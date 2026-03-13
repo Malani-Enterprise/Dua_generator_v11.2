@@ -52,7 +52,6 @@
 # # OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "")
 # # ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY", "")
 # ANTHROPIC_MODEL = os.getenv("ANTHROPIC_MODEL", "claude-opus-4-6")
-# ANTHROPIC_API_KEY= '
 # SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 # SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 # SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
