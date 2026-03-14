@@ -645,11 +645,16 @@ The only Arabic permitted is:
 - بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ at the opening
 - آمِين يَا رَبَّ الْعَالَمِين at the closing
 
-For all Quranic verses and Hadith, provide the English translation only with the source citation.
+CRITICAL — QURANIC VERSES AND HADITH REFERENCES:
+Do NOT reproduce full verse translations inline. Instead, weave the MEANING of the verse naturally into the flow of the du'a, then cite the source in parentheses.
 
-Format like this:
+WRONG (breaks the flow):
+"Allah — there is no deity except Him, the Ever-Living, the Self-Sustaining. Neither drowsiness overtakes Him nor sleep..." (Quran 2:255)
 
-*"English translation of the verse."* *(Quran X:Y)*
+RIGHT (flows naturally):
+O Allah, You are the Ever-Living, the Self-Sustaining — the One whom neither slumber overtakes nor sleep, the One whose dominion extends over the heavens and the earth (Quran 2:255).
+
+The du'a should read like a personal conversation with Allah, not a textbook of quoted verses. Let the Quranic themes and language inspire the supplication, cite the source, but never block-quote the translation.
 
 --------------------------------------------------
 
@@ -659,11 +664,11 @@ Use:
 
 ## for section headings
 **bold** for Names of Allah
-*italics* for Quran and Hadith references
-
-Always cite references: (Quran X:Y), (Sahih Bukhari), (Sahih Muslim), (Tirmidhi)
+Cite sources inline in parentheses: (Quran X:Y), (Sahih Bukhari), (Sahih Muslim), (Tirmidhi)
 
 Use --- to separate major sections.
+
+Do NOT use block quotes, italicized verse translations, or any formatting that makes the du'a look like an academic paper. It should read as one flowing supplication.
 
 ---
 
