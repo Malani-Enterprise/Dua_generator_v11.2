@@ -65,8 +65,8 @@ SMTP_HOST = os.getenv("SMTP_HOST", "smtp.gmail.com")
 SMTP_PORT = int(os.getenv("SMTP_PORT", "587"))
 SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
-SMTP_FROM_NAME = os.getenv("SMTP_FROM_NAME", "Du\'a Generator")
-SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL", "")
+SMTP_FROM_NAME = os.getenv("SMTP_FROM_NAME", "MyDua.ai")
+SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL", "") or SMTP_USERNAME  # Fallback to username (required for Gmail)
 
 APP_BASE_URL = os.getenv("APP_BASE_URL", "http://localhost:8000")
 SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
@@ -1377,7 +1377,16 @@ async def health_check():
         checks["ai_provider"] = "configured"
 
     # Verify email is configured
-    checks["email"] = "configured" if SMTP_USERNAME else "not configured"
+    if SMTP_USERNAME and SMTP_PASSWORD and SMTP_FROM_EMAIL:
+        checks["email"] = "configured"
+        checks["email_from"] = SMTP_FROM_EMAIL
+    elif SMTP_USERNAME and not SMTP_PASSWORD:
+        checks["email"] = "missing SMTP_PASSWORD"
+        checks["status"] = "degraded"
+    elif not SMTP_USERNAME:
+        checks["email"] = "not configured (SMTP_USERNAME missing)"
+    else:
+        checks["email"] = "incomplete config"
 
     return checks
 
@@ -1536,9 +1545,18 @@ async def email_dua(req: EmailDuaRequest, request: Request):
     share_url = f"{APP_BASE_URL}/shared/{req.duaId}?ref=share"
     try:
         await send_dua_email(req.email, req.recipientName or data["user_name"], data["dua"], share_url)
+    except aiosmtplib.SMTPAuthenticationError as e:
+        logger.error(f"Email auth failed: {e}")
+        raise HTTPException(500, "Email authentication failed. Check SMTP_USERNAME and SMTP_PASSWORD (Gmail requires an App Password, not your account password).")
+    except aiosmtplib.SMTPConnectError as e:
+        logger.error(f"Email connection failed: {e}")
+        raise HTTPException(500, "Cannot connect to email server. Check SMTP_HOST and SMTP_PORT.")
+    except aiosmtplib.SMTPRecipientsRefused as e:
+        logger.error(f"Email recipient refused: {e}")
+        raise HTTPException(500, "Email address was rejected by the mail server.")
     except Exception as e:
-        logger.error(f"Email failed: {e}")
-        raise HTTPException(500, "Failed to send email. Please try again.")
+        logger.error(f"Email failed ({type(e).__name__}): {e}")
+        raise HTTPException(500, f"Failed to send email: {type(e).__name__}")
 
     db.track("emails_sent")
     return {"status": "sent", "to": req.email}
