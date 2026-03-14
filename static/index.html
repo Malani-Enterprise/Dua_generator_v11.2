@@ -174,11 +174,11 @@
       <span class="divider-star" style="opacity:.3">✦</span><br/>
       This tool generates du'as using AI. Please verify all Quranic verses<br/>and Hadith references with authentic Islamic sources.<br/><br/>
       <span style="color:var(--gold);font-size:12px;">🔒 Your du'a is private and never shared without your permission.</span><br/><br/>
-      Questions or feedback? <a href="/cdn-cgi/l/email-protection#a2d1d7d2d2cdd0d6e2cfdbc6d7c38cc3cb"><span class="__cf_email__" data-cfemail="f1828481819e8385b19c88958490df9098">[email&#160;protected]</span></a>
+      Questions or feedback? <a href="mailto:support@mydua.ai">support@mydua.ai</a>
     </div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
     const API={generate:"/api/generate-dua",save:"/api/save-dua",email:"/api/email-dua",trackPdf:"/api/track-pdf",trackSms:"/api/track-sms",analytics:"/api/analytics"};
     fetch("/api/track-pageview",{method:"POST"}).catch(()=>{});
     const isReferred=(new URLSearchParams(window.location.search)).get("ref")==="share";
@@ -274,4 +274,8 @@
 
     let selectedSupportAmount="10";
     function selectAmount(amt){selectedSupportAmount=amt;document.querySelectorAll(".support-amt").forEach(b=>{if(b.dataset.amt===amt){b.style.borderColor="var(--gold)";b.style.background="rgba(201,169,110,0.12)";}else{b.style.borderColor="rgba(201,169,110,0.25)";b.style.background="rgba(255,255,255,0.03)";}});document.getElementById("customAmountWrap").style.display=amt==="custom"?"block":"none";}
-    async function handleSupport(){const btn=document.getElementById("supportBtn");btn.disabled=true;btn.textContent="Redirecting to Stripe...";const body={amount:selectedSupportAmount};if(selectedSupportAmount==="custom"){const val=parseInt(document.getElementById("customAmountInput").value);if(!val||val<1){alert("Please enter an amount of at least $1.");btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";return;}body.customAmount=val;}try{const res=await fetch("/api/create-support-session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to create payment se
+    async function handleSupport(){const btn=document.getElementById("supportBtn");btn.disabled=true;btn.textContent="Redirecting to Stripe...";const body={amount:selectedSupportAmount};if(selectedSupportAmount==="custom"){const val=parseInt(document.getElementById("customAmountInput").value);if(!val||val<1){alert("Please enter an amount of at least $1.");btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";return;}body.customAmount=val;}try{const res=await fetch("/api/create-support-session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to create payment session");}const data=await res.json();window.location.href=data.url;}catch(e){alert("Payment error: "+e.message);btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";}}
+
+  </script>
+</body>
+</html>
