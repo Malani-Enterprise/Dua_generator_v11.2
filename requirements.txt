@@ -9,3 +9,4 @@ email-validator==2.1.0
 aiosmtplib==3.0.1
 python-multipart==0.0.9
 stripe==10.0.0
+reportlab==4.1.0

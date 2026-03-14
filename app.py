@@ -1,7 +1,7 @@
 """
-mydua.ai — Backend API (v1.2 Production)
+mydua.ai — Backend API (v1.4 Production)
 ==========================================
-v1.2 Changes:
+v1.4 Changes:
   - Solo user mode: single user gets a flowing personal du'a (no individual family sections)
   - Shorter natural output for solo user (~1200-1500 words) within same max_tokens ceiling
   - No truncation — prompt instructs model to complete naturally at shorter length
@@ -32,6 +32,8 @@ import asyncio
 import sqlite3
 import logging
 import re
+import base64
+import io
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Optional
@@ -67,6 +69,7 @@ SMTP_USERNAME = os.getenv("SMTP_USERNAME", "")
 SMTP_PASSWORD = os.getenv("SMTP_PASSWORD", "")
 SMTP_FROM_NAME = os.getenv("SMTP_FROM_NAME", "MyDua.ai")
 SMTP_FROM_EMAIL = os.getenv("SMTP_FROM_EMAIL", "") or SMTP_USERNAME  # Fallback to username (required for Gmail)
+RESEND_API_KEY = os.getenv("RESEND_API_KEY", "")  # Preferred over SMTP — use Resend HTTP API
 
 APP_BASE_URL = os.getenv("APP_BASE_URL", "http://localhost:8000")
 SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
@@ -95,6 +98,7 @@ LOB_FROM_ZIP = os.getenv("LOB_FROM_ZIP", "")
 # Gift pricing (in cents)
 GIFT_SMS_PRICE = 249      # $2.49
 GIFT_POSTCARD_PRICE = 1099  # $10.99
+GIFT_ENABLED = False  # Gift feature pulled from production — set True to re-enable
 
 # ElevenLabs (AI voice for du'a reading)
 ELEVENLABS_API_KEY = os.getenv("ELEVENLABS_API_KEY", "")
@@ -445,17 +449,20 @@ def verify_email_token(dua_id: str, token: str) -> bool:
 
 def get_client_ip(request: Request) -> str:
     """
-    Fix #4: Extract client IP safely.
+    Extract client IP safely.
     In production behind a reverse proxy (Railway, Render), trust X-Forwarded-For
-    but only the rightmost N hops where N = TRUSTED_PROXY_DEPTH.
-    In development, use the direct connection IP.
+    but skip the rightmost TRUSTED_PROXY_DEPTH entries (those are trusted proxies)
+    and take the next entry — that's the real client.
+    Example: X-Forwarded-For: client, cdn, proxy  with depth=1 → skip proxy, return cdn
+             X-Forwarded-For: client, proxy        with depth=1 → skip proxy, return client
     """
     if APP_ENV == "production":
         xff = request.headers.get("x-forwarded-for", "")
         if xff:
             parts = [p.strip() for p in xff.split(",") if p.strip()]
-            # Take the IP set by the trusted proxy (rightmost hop)
-            idx = max(0, len(parts) - TRUSTED_PROXY_DEPTH)
+            # Skip TRUSTED_PROXY_DEPTH entries from the right (trusted proxies),
+            # then take the next one (the real client or last untrusted hop)
+            idx = max(0, len(parts) - TRUSTED_PROXY_DEPTH - 1)
             return parts[idx]
     return request.client.host if request.client else "unknown"
 
@@ -671,6 +678,11 @@ The du'a should feel:
 
 It should feel like a believer speaking to Allah from the depths of their heart.
 
+VOICE: Write the du'a in FIRST PERSON — as if the person themselves is speaking directly to Allah.
+Use "O Allah, I ask You..." and "Ya Allah, grant me..." — NOT "O Allah, grant [Name]..."
+The reader should be able to recite this du'a as their own personal conversation with Allah.
+When the du'a includes family members, use first person possessive: "my wife", "my son", "my mother".
+
 ---
 
 IMPORTANT RULES
@@ -744,8 +756,8 @@ class FamilyMember(BaseModel):
     @field_validator("concerns")
     @classmethod
     def concerns_length(cls, v):
-        if len(v) > 500:
-            raise ValueError("Concerns must be under 500 characters")
+        if len(v) > 1000:
+            raise ValueError("Concerns must be under 1000 characters")
         return v
 
     @field_validator("relationship", "ageRange", "gender")
@@ -757,7 +769,7 @@ class FamilyMember(BaseModel):
 
 
 class GenerateDuaRequest(BaseModel):
-    userName: str
+    userName: str = ""
     members: list[FamilyMember]
     occasion: str = "general"
     skipCache: bool = False
@@ -782,7 +794,7 @@ class GenerateDuaRequest(BaseModel):
     @field_validator("occasion")
     @classmethod
     def valid_occasion(cls, v):
-        valid = {"ramadan", "jumuah", "illness", "travel", "newborn",
+        valid = {"ramadan", "jumuah", "illness", "exams", "travel", "newborn",
                  "marriage", "grief", "hajj", "gratitude", "general"}
         if v not in valid:
             return "general"
@@ -883,8 +895,8 @@ class GiftDuaRequest(BaseModel):
     @field_validator("concerns")
     @classmethod
     def concerns_length(cls, v):
-        if len(v) > 500:
-            raise ValueError("Concerns must be under 500 characters")
+        if len(v) > 1000:
+            raise ValueError("Concerns must be under 1000 characters")
         return v
 
 
@@ -935,17 +947,17 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("mydua.ai v1.3 — Production")
+    logger.info("mydua.ai v1.4 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
     logger.info(f"OpenAI:       {'configured' if OPENAI_API_KEY else 'not set'}")
     logger.info(f"Stripe:       {'configured' if STRIPE_SECRET_KEY else 'not set'}")
-    logger.info(f"Email:        {'configured' if SMTP_USERNAME else 'not set'}")
+    logger.info(f"Email:        {'Resend API' if RESEND_API_KEY else 'SMTP' if SMTP_USERNAME else 'not set'}")
     logger.info(f"Twilio (SMS): {'configured' if TWILIO_ACCOUNT_SID else 'not set'}")
     logger.info(f"Lob (post):   {'configured' if LOB_API_KEY else 'not set'}")
     logger.info(f"ElevenLabs:   {'configured' if ELEVENLABS_API_KEY else 'not set (browser TTS fallback)'}")
-    logger.info(f"Analytics:    {'key configured' if ANALYTICS_KEY else 'NO KEY — endpoint unprotected!'}")
+    logger.info(f"Analytics:    {'key configured' if ANALYTICS_KEY else 'NO KEY — endpoint locked (all requests return 401)'}")
     logger.info(f"Base URL:     {APP_BASE_URL}")
     logger.info(f"Database:     {DB_PATH}")
 
@@ -972,7 +984,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.3",
+    version="1.4",
     lifespan=lifespan,
 )
 
@@ -1021,6 +1033,7 @@ OCCASION_LABELS = {
     "ramadan": "the blessed last ten nights of Ramadan",
     "jumuah": "the blessed day of Jumu'ah (Friday)",
     "illness": "a time of illness — asking Allah for healing and ease",
+    "exams": "a time of exams and studies — asking Allah for knowledge, understanding, and success",
     "travel": "an upcoming journey — asking Allah for safety and protection",
     "newborn": "the arrival of a new baby — asking Allah for blessings and protection",
     "marriage": "a marriage — asking Allah for love, mercy, and harmony",
@@ -1034,6 +1047,7 @@ OCCASION_DISPLAY = {
     "ramadan": "Ramadan — Last 10 Nights",
     "jumuah": "Jumu'ah (Friday)",
     "illness": "Illness / Healing",
+    "exams": "Exams / Studies",
     "travel": "Travel / Journey",
     "newborn": "New Baby",
     "marriage": "Marriage / Wedding",
@@ -1051,6 +1065,10 @@ OCCASION_DISPLAY = {
 def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "general") -> str:
     member_count = len(members)
 
+    # If name is blank, use second-person address
+    display_name = user_name.strip() if user_name else ""
+    name_for_prompt = display_name if display_name else "the supplicant"
+
     # Detect solo user: only 1 member whose relationship is "Self" (or empty/unset)
     is_solo = (member_count == 1 and members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
 
@@ -1060,7 +1078,10 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
     if is_solo:
         # ── Solo user prompt: personal du'a, no family member sections ──
         m = members[0]
-        prompt = f"Please write a deeply personal du'a for {user_name}.\n\n"
+        if display_name:
+            prompt = f"Please write a deeply personal du'a for {display_name}.\n\n"
+        else:
+            prompt = "Please write a deeply personal du'a. The person has not provided their name, so write in second person — address them as 'you' and 'your' throughout, as if guiding them in conversation with Allah.\n\n"
         prompt += f"OCCASION: This du'a is for {occasion_label}.\n\n"
         prompt += f"LENGTH INSTRUCTION: {length_instruction}\n\n"
 
@@ -1079,7 +1100,10 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
 
     else:
         # ── Family prompt: original structure with individual sections ──
-        prompt = f"Please write a personalized du'a for {user_name} and their family.\n\n"
+        if display_name:
+            prompt = f"Please write a personalized du'a for {display_name} and their family.\n\n"
+        else:
+            prompt = "Please write a personalized du'a for this person and their family. The person has not provided their name, so address them in second person ('you', 'your').\n\n"
         prompt += f"OCCASION: This du'a is for {occasion_label}.\n\n"
         prompt += f"LENGTH INSTRUCTION: {length_instruction}\n\n"
 
@@ -1249,7 +1273,7 @@ async def poll_batch_job(job_id: str):
         # Server-owned email delivery with proper status tracking
         user_email = job.get("user_email", "")
         user_name = job.get("user_name", "")
-        if user_email and SMTP_USERNAME:
+        if user_email and (RESEND_API_KEY or SMTP_USERNAME):
             db.job_set_email_status(job_id, "sending")
             try:
                 dua_id = uuid.uuid4().hex[:24]
@@ -1315,19 +1339,126 @@ def _markdown_to_html(text: str) -> str:
     return "\n".join(html_lines)
 
 
-async def send_dua_email(to_email: str, recipient_name: str, dua_text: str, share_url: Optional[str] = None):
+async def _send_raw_email(to: str, subject: str, html_body: str, text_body: str,
+                          attachments: list = None):
+    """Generic email sender — Resend HTTP API first, SMTP fallback."""
+    if RESEND_API_KEY:
+        payload = {
+            "from": f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>",
+            "to": [to],
+            "subject": subject,
+            "html": html_body,
+            "text": text_body,
+        }
+        if attachments:
+            payload["attachments"] = attachments
+        resp = await http_client.post(
+            "https://api.resend.com/emails",
+            headers={"Authorization": f"Bearer {RESEND_API_KEY}", "Content-Type": "application/json"},
+            json=payload, timeout=30.0,
+        )
+        if resp.status_code not in (200, 201):
+            detail = resp.text[:200]
+            logger.error(f"Resend API error {resp.status_code}: {detail}")
+            raise HTTPException(500, f"Email delivery failed: {detail[:100]}")
+        return
+
     if not SMTP_USERNAME:
         raise HTTPException(500, "Email is not configured.")
 
-    dua_html = _markdown_to_html(dua_text)
+    msg = MIMEMultipart("mixed")
+    msg["From"] = f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
+    msg["To"] = to
+    msg["Subject"] = subject
+    alt = MIMEMultipart("alternative")
+    alt.attach(MIMEText(text_body, "plain", "utf-8"))
+    alt.attach(MIMEText(html_body, "html", "utf-8"))
+    msg.attach(alt)
+    if attachments:
+        from email.mime.application import MIMEApplication
+        for att in attachments:
+            part = MIMEApplication(base64.b64decode(att["content"]), _subtype="pdf")
+            part.add_header("Content-Disposition", "attachment", filename=att["filename"])
+            msg.attach(part)
+    await aiosmtplib.send(msg, hostname=SMTP_HOST, port=SMTP_PORT,
+                          username=SMTP_USERNAME, password=SMTP_PASSWORD, start_tls=True)
 
-    # Fix #3: Only include "View online" link if share_url is provided (not for private/email-only du'as)
+
+def _generate_dua_pdf_bytes(recipient_name: str, dua_text: str) -> bytes:
+    """Generate a simple PDF of the du'a using reportlab and return raw bytes."""
+    from reportlab.lib.pagesizes import letter
+    from reportlab.lib.styles import ParagraphStyle
+    from reportlab.lib.enums import TA_CENTER, TA_LEFT
+    from reportlab.lib.colors import HexColor
+    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
+
+    buf = io.BytesIO()
+    doc = SimpleDocTemplate(buf, pagesize=letter, topMargin=50, bottomMargin=50,
+                            leftMargin=60, rightMargin=60)
+
+    GOLD = HexColor("#8b6914")
+    DARK = HexColor("#2c2419")
+    MUTED = HexColor("#7a6b50")
+
+    title_style = ParagraphStyle("title", fontName="Times-Bold", fontSize=22,
+                                  leading=28, alignment=TA_CENTER, textColor=GOLD, spaceAfter=4)
+    subtitle_style = ParagraphStyle("subtitle", fontName="Times-Italic", fontSize=12,
+                                     leading=16, alignment=TA_CENTER, textColor=MUTED, spaceAfter=20)
+    h2_style = ParagraphStyle("h2", fontName="Times-Bold", fontSize=16, leading=22,
+                               textColor=GOLD, spaceBefore=18, spaceAfter=8)
+    body_style = ParagraphStyle("body", fontName="Times-Roman", fontSize=12,
+                                 leading=20, textColor=DARK, spaceAfter=6, alignment=TA_LEFT)
+    footer_style = ParagraphStyle("footer", fontName="Times-Italic", fontSize=9,
+                                   leading=14, alignment=TA_CENTER, textColor=MUTED, spaceBefore=20)
+
+    story = []
+    # Logo
+    logo_style = ParagraphStyle("logo", fontName="Times-Bold", fontSize=18,
+                                 leading=24, alignment=TA_CENTER, textColor=GOLD, spaceAfter=8)
+    story.append(Paragraph("My<b>Dua</b>.ai", logo_style))
+    story.append(Paragraph(f"A Du'a for {html_escape(recipient_name or 'You')}", title_style))
+    story.append(Paragraph("A personalized supplication — mydua.ai", subtitle_style))
+    story.append(Spacer(1, 12))
+
+    for line in dua_text.split("\n"):
+        line = line.strip()
+        if line.startswith("## "):
+            clean = re.sub(r"\*+", "", line[3:])
+            story.append(Paragraph(html_escape(clean), h2_style))
+        elif line.startswith("# "):
+            clean = re.sub(r"\*+", "", line[2:])
+            story.append(Paragraph(html_escape(clean), title_style))
+        elif line == "---":
+            story.append(Spacer(1, 12))
+        elif line:
+            clean = re.sub(r"\*\*\*(.+?)\*\*\*", r"<b><i>\1</i></b>", line)
+            clean = re.sub(r"\*\*(.+?)\*\*", r"<b>\1</b>", clean)
+            clean = re.sub(r"\*(.+?)\*", r"<i>\1</i>", clean)
+            story.append(Paragraph(clean, body_style))
+        else:
+            story.append(Spacer(1, 8))
+
+    story.append(Spacer(1, 20))
+    story.append(Paragraph("Please verify all Quranic verses and Hadith references with authentic Islamic sources.", footer_style))
+    story.append(Spacer(1, 8))
+    logo_footer = ParagraphStyle("logo_footer", fontName="Times-Bold", fontSize=12,
+                                  leading=16, alignment=TA_CENTER, textColor=GOLD, spaceAfter=2)
+    story.append(Paragraph("My<b>Dua</b>.ai", logo_footer))
+    story.append(Paragraph("mydua.ai — support@mydua.ai", footer_style))
+
+    doc.build(story)
+    return buf.getvalue()
+
+
+async def send_dua_email(to_email: str, recipient_name: str, dua_text: str, share_url: Optional[str] = None):
+    """Send du'a email with PDF attachment."""
+    dua_html = _markdown_to_html(dua_text)
     footer_link = f'<a href="{share_url}" style="color:#8b6914;">View online</a><br/>' if share_url else ""
 
     html_body = f"""<html><body style="font-family:Georgia,serif;max-width:650px;margin:0 auto;padding:20px;color:#2c2c2c;line-height:1.8;background:#faf6ef;">
 <div style="text-align:center;padding:20px 0;border-bottom:1px solid #d4c4a0;margin-bottom:20px;">
   <div style="font-size:24px;color:#8b6914;font-weight:bold;">Your Personalized Du'a</div>
-  <div style="font-size:14px;color:#888;margin-top:4px;">A heartfelt supplication for {html_escape(recipient_name)} and family</div>
+  <div style="font-size:14px;color:#888;margin-top:4px;">A heartfelt supplication for {html_escape(recipient_name or 'you')} and family</div>
 </div>
 {dua_html}
 <div style="text-align:center;margin-top:30px;padding-top:20px;border-top:1px solid #d4c4a0;">
@@ -1335,15 +1466,17 @@ async def send_dua_email(to_email: str, recipient_name: str, dua_text: str, shar
   <p style="font-size:11px;color:#888;margin-top:10px;">Generated at mydua.ai — support@mydua.ai</p>
 </div></body></html>"""
 
-    msg = MIMEMultipart("alternative")
-    msg["From"] = f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
-    msg["To"] = to_email
-    msg["Subject"] = f"Your Du'a — {recipient_name}"
-    msg.attach(MIMEText(dua_text, "plain", "utf-8"))
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
+    subject = f"Your Du'a — {recipient_name}" if recipient_name else "Your Personalized Du'a"
+    safe_name = re.sub(r"[^a-zA-Z0-9]", "-", (recipient_name or "dua").lower().strip())
 
-    await aiosmtplib.send(msg, hostname=SMTP_HOST, port=SMTP_PORT,
-                          username=SMTP_USERNAME, password=SMTP_PASSWORD, start_tls=True)
+    attachments = []
+    try:
+        pdf_bytes = _generate_dua_pdf_bytes(recipient_name, dua_text)
+        attachments = [{"filename": f"dua-{safe_name}.pdf", "content": base64.b64encode(pdf_bytes).decode("utf-8")}]
+    except Exception as e:
+        logger.warning(f"PDF generation failed, sending without attachment: {e}")
+
+    await _send_raw_email(to_email, subject, html_body, dua_text, attachments=attachments or None)
 
 
 # ══════════════════════════════════════════════════
@@ -1355,7 +1488,7 @@ async def health_check():
     checks = {
         "status": "ok",
         "provider": AI_PROVIDER,
-        "version": "1.3",
+        "version": "1.4",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable
@@ -1377,8 +1510,11 @@ async def health_check():
         checks["ai_provider"] = "configured"
 
     # Verify email is configured
-    if SMTP_USERNAME and SMTP_PASSWORD and SMTP_FROM_EMAIL:
-        checks["email"] = "configured"
+    if RESEND_API_KEY:
+        checks["email"] = "configured (Resend API)"
+        checks["email_from"] = SMTP_FROM_EMAIL
+    elif SMTP_USERNAME and SMTP_PASSWORD and SMTP_FROM_EMAIL:
+        checks["email"] = "configured (SMTP)"
         checks["email_from"] = SMTP_FROM_EMAIL
     elif SMTP_USERNAME and not SMTP_PASSWORD:
         checks["email"] = "missing SMTP_PASSWORD"
@@ -1393,12 +1529,13 @@ async def health_check():
 
 @app.post("/api/generate-dua")
 async def generate_dua(req: GenerateDuaRequest, request: Request, background_tasks: BackgroundTasks):
-    if not req.userName.strip():
-        raise HTTPException(400, "Please enter your name.")
-
     valid_members = [m for m in req.members if m.name.strip()]
+    # If no name provided and no members, create a Self entry so solo mode works
     if not valid_members:
-        raise HTTPException(400, "Please add at least one family member with a name.")
+        if req.userName.strip():
+            raise HTTPException(400, "Please add at least one family member with a name.")
+        else:
+            valid_members = [FamilyMember(name="", relationship="Self", ageRange="", gender="", attributes="", concerns=req.members[0].concerns if req.members else "")]
 
     # Fix #4: SQLite-backed rate limiting
     # Fix #4: Safe client IP extraction
@@ -1473,6 +1610,18 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
                  referrer=request.headers.get("referer", ""))
     if req.referred:
         db.track("referred_generations")
+
+    # Auto-send email with du'a after generation
+    if req.userEmail and (RESEND_API_KEY or SMTP_USERNAME):
+        async def auto_email():
+            try:
+                await send_dua_email(req.userEmail, req.userName or "Friend", dua_text, share_url=None)
+                db.track("emails_sent")
+                logger.info(f"Auto-email sent to {req.userEmail}")
+            except Exception as e:
+                logger.error(f"Auto-email failed for {req.userEmail}: {e}")
+        background_tasks.add_task(auto_email)
+
     return {"dua": dua_text, "cached": False}
 
 
@@ -1499,7 +1648,17 @@ async def save_dua(req: SaveDuaRequest, request: Request):
 
     dua_id = uuid.uuid4().hex[:24]
     token = generate_email_token(dua_id)
-    members_json = json.dumps([m.model_dump() for m in req.members]) if req.members else "[]"
+    # Privacy: strip concerns from members before saving to DB
+    if req.members:
+        safe_members = []
+        for m in req.members:
+            d = m.model_dump()
+            d.pop("concerns", None)
+            d.pop("attributes", None)
+            safe_members.append(d)
+        members_json = json.dumps(safe_members)
+    else:
+        members_json = "[]"
     db.save_dua(dua_id, req.userName, req.dua, members_json, token)
     db.track("shares_created")
 
@@ -1803,11 +1962,11 @@ async def send_gift_email(to_email: str, sender_name: str, recipient_name: str,
     msg["From"] = f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
     msg["To"] = to_email
     msg["Subject"] = f"{sender_name} made a du'a for you, {recipient_name}"
-    msg.attach(MIMEText(f"{sender_name} made a du'a for you:\n\n{dua_text}\n\nView online: {view_url}", "plain", "utf-8"))
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
 
-    await aiosmtplib.send(msg, hostname=SMTP_HOST, port=SMTP_PORT,
-                          username=SMTP_USERNAME, password=SMTP_PASSWORD, start_tls=True)
+    plain = f"{sender_name} made a du'a for you:\n\n{dua_text}\n\nView online: {view_url}"
+    subject = f"{sender_name} made a du'a for you, {recipient_name}"
+
+    await _send_raw_email(to_email, subject, html_body, plain)
 
 
 async def send_gift_sms(to_phone: str, sender_name: str, recipient_name: str, gift_id: str):
@@ -1889,6 +2048,8 @@ async def send_gift_postcard(gift: dict):
 @app.post("/api/gift/generate")
 async def generate_gift_dua(req: GiftDuaRequest, request: Request):
     """Generate a personalized gift du'a for a recipient."""
+    if not GIFT_ENABLED:
+        raise HTTPException(501, "Gift feature coming soon.")
     client_ip = get_client_ip(request)
     allowed, _ = db.rate_limit_check(f"gen:{client_ip}", max_requests=5, window_seconds=3600)
     if not allowed:
@@ -1946,6 +2107,8 @@ async def generate_gift_dua(req: GiftDuaRequest, request: Request):
 @app.post("/api/gift/deliver")
 async def deliver_gift(req: GiftDeliverRequest, request: Request):
     """Deliver a gift du'a via email (free), SMS ($2.49), or postcard ($10.99)."""
+    if not GIFT_ENABLED:
+        raise HTTPException(501, "Gift feature coming soon.")
     gift = db.gift_get(req.giftId)
     if not gift:
         raise HTTPException(404, "Gift not found.")
@@ -2049,6 +2212,8 @@ async def deliver_gift(req: GiftDeliverRequest, request: Request):
 
 @app.get("/gift/paid", response_class=HTMLResponse)
 async def gift_paid_page(session_id: str, gift_id: str, background_tasks: BackgroundTasks):
+    if not GIFT_ENABLED:
+        return HTMLResponse("<html><body><h1>Gift feature coming soon</h1><p><a href='/'>Back to MyDua.ai</a></p></body></html>", status_code=200)
     """Post-payment page — triggers delivery and shows confirmation."""
     gift = db.gift_get(gift_id)
     if not gift:
@@ -2133,6 +2298,8 @@ async def fulfill_gift_background(session_id: str, gift_id: str):
 
 @app.get("/gift/{gift_id}", response_class=HTMLResponse)
 async def view_gift(gift_id: str):
+    if not GIFT_ENABLED:
+        return HTMLResponse("<html><body><h1>Gift feature coming soon</h1><p><a href='/'>Back to MyDua.ai</a></p></body></html>", status_code=200)
     """Public gift viewing page — the recipient sees this."""
     gift = db.gift_get(gift_id)
     if not gift:
@@ -2189,6 +2356,8 @@ async def view_gift(gift_id: str):
 
 @app.get("/api/gift/status/{gift_id}")
 async def gift_status(gift_id: str):
+    if not GIFT_ENABLED:
+        raise HTTPException(501, "Gift feature coming soon.")
     """Check delivery status of a gift."""
     gift = db.gift_get(gift_id)
     if not gift:
@@ -2204,10 +2373,18 @@ async def gift_status(gift_id: str):
 @app.get("/api/gift/config")
 async def gift_config():
     """Return gift feature availability and pricing."""
+    if not GIFT_ENABLED:
+        return {
+            "enabled": False,
+            "email": {"available": False, "price": 0},
+            "sms": {"available": False, "price": 0},
+            "postcard": {"available": False, "price": 0},
+        }
     return {
-        "email": {"available": bool(SMTP_USERNAME), "price": 0},
-        "sms": {"available": bool(TWILIO_ACCOUNT_SID), "price": GIFT_SMS_PRICE / 100},
-        "postcard": {"available": bool(LOB_API_KEY), "price": GIFT_POSTCARD_PRICE / 100},
+        "enabled": True,
+        "email": {"available": bool(RESEND_API_KEY or SMTP_USERNAME), "price": 0},
+        "sms": {"available": bool(TWILIO_ACCOUNT_SID and TWILIO_AUTH_TOKEN and TWILIO_FROM_NUMBER), "price": GIFT_SMS_PRICE / 100},
+        "postcard": {"available": bool(LOB_API_KEY and LOB_FROM_ADDRESS and LOB_FROM_CITY and LOB_FROM_STATE and LOB_FROM_ZIP), "price": GIFT_POSTCARD_PRICE / 100},
     }
 
 
