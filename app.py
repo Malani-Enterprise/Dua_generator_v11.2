@@ -1,7 +1,7 @@
 """
-mydua.ai — Backend API (v1.4 Production)
+mydua.ai — Backend API (v1.4.2 Production)
 ==========================================
-v1.4 Changes:
+v1.4.2 Changes:
   - Solo user mode: single user gets a flowing personal du'a (no individual family sections)
   - Shorter natural output for solo user (~1200-1500 words) within same max_tokens ceiling
   - No truncation — prompt instructs model to complete naturally at shorter length
@@ -952,7 +952,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("mydua.ai v1.4 — Production")
+    logger.info("mydua.ai v1.4.2 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -989,7 +989,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.4",
+    version="1.4.2",
     lifespan=lifespan,
 )
 
@@ -1397,6 +1397,20 @@ def _generate_dua_pdf_bytes(recipient_name: str, dua_text: str) -> bytes:
     from reportlab.lib.colors import HexColor
     from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer
 
+    # Replace Arabic text with transliterations — reportlab's default fonts can't render Arabic
+    ARABIC_REPLACEMENTS = {
+        "بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ": "Bismillahir Rahmanir Rahim",
+        "بسم الله الرحمن الرحيم": "Bismillahir Rahmanir Rahim",
+        "آمِين يَا رَبَّ الْعَالَمِين": "Ameen, Ya Rabbal Alameen",
+        "آمين يا رب العالمين": "Ameen, Ya Rabbal Alameen",
+        "تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ": "Taqabbal Allahu minna wa minkum",
+    }
+    pdf_text = dua_text
+    for arabic, transliteration in ARABIC_REPLACEMENTS.items():
+        pdf_text = pdf_text.replace(arabic, transliteration)
+    # Strip any remaining Arabic characters (U+0600-U+06FF, U+0750-U+077F, U+FB50-U+FDFF, U+FE70-U+FEFF)
+    pdf_text = re.sub(r'[\u0600-\u06FF\u0750-\u077F\uFB50-\uFDFF\uFE70-\uFEFF]+', '', pdf_text)
+
     buf = io.BytesIO()
     doc = SimpleDocTemplate(buf, pagesize=letter, topMargin=50, bottomMargin=50,
                             leftMargin=60, rightMargin=60)
@@ -1425,7 +1439,7 @@ def _generate_dua_pdf_bytes(recipient_name: str, dua_text: str) -> bytes:
     story.append(Paragraph("A personalized supplication — mydua.ai", subtitle_style))
     story.append(Spacer(1, 12))
 
-    for line in dua_text.split("\n"):
+    for line in pdf_text.split("\n"):
         line = line.strip()
         if line.startswith("## "):
             clean = re.sub(r"\*+", "", line[3:])
@@ -1493,7 +1507,7 @@ async def health_check():
     checks = {
         "status": "ok",
         "provider": AI_PROVIDER,
-        "version": "1.4",
+        "version": "1.4.2",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable
