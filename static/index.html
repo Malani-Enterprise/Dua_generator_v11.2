@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyDua.ai — Personalized Du'as for Every Occasion</title>
-  <meta name="description" content="Create a beautiful, personalized du'a for yourself, your family, and loved ones — for Ramadan, Jumu'ah, illness, exams, travel, and any moment you need Allah's guidance." />
+  <meta name="description" content="Create a beautiful, personalized du'a for yourself, your family, and loved ones — for Ramadan, Jumu'ah, illness, travel, and any moment you need Allah's guidance." />
   <meta property="og:title" content="MyDua.ai — Personalized Du'as for Every Occasion" />
   <meta property="og:description" content="Create a beautiful, personalized supplication for your family — powered by Quran and authentic Hadith." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -24,24 +24,23 @@
     .fade-in{animation:fadeInUp .7s ease-out both;}
     .bg-pattern{position:fixed;inset:0;z-index:0;pointer-events:none;}.bg-pattern svg{position:absolute;inset:0;opacity:.04;}
     .bg-orb{position:absolute;border-radius:50%;filter:blur(40px);}.bg-orb-1{top:10%;right:15%;width:400px;height:400px;background:radial-gradient(circle,rgba(201,169,110,.06) 0%,transparent 70%);}.bg-orb-2{bottom:20%;left:10%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,169,110,.04) 0%,transparent 70%);filter:blur(30px);}
-    .container{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:40px 20px 80px;min-height:100vh;}
-    .header{text-align:center;margin-bottom:48px;}.bismillah{font-family:'Amiri',serif;font-size:36px;color:var(--gold);direction:rtl;opacity:.8;margin-bottom:8px;}.title{font-size:clamp(32px,6vw,48px);font-weight:300;color:var(--text-primary);letter-spacing:.04em;margin-bottom:8px;line-height:1.2;}.subtitle{font-size:18px;color:var(--text-muted);font-style:italic;max-width:500px;margin:0 auto;line-height:1.6;}
+    .container{position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;padding:24px 20px 80px;min-height:100vh;}
+    .header{text-align:center;margin-bottom:20px;}.bismillah{font-family:'Amiri',serif;font-size:36px;color:var(--gold);direction:rtl;opacity:.8;margin-bottom:8px;}.title{font-size:clamp(32px,6vw,48px);font-weight:300;color:var(--text-primary);letter-spacing:.04em;margin-bottom:8px;line-height:1.2;}.subtitle{font-size:18px;color:var(--text-muted);font-style:italic;max-width:500px;margin:0 auto;line-height:1.6;}
     .counter{text-align:center;margin-bottom:28px;font-size:14px;color:var(--text-muted);}.counter .count{color:var(--gold);font-weight:600;font-size:16px;}
-    .divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:28px 0;opacity:.4;}.divider-line{width:60px;height:1px;}.divider-line-l{background:linear-gradient(to right,transparent,var(--gold));}.divider-line-r{background:linear-gradient(to left,transparent,var(--gold));}.divider-star{color:var(--gold);font-size:18px;opacity:.6;}
+    .divider{display:flex;align-items:center;justify-content:center;gap:12px;margin:16px 0;opacity:.4;}.divider-line{width:60px;height:1px;}.divider-line-l{background:linear-gradient(to right,transparent,var(--gold));}.divider-line-r{background:linear-gradient(to left,transparent,var(--gold));}.divider-star{color:var(--gold);font-size:18px;opacity:.6;}
     .form-wrap{width:100%;max-width:640px;}
     label{display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;}label.main-label{font-size:15px;}
     input,select,textarea{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--text-primary);font-size:15px;font-family:'Cormorant Garamond',serif;outline:none;transition:border-color .3s,box-shadow .3s;}
     input:focus,select:focus,textarea:focus{border-color:var(--input-focus-border);box-shadow:var(--input-focus-shadow);}
     input.name-input{font-size:18px;padding:14px 18px;}
     select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23c9a96e' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}
-    select option{background:var(--bg-mid);color:var(--text-primary);}textarea{resize:vertical;min-height:60px;}
+    select option{background:var(--bg-mid);color:var(--text-primary);}select option:disabled{color:var(--text-dim);font-style:italic;}textarea{resize:vertical;min-height:60px;}
     .about-you-card{background:var(--card-bg);border-radius:16px;border:1px solid var(--card-border);padding:28px;backdrop-filter:blur(10px);margin-bottom:32px;}.about-you-title{font-size:20px;font-weight:600;color:var(--gold);margin-bottom:20px;}
     .member-card{background:var(--card-bg);border-radius:16px;border:1px solid var(--card-border);padding:24px;position:relative;backdrop-filter:blur(10px);transition:border-color .3s;margin-bottom:16px;}.member-card:hover{border-color:rgba(201,169,110,.25);}
     .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}.field-group{margin-bottom:16px;}.field-group:last-child{margin-bottom:0;}
     .remove-btn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.15);border-radius:8px;color:var(--gold);width:30px;height:30px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:sans-serif;line-height:1;}.remove-btn:hover{background:rgba(200,100,100,.15);border-color:rgba(200,100,100,.3);}
     .add-btn{width:100%;padding:14px;margin-top:4px;border-radius:12px;border:1px dashed var(--gold-dim);background:transparent;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.05em;}.add-btn:hover{background:rgba(201,169,110,.05);border-color:var(--input-focus-border);}
     .empty-state{text-align:center;padding:40px 20px;border:1px dashed var(--gold-dim);border-radius:16px;margin-bottom:16px;}.empty-state p{font-size:16px;color:var(--text-muted);font-style:italic;margin-bottom:4px;}.empty-state .small{font-size:13px;color:var(--text-dim);}
-    .occasion-btn{padding:12px 16px;border-radius:10px;border:1px solid rgba(201,169,110,0.2);background:rgba(255,255,255,0.03);color:var(--text-secondary);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:600;cursor:pointer;transition:all 0.3s;text-align:center;}.occasion-btn:hover{border-color:rgba(201,169,110,0.4);background:rgba(201,169,110,0.05);}.occasion-btn.selected{border-color:var(--gold);background:rgba(201,169,110,0.12);color:var(--gold);}.occasion-icon{font-size:20px;display:block;margin-bottom:4px;}
     .generate-btn{width:100%;padding:18px;margin-top:32px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 50%,var(--gold) 100%);background-size:200% auto;color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;transition:all .4s;box-shadow:0 4px 24px rgba(201,169,110,.2);}.generate-btn:hover{background-position:right center;}.generate-btn:disabled{background:linear-gradient(135deg,#2a1f0e,#3d2c12);color:var(--gold);cursor:wait;box-shadow:none;}
     .loading-text{text-align:center;margin-top:16px;font-size:15px;color:var(--text-muted);font-style:italic;animation:pulse 2s ease-in-out infinite;}.spinner{display:inline-block;animation:gentleSpin 2s linear infinite;}
     .error-msg{padding:12px 16px;border-radius:10px;margin-top:16px;background:var(--error-bg);border:1px solid var(--error-border);color:var(--error);font-size:15px;display:none;}
@@ -103,8 +102,20 @@
       <!-- OCCASION SELECTOR -->
       <div class="about-you-card" style="margin-bottom:32px">
         <div class="about-you-title">Occasion</div>
-        <p style="font-size:14px;color:var(--text-muted);margin-bottom:16px;font-style:italic;">What is this du'a for? This helps us weave the right Quranic verses and Hadith.</p>
-        <div id="occasionGrid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;">
+        <div>
+          <label for="occasionSelect">Select the occasion for your du'a</label>
+          <select id="occasionSelect" onchange="selectedOccasion=this.value;trackFormStart();">
+            <option value="ramadan">🌙  Ramadan</option>
+            <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
+            <option value="general" disabled>🤲  General — Coming Soon</option>
+            <option value="illness" disabled>💚  Healing — Coming Soon</option>
+            <option value="travel" disabled>✈️  Travel — Coming Soon</option>
+            <option value="newborn" disabled>👶  New Baby — Coming Soon</option>
+            <option value="marriage" disabled>💍  Marriage — Coming Soon</option>
+            <option value="grief" disabled>🕊️  Grief — Coming Soon</option>
+            <option value="hajj" disabled>🕋  Hajj — Coming Soon</option>
+            <option value="gratitude" disabled>🌿  Gratitude — Coming Soon</option>
+          </select>
         </div>
       </div>
 
@@ -196,50 +207,28 @@
     const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague"];
     const AGE_RANGES=["Under 5","5-10","11-15","16-20","21-30","31-40","41-50","51-60","61-70","70+"];
     let members=[], generatedDuaText="", currentDuaId=null, currentEmailToken="";
-    let selectedOccasion="general";
+    let selectedOccasion="ramadan";
 
     const OCCASIONS=[
-      {id:"general",label:"General / Everyday",icon:"🤲"},
       {id:"ramadan",label:"Ramadan",icon:"🌙"},
-      {id:"jumuah",label:"Jumu'ah (Friday)",icon:"🕌"},
-      {id:"illness",label:"Illness / Healing",icon:"💚"},
-      {id:"exams",label:"Exams / Studies",icon:"📖"},
-      {id:"travel",label:"Travel / Journey",icon:"✈️"},
+      {id:"jumuah",label:"Jumu'ah",icon:"🕌"},
+      {id:"general",label:"General",icon:"🤲"},
+      {id:"illness",label:"Healing",icon:"💚"},
+      {id:"travel",label:"Travel",icon:"✈️"},
       {id:"newborn",label:"New Baby",icon:"👶"},
-      {id:"marriage",label:"Marriage / Wedding",icon:"💍"},
-      {id:"grief",label:"Grief / Loss",icon:"🕊️"},
-      {id:"hajj",label:"Hajj / Umrah",icon:"🕋"},
-      {id:"gratitude",label:"Gratitude / Shukr",icon:"🌿"},
+      {id:"marriage",label:"Marriage",icon:"💍"},
+      {id:"grief",label:"Grief",icon:"🕊️"},
+      {id:"hajj",label:"Hajj",icon:"🕋"},
+      {id:"gratitude",label:"Gratitude",icon:"🌿"},
     ];
-
-    // Render occasion buttons
-    (function renderOccasions(){
-      const grid=document.getElementById("occasionGrid");
-      OCCASIONS.forEach(o=>{
-        const btn=document.createElement("button");
-        btn.type="button";
-        btn.className="occasion-btn"+(o.id===selectedOccasion?" selected":"");
-        btn.dataset.occasion=o.id;
-        btn.innerHTML='<span class="occasion-icon">'+o.icon+'</span>'+o.label;
-        btn.onclick=function(){
-          selectedOccasion=o.id;
-          grid.querySelectorAll(".occasion-btn").forEach(b=>b.classList.remove("selected"));
-          btn.classList.add("selected");
-          trackFormStart();
-        };
-        grid.appendChild(btn);
-      });
-    })();
 
     // Seasonal banner — show contextual message based on Islamic calendar events
     (function showSeasonalBanner(){
       const banner=document.getElementById("seasonalBanner");
       const now=new Date();
-      const month=now.getMonth();const day=now.getDate();const dow=now.getDay();
-      // Friday reminder
-      if(dow===5){banner.textContent="It's Jumu'ah — the Prophet ﷺ said there is an hour on Friday when du'a is accepted.";banner.style.display="block";}
+      const month=now.getMonth();const day=now.getDate();
       // Ramadan approximate window (March-April) — adjust yearly
-      else if((month===2&&day>=10)||(month===3&&day<=25)){banner.textContent="The blessed month of Ramadan — make du'a for your family during these precious nights.";banner.style.display="block";}
+      if((month===2&&day>=10)||(month===3&&day<=25)){banner.textContent="The blessed month of Ramadan — make du'a for your family during these precious nights.";banner.style.display="block";}
       // Dhul Hijjah approximate window (June) — adjust yearly
       else if(month===5&&day<=15){banner.textContent="The first 10 days of Dhul Hijjah — among the most beloved days to Allah for good deeds.";banner.style.display="block";}
     })();

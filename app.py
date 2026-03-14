@@ -16,11 +16,6 @@ v1.2 Changes:
   - Retry logic on AI API calls (2 retries with backoff for 500/502/503/529)
   - Deeper health check: verifies DB, AI provider, and email config
   - EVERGREEN REBRAND: Header, titles, and all templates are occasion-agnostic
-  - 11 occasion types: general, ramadan, jumuah, illness, exams, travel, newborn, marriage, grief, hajj, gratitude
-  - Occasion selector in frontend with icons and seasonal contextual banner
-  - Jumu'ah weekly reminder email: /api/send-jumuah-reminder (cron-triggered)
-  - Unsubscribe endpoint: /api/unsubscribe?email=...
-  - Dynamic PDF/print titles based on selected occasion
 
 All 8 production-readiness issues from v10.2 remain resolved.
 
@@ -352,13 +347,6 @@ class Database:
         conn.close()
         return count
 
-    def get_all_emails(self) -> list:
-        """Return all email subscribers with name and email."""
-        conn = self._get_conn()
-        rows = conn.execute("SELECT email, name FROM email_list ORDER BY last_seen DESC").fetchall()
-        conn.close()
-        return [{"email": r["email"], "name": r["name"] or ""} for r in rows]
-
     # ── Gifts ──
     def gift_create(self, gift_id: str, sender_name: str, sender_email: str,
                     recipient_name: str, recipient_contact: str, delivery_method: str,
@@ -605,10 +593,6 @@ ILLNESS / HEALING:
 • Names of Allah: Ash-Shafi (the Healer), Al-Mu'afi
 • "Remove the hardship, O Lord of mankind, and heal" (Sahih Bukhari)
 
-EXAMS / STUDIES:
-• Du'a of Musa for ease of speech (Quran 20:25-28)
-• Names: Al-Fattah (the Opener), Al-Alim (the All-Knowing)
-
 TRAVEL / JOURNEY:
 • The traveler's du'a from Hadith
 • Names: Al-Hafidh (the Preserver), Al-Wakil (the Trustee)
@@ -798,7 +782,7 @@ class GenerateDuaRequest(BaseModel):
     @field_validator("occasion")
     @classmethod
     def valid_occasion(cls, v):
-        valid = {"ramadan", "jumuah", "illness", "exams", "travel", "newborn",
+        valid = {"ramadan", "jumuah", "illness", "travel", "newborn",
                  "marriage", "grief", "hajj", "gratitude", "general"}
         if v not in valid:
             return "general"
@@ -1037,7 +1021,6 @@ OCCASION_LABELS = {
     "ramadan": "the blessed last ten nights of Ramadan",
     "jumuah": "the blessed day of Jumu'ah (Friday)",
     "illness": "a time of illness — asking Allah for healing and ease",
-    "exams": "an upcoming exam or period of study — asking Allah for knowledge and success",
     "travel": "an upcoming journey — asking Allah for safety and protection",
     "newborn": "the arrival of a new baby — asking Allah for blessings and protection",
     "marriage": "a marriage — asking Allah for love, mercy, and harmony",
@@ -1051,7 +1034,6 @@ OCCASION_DISPLAY = {
     "ramadan": "Ramadan — Last 10 Nights",
     "jumuah": "Jumu'ah (Friday)",
     "illness": "Illness / Healing",
-    "exams": "Exams / Studies",
     "travel": "Travel / Journey",
     "newborn": "New Baby",
     "marriage": "Marriage / Wedding",
@@ -1649,132 +1631,6 @@ async def get_analytics(request: Request):
     stats["share_conversion_rate"] = round((rg / rv) * 100, 1) if rv > 0 else 0
 
     return stats
-
-
-# ══════════════════════════════════════════════════
-# Jumu'ah Weekly Reminder Email
-# ══════════════════════════════════════════════════
-
-async def send_jumuah_email(to_email: str, name: str):
-    """Send a Jumu'ah reminder email to a single subscriber."""
-    greeting = f"Assalamu alaikum{' ' + name if name else ''}"
-
-    html_body = f"""<html><body style="font-family:Georgia,serif;max-width:600px;margin:0 auto;padding:20px;color:#2c2c2c;line-height:1.8;background:#faf6ef;">
-<div style="text-align:center;padding:24px 0;border-bottom:1px solid #d4c4a0;margin-bottom:24px;">
-  <div style="font-family:'Georgia',serif;font-size:22px;color:#8b6914;font-weight:bold;margin-bottom:4px;">MyDua.ai</div>
-  <div style="font-size:13px;color:#888;">Your weekly Jumu'ah reminder</div>
-</div>
-
-<div style="text-align:center;margin-bottom:24px;">
-  <div style="font-size:28px;color:#8b6914;font-family:Georgia,serif;direction:rtl;margin-bottom:8px;">جُمُعَة مُبَارَكَة</div>
-  <div style="font-size:20px;color:#2c2c2c;font-weight:300;">Jumu'ah Mubarak</div>
-</div>
-
-<p>{greeting},</p>
-
-<p>The Prophet ﷺ said: <em style="color:#5a4520;">"There is an hour on Friday during which no Muslim asks Allah for good except that He gives it to them."</em> <span style="color:#888;font-size:13px;">(Sahih Muslim)</span></p>
-
-<p>Don't let this blessed hour pass without making du'a for yourself and the people you love.</p>
-
-<div style="text-align:center;margin:28px 0;">
-  <a href="{APP_BASE_URL}/?ref=jumuah&occasion=jumuah" style="display:inline-block;padding:16px 36px;background:#8b6914;color:#fff;text-decoration:none;border-radius:10px;font-weight:bold;font-size:17px;font-family:Georgia,serif;">Make a Du'a for Jumu'ah</a>
-</div>
-
-<p style="font-size:14px;color:#666;font-style:italic;">The Prophet ﷺ also said: <em style="color:#5a4520;">"Increase your salawat upon me on Friday, for it is witnessed by the angels."</em> <span style="color:#888;font-size:12px;">(Abu Dawud)</span></p>
-
-<p style="font-size:14px;color:#666;">اللَّهُمَّ صَلِّ عَلَى مُحَمَّدٍ وَعَلَى آلِ مُحَمَّدٍ</p>
-
-<div style="text-align:center;margin-top:32px;padding-top:20px;border-top:1px solid #d4c4a0;">
-  <p style="font-size:11px;color:#aaa;">You're receiving this because you used mydua.ai.<br/>
-  <a href="{APP_BASE_URL}/api/unsubscribe?email={to_email}" style="color:#8b6914;">Unsubscribe</a></p>
-  <p style="font-size:10px;color:#ccc;margin-top:8px;">mydua.ai — support@mydua.ai</p>
-</div>
-</body></html>"""
-
-    plain_text = f"""{greeting},
-
-Jumu'ah Mubarak!
-
-The Prophet ﷺ said: "There is an hour on Friday during which no Muslim asks Allah for good except that He gives it to them." (Sahih Muslim)
-
-Make a du'a for your loved ones today: {APP_BASE_URL}/?ref=jumuah&occasion=jumuah
-
-— mydua.ai
-"""
-
-    msg = MIMEMultipart("alternative")
-    msg["From"] = f"{SMTP_FROM_NAME} <{SMTP_FROM_EMAIL}>"
-    msg["To"] = to_email
-    msg["Subject"] = "Jumu'ah Mubarak — Don't forget to make du'a today"
-    msg.attach(MIMEText(plain_text, "plain", "utf-8"))
-    msg.attach(MIMEText(html_body, "html", "utf-8"))
-
-    await aiosmtplib.send(msg, hostname=SMTP_HOST, port=SMTP_PORT,
-                          username=SMTP_USERNAME, password=SMTP_PASSWORD, start_tls=True)
-
-
-@app.post("/api/send-jumuah-reminder")
-async def send_jumuah_reminder(request: Request, background_tasks: BackgroundTasks):
-    """
-    Send Jumu'ah reminder email to all subscribers.
-    Requires ANALYTICS_KEY auth. Designed to be called by a cron job every Friday.
-    Example: curl -X POST https://mydua.ai/api/send-jumuah-reminder?key=YOUR_KEY
-    """
-    # Auth check (same as analytics)
-    key = request.query_params.get("key", "")
-    if not key:
-        auth_header = request.headers.get("authorization", "")
-        if auth_header.startswith("Bearer "):
-            key = auth_header[7:]
-    if not ANALYTICS_KEY or not hmac.compare_digest(key, ANALYTICS_KEY):
-        raise HTTPException(401, "Unauthorized.")
-
-    if not SMTP_USERNAME:
-        raise HTTPException(503, "Email is not configured.")
-
-    subscribers = db.get_all_emails()
-    if not subscribers:
-        return {"status": "no_subscribers", "count": 0}
-
-    # Send in background to avoid timeout
-    async def send_all():
-        sent = 0
-        failed = 0
-        for sub in subscribers:
-            try:
-                await send_jumuah_email(sub["email"], sub["name"])
-                sent += 1
-                # Small delay to avoid SMTP rate limits
-                await asyncio.sleep(0.5)
-            except Exception as e:
-                failed += 1
-                logger.error(f"Jumu'ah email failed for {sub['email']}: {e}")
-        logger.info(f"Jumu'ah reminder: {sent} sent, {failed} failed out of {len(subscribers)}")
-
-    background_tasks.add_task(send_all)
-    return {"status": "sending", "count": len(subscribers)}
-
-
-@app.get("/api/unsubscribe")
-async def unsubscribe(email: str):
-    """Remove an email from the subscriber list."""
-    if not email or "@" not in email:
-        raise HTTPException(400, "Invalid email.")
-    conn = db._get_conn()
-    deleted = conn.execute("DELETE FROM email_list WHERE email = ?", (email,)).rowcount
-    conn.commit()
-    conn.close()
-
-    return HTMLResponse(content=f"""<!DOCTYPE html>
-<html lang="en"><head>
-<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>Unsubscribed — mydua.ai</title>
-<style>*{{margin:0;padding:0;box-sizing:border-box;}}body{{font-family:Georgia,serif;background:linear-gradient(160deg,#0a1628,#112240,#091525);color:#e8dcc8;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:40px 20px;text-align:center;}}.card{{max-width:480px;background:rgba(255,255,255,.03);border:1px solid rgba(201,169,110,.15);border-radius:20px;padding:40px;}}h1{{font-size:24px;font-weight:300;margin-bottom:12px;}}p{{font-size:16px;color:#d4c9b4;line-height:1.7;margin-bottom:16px;}}a{{color:#c9a96e;text-decoration:none;}}</style>
-</head><body><div class="card">
-<h1>{"You've been unsubscribed" if deleted else "Email not found"}</h1>
-<p>{"You won't receive any more emails from mydua.ai. May Allah bless you." if deleted else "This email wasn't in our list. You may have already unsubscribed."}</p>
-<a href="/">Visit mydua.ai</a>
-</div></body></html>""")
 
 
 @app.get("/shared/{dua_id}", response_class=HTMLResponse)
