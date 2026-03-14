@@ -9,7 +9,7 @@
   <meta property="og:description" content="Create a beautiful, personalized supplication for your family — powered by Quran and authentic Hadith." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap%22 rel="stylesheet" />
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
   <style>
     :root{--gold:#c9a96e;--gold-dim:rgba(201,169,110,0.3);--bg-deep:#0a1628;--bg-mid:#112240;--text-primary:#e8dcc8;--text-secondary:#d4c9b4;--text-muted:#8a7d6b;--text-dim:#5a5042;--error:#e8a0a0;--error-bg:rgba(200,100,100,0.1);--error-border:rgba(200,100,100,0.2);--success:#8bca8b;--success-bg:rgba(100,200,100,0.1);--card-bg:rgba(255,255,255,0.03);--card-border:rgba(201,169,110,0.12);--input-bg:rgba(255,255,255,0.04);--input-border:rgba(201,169,110,0.2);--input-focus-border:rgba(201,169,110,0.5);--input-focus-shadow:0 0 12px rgba(201,169,110,0.1);}
@@ -87,23 +87,23 @@
       <div id="seasonalBanner" style="margin-top:12px;padding:8px 20px;border-radius:10px;background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.15);font-size:14px;color:#c9a96e;font-style:italic;display:none;"></div>
       <div class="divider"><div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div></div>
     </header>
-
+ 
     <div id="formSection" class="form-wrap fade-in">
       <div class="about-you-card">
         <div class="about-you-title">About You</div>
-
+ 
         <div class="grid-2">
           <div><label for="userName">Your Name</label><input type="text" id="userName" class="name-input" placeholder="Enter your name" /></div>
           <!--<div><label for="userEmail">Your Email <span style="color:#c9a96e;">*</span></label><input type="email" id="userEmail" placeholder="name@example.com" /></div>!-->
           <div><label for="userEmail">Your Email <span style="color:#c9a96e;">*</span></label><input type="email" id="userEmail" placeholder="name@example.com" required /><p style="font-size:11px;color:var(--text-dim);margin-top:4px;font-style:italic;line-height:1.4;">Your email is only used to send you your du'a. We never share it with anyone.</p></div>
-        
+       
         </div>
-
+ 
         <div class="grid-2">
           <div><label for="userAge">Age Range</label><select id="userAge"><option value="">Select...</option></select></div>
           <div><label for="userGender">Gender</label><select id="userGender"><option value="">Select...</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
         </div>
-
+ 
         <div class="field-group" style="margin-top:16px">
           <label for="userConcerns">What would you like to pray for?</label>
           <textarea
@@ -120,7 +120,7 @@
           </div>
         </div>
       </div>
-
+ 
       <div class="about-you-card" style="margin-bottom:32px">
         <div class="about-you-title">Occasion</div>
         <div>
@@ -139,8 +139,10 @@
           </select>
         </div>
       </div>
-
-      <div>
+      
+      <!-- Beg Generate Button !-->
+      
+       <div>
         <div class="section-header"><h2 class="section-title">Family & Friends</h2><span class="member-count" id="memberCount">0 people</span></div>
         <div id="membersContainer"></div>
         <button class="add-btn" onclick="addMember()">+ Add Family or Friend</button>
@@ -148,14 +150,16 @@
 
       <div id="errorMsg" class="error-msg"></div>
 
+      <div style="text-align:center;margin:20px 0 8px;padding:12px 16px;border-radius:10px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.1);">
+        <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin:0;"><span style="color:var(--gold);">🔒</span> <strong style="color:var(--gold);">Your du'a is private.</strong> Your names, concerns, and personal details are used only to generate your du'a and are never shared publicly. Du'as are only visible to you unless you choose to share them.</p>
+      </div>
+
       <button class="generate-btn" id="generateBtn" onclick="generateDua()">Generate My Du'a</button>
       <p class="loading-text" id="loadingText" style="display:none">Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...</p>
+    </div>
 
-    <!--  <div style="text-align:center;margin:20px 0 8px;padding:12px 16px;border-radius:10px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.1);">
-        <span class="divider-star" style="opacity:.3">✦</span><br/>
-        <span style="color:var(--gold);font-size:12px;">🔒 Your du'a is private and never shared without your permission.</span><br/><br/>
-      </div>
-    </div>!-->
+      <!-- End Generate Button !-->
+
 
     <div id="supportSection" class="form-wrap fade-in" style="margin-top:48px">
       <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:32px 28px;text-align:center;backdrop-filter:blur(10px);">
@@ -179,7 +183,7 @@
         <p style="font-size:12px;color:var(--text-dim);margin-top:12px">Secure payment via Stripe. No account required.</p>
       </div>
     </div>
-
+ 
     <div id="resultSection" class="result-wrap fade-in" style="display:none">
       <div class="divider"><div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div></div>
       <div class="result-card">
@@ -197,25 +201,25 @@
       </div>
       <div class="closing-note">May Allah accept your du'a and answer it in the best of ways.<br/><span class="closing-arabic">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</span></div>
     </div>
-
+ 
     <div class="footer">
       <span class="divider-star" style="opacity:.3">✦</span><br/>
       This tool generates du'as using AI. Please verify all Quranic verses<br/>and Hadith references with authentic Islamic sources.<br/><br/>
       Questions or feedback? <a href="mailto:support@mydua.ai">support@mydua.ai</a>
     </div>
   </div>
-
+ 
   <script>
     const API={generate:"/api/generate-dua",save:"/api/save-dua",email:"/api/email-dua",trackPdf:"/api/track-pdf",trackSms:"/api/track-sms",analytics:"/api/analytics"};
-
+ 
     fetch("/api/track-pageview",{method:"POST"}).catch(()=>{});
-
+ 
     const isReferred=(new URLSearchParams(window.location.search)).get("ref")==="share";
     if(isReferred){fetch("/api/track-referral",{method:"POST"}).catch(()=>{});}
-
+ 
     let formStarted=false;
     function trackFormStart(){if(!formStarted){formStarted=true;fetch("/api/track-form-start",{method:"POST"}).catch(()=>{});}}
-
+ 
     function updateUserConcernsCount(){
       const el=document.getElementById("userConcerns");
       const counter=document.getElementById("userConcernsCount");
@@ -223,32 +227,32 @@
         counter.textContent=(el.value.length)+" / 500";
       }
     }
-
+ 
     function updateMemberConcernCount(i, textarea){
       const counter=document.getElementById("memberConcernsCount"+i);
       if(counter){
         counter.textContent=(textarea.value.length)+" / 500";
       }
     }
-
+ 
     document.addEventListener("DOMContentLoaded",()=>{
       ["userName","userEmail","userConcerns"].forEach(id=>{
         const el=document.getElementById(id);
         if(el){el.addEventListener("focus",trackFormStart,{once:true});}
       });
-
+ 
       const userConcernsEl=document.getElementById("userConcerns");
       if(userConcernsEl){
         userConcernsEl.addEventListener("input", updateUserConcernsCount);
         updateUserConcernsCount();
       }
     });
-
+ 
     const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague"];
     const AGE_RANGES=["Under 5","5-10","11-15","16-20","21-30","31-40","41-50","51-60","61-70","70+"];
     let members=[], generatedDuaText="", currentDuaId=null, currentEmailToken="";
     let selectedOccasion="ramadan";
-
+ 
     const OCCASIONS=[
       {id:"ramadan",label:"Ramadan",icon:"🌙"},
       {id:"jumuah",label:"Jumu'ah",icon:"🕌"},
@@ -261,7 +265,7 @@
       {id:"hajj",label:"Hajj",icon:"🕋"},
       {id:"gratitude",label:"Gratitude",icon:"🌿"},
     ];
-
+ 
     (function showSeasonalBanner(){
       const banner=document.getElementById("seasonalBanner");
       const now=new Date();
@@ -269,28 +273,28 @@
       if((month===2&&day>=10)||(month===3&&day<=25)){banner.textContent="The blessed month of Ramadan — make du'a for your family during these precious nights.";banner.style.display="block";}
       else if(month===5&&day<=15){banner.textContent="The first 10 days of Dhul Hijjah — among the most beloved days to Allah for good deeds.";banner.style.display="block";}
     })();
-
+ 
     const uAge=document.getElementById("userAge");
     AGE_RANGES.forEach(a=>{const o=document.createElement("option");o.value=a;o.textContent=a;uAge.appendChild(o);});
-
+ 
     function emptyMember(){return{name:"",relationship:"",ageRange:"",gender:"",attributes:"",concerns:""};}
     function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
-
+ 
     function renderMembers(){
       const c=document.getElementById("membersContainer");
       c.innerHTML="";
-
+ 
       if(!members.length){
         c.innerHTML='<div class="empty-state"><p>No one added yet</p><p class="small">Add your loved ones — family, friends, or anyone you want to make du\'a for</p></div>';
         document.getElementById("memberCount").textContent="0 people";
         return;
       }
-
+ 
       members.forEach((m,i)=>{
         const card=document.createElement("div");
         card.className="member-card fade-in";
         card.style.animationDelay=(i*.05)+"s";
-
+ 
         card.innerHTML=`
           <button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button>
           <div class="grid-2">
@@ -341,13 +345,13 @@
         `;
         c.appendChild(card);
       });
-
+ 
       document.getElementById("memberCount").textContent=members.length+(members.length===1?" person":" people");
     }
-
+ 
     function addMember(){members.push(emptyMember());renderMembers();}
     function removeMember(i){members.splice(i,1);renderMembers();}
-
+ 
     async function generateDua(){
       const userName=document.getElementById("userName").value.trim();
       const userEmail=document.getElementById("userEmail").value.trim();
@@ -364,11 +368,11 @@
         if(res.status===429){const d=await res.json();const msg=typeof d.detail==="string"?d.detail:Array.isArray(d.detail)?d.detail.map(e=>e.msg||e).join(", "):"Rate limit exceeded.";showError(msg);btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";return;}
         if(!res.ok){const d=await res.json().catch(()=>({}));const msg=typeof d.detail==="string"?d.detail:Array.isArray(d.detail)?d.detail.map(e=>e.msg||e).join(", "):JSON.stringify(d.detail||"Server error");throw new Error(msg);}
         const data=await res.json();
-
+ 
         generatedDuaText=data.dua;currentDuaId=null;currentEmailToken="";
         renderDua(data.dua);document.getElementById("resultSection").style.display="block";
         setTimeout(()=>document.getElementById("resultSection").scrollIntoView({behavior:"smooth"}),100);
-
+ 
       }catch(err){
         if(err.message==="Failed to fetch"){
           showError("Cannot connect to the server. Make sure the backend is running at "+window.location.origin+" and try again. (If you opened this HTML file directly, you need to access it through the server instead.)");
@@ -378,7 +382,7 @@
       }
       finally{btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";}
     }
-
+ 
     function renderDua(text){
       const c=document.getElementById("duaContent");
       c.innerHTML="";
@@ -407,7 +411,7 @@
         }
       });
     }
-
+ 
     function renderInline(t){
       t=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
       t=t.replace(/\*\*\*(.+?)\*\*\*/g,'<strong style="color:var(--gold);font-style:italic">$1</strong>');
@@ -415,25 +419,25 @@
       t=t.replace(/\*(.+?)\*/g,'<em style="color:#b8a88a">$1</em>');
       return t;
     }
-
+ 
     function exportPDF(){
       const btn=document.getElementById("pdfBtn");
       btn.disabled=true;
       btn.textContent="Generating...";
-
+ 
       const content=document.getElementById("duaContent");
       const userName=document.getElementById("userName").value.trim()||"Family";
-
+ 
       if(!content||!content.innerHTML.trim()){
         btn.disabled=false;
         btn.textContent="Download PDF";
         alert("No du'a content found to export.");
         return;
       }
-
+ 
       const occasionTitle=OCCASIONS.find(o=>o.id===selectedOccasion);
       const pdfTitle=occasionTitle?occasionTitle.label:"Personal Du'a";
-
+ 
       const opt={
         margin:[0.55,0.65,0.55,0.65],
         filename:"dua-"+userName.toLowerCase().replace(/\s+/g,"-")+".pdf",
@@ -455,7 +459,7 @@
           mode:["avoid-all","css","legacy"]
         }
       };
-
+ 
       const renderRoot=document.createElement("div");
       renderRoot.style.cssText=[
         "position:fixed",
@@ -470,7 +474,7 @@
         "padding:0",
         "overflow:visible"
       ].join(";");
-
+ 
       const wrapper=document.createElement("div");
       wrapper.style.cssText=[
         "color:#2c2419",
@@ -484,7 +488,7 @@
         "overflow:visible",
         "box-sizing:border-box"
       ].join(";");
-
+ 
       const header=document.createElement("div");
       header.style.cssText="text-align:center;margin:0 0 24px 0;padding-bottom:16px;border-bottom:1px solid #d4c4a0;page-break-inside:avoid;break-inside:avoid;";
       header.innerHTML=
@@ -492,10 +496,10 @@
         '<div style="font-size:28px;color:#1a1208;font-weight:300;letter-spacing:.04em;font-family:Cormorant Garamond,serif;">A Du\'a for '+esc(pdfTitle)+'</div>'+
         '<div style="font-size:14px;color:#7a6b50;font-style:italic;margin-top:6px;font-family:Cormorant Garamond,serif;">A personalized supplication for '+esc(userName)+'</div>';
       wrapper.appendChild(header);
-
+ 
       const clone=content.cloneNode(true);
       clone.style.cssText="display:block;visibility:visible;opacity:1;padding:0;margin:0;background:#ffffff;color:#2c2419;overflow:visible;max-height:none;height:auto;";
-
+ 
       const kids=Array.from(clone.children);
       let foundBismillah=false;
       for(let i=0;i<Math.min(kids.length,6);i++){
@@ -510,7 +514,7 @@
           break;
         }
       }
-
+ 
       clone.querySelectorAll("*").forEach(el=>{
         if(el.tagName!=="BR"){
           el.style.visibility="visible";
@@ -520,34 +524,34 @@
           if(el.style.maxHeight&&el.style.maxHeight!=="none") el.style.maxHeight="none";
         }
       });
-
+ 
       clone.querySelectorAll("h1").forEach(h=>{
         h.style.cssText="color:#8b6914;margin:24px 0 10px 0;font-size:30px;line-height:1.25;text-align:center;font-family:Cormorant Garamond,Georgia,serif;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;";
       });
-
+ 
       clone.querySelectorAll("h2").forEach(h=>{
         h.style.cssText="color:#8b6914;margin:22px 0 10px 0;font-size:24px;line-height:1.3;font-family:Cormorant Garamond,Georgia,serif;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;";
       });
-
+ 
       clone.querySelectorAll("p").forEach(p=>{
         p.style.cssText="color:#2c2419;margin:6px 0;font-size:16px;line-height:1.8;white-space:pre-wrap;font-family:Cormorant Garamond,Georgia,serif;orphans:3;widows:3;page-break-inside:avoid;break-inside:avoid;";
       });
-
+ 
       clone.querySelectorAll("strong").forEach(s=>{
         s.style.color="#8b6914";
       });
-
+ 
       clone.querySelectorAll("em").forEach(e=>{
         e.style.color="#5a4520";
       });
-
+ 
       clone.querySelectorAll(".divider").forEach(d=>{
         d.style.cssText="text-align:center;margin:14px 0;color:#c9a96e;opacity:.5;font-size:14px;page-break-inside:avoid;break-inside:avoid;";
         d.innerHTML="✦";
       });
-
+ 
       wrapper.appendChild(clone);
-
+ 
       const footer=document.createElement("div");
       footer.style.cssText="text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #d4c4a0;page-break-inside:avoid;break-inside:avoid;";
       footer.innerHTML=
@@ -555,10 +559,10 @@
         '<p style="font-size:12px;color:#7a6b50;font-style:italic;font-family:Cormorant Garamond,serif;margin:4px 0;">Please verify all Quranic verses and Hadith references with authentic Islamic sources.</p>'+
         '<p style="font-size:11px;color:#9a8d7a;margin-top:8px;font-family:Cormorant Garamond,serif;">Generated at mydua.ai — support@mydua.ai</p>';
       wrapper.appendChild(footer);
-
+ 
       renderRoot.appendChild(wrapper);
       document.body.appendChild(renderRoot);
-
+ 
       setTimeout(()=>{
         html2pdf().set(opt).from(wrapper).save()
           .then(()=>{
@@ -576,7 +580,7 @@
           });
       },700);
     }
-
+ 
     async function saveDua(){if(currentDuaId)return{id:currentDuaId,shareUrl:window.location.origin+"/shared/"+currentDuaId+"?ref=share",emailToken:currentEmailToken};const userName=document.getElementById("userName").value.trim();const res=await fetch(API.save,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({userName,dua:generatedDuaText,members})});if(!res.ok)throw new Error("Failed to save");const data=await res.json();currentDuaId=data.id;currentEmailToken=data.emailToken||"";return data;}
     async function shareDua(){const panel=document.getElementById("sharePanel");if(panel.style.display==="block"){panel.style.display="none";return;}document.getElementById("smsPanel").style.display="none";try{const data=await saveDua();document.getElementById("shareLinkInput").value=data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share";panel.style.display="block";}catch(e){alert("Failed to create share link.");}}
     function copyShareLink(){navigator.clipboard.writeText(document.getElementById("shareLinkInput").value).then(()=>{const e=document.getElementById("shareSuccess");e.textContent="Link copied!";e.style.display="block";setTimeout(()=>e.style.display="none",3000);});}
@@ -593,16 +597,17 @@
     }
     async function sendEmail(){const email=document.getElementById("emailInput").value.trim();const btn=document.getElementById("emailSendBtn");const sEl=document.getElementById("emailSuccess");const eEl=document.getElementById("emailError");sEl.style.display="none";eEl.style.display="none";if(!email||!email.includes("@")){eEl.textContent="Please enter a valid email.";eEl.style.display="block";return;}btn.disabled=true;btn.textContent="Sending...";try{await saveDua();const res=await fetch(API.email,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({duaId:currentDuaId,email,recipientName:document.getElementById("userName").value.trim(),token:currentEmailToken})});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed");}sEl.textContent="Du'a sent to "+email+"!";sEl.style.display="block";document.getElementById("emailInput").value="";}catch(e){eEl.textContent=e.message;eEl.style.display="block";}finally{btn.disabled=false;btn.textContent="Send";}}
     function copyDua(){navigator.clipboard.writeText(generatedDuaText).then(()=>{const b=document.getElementById("copyBtn");b.textContent="✓ Copied";b.classList.add("copied");setTimeout(()=>{b.textContent="Copy";b.classList.remove("copied");},2500);});}
-    function printDua(){const c=document.getElementById("duaContent").innerHTML;const u=document.getElementById("userName").value.trim()||"Family";const oc=OCCASIONS.find(o=>o.id===selectedOccasion);const pt=oc?oc.label:"Personal Du'a";const w=window.open("","_blank");w.document.write('<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,700&family=Amiri:wght@400;700&display=swap" rel="stylesheet"/><style>body{font-family:"Cormorant Garamond",serif;max-width:700px;margin:40px auto;padding:20px;color:#2c2419;line-height:1.8;background:#fff;}h1{text-align:center;font-size:28px;color:#8b6914;margin:30px 0 15px;}h2{font-size:22px;color:#8b6914;margin:28px 0 12px;}p{font-size:16px;margin:4px 0;color:#2c2419;}strong{color:#8b6914;}em{color:#5a4520;}.divider{text-align:center;margin:20px 0;color:#c9a96e;opacity:.5;}.footer{text-align:center;font-size:12px;color:#7a6b50;margin-top:30px;padding-top:20px;border-top:1px solid #d4c4a0;}</style></head><body><div style="text-align:center;margin-bottom:30px"><div style="font-family:Amiri,serif;font-size:24px;color:#8b6914;direction:rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><div style="font-size:26px;margin:8px 0;color:#1a1208;font-weight:300">A Du\'a for '+esc(pt)+'</div><div style="font-size:14px;color:#7a6b50;font-style:italic">A personalized supplication for '+esc(u)+'</div></div>'+c+'<div class="footer">Generated at mydua.ai — support@mydua.ai</div><script>window.print();<\/script></body></html>');w.document.close();}
+    function printDua(){const c=document.getElementById("duaContent").innerHTML;const u=document.getElementById("userName").value.trim()||"Family";const oc=OCCASIONS.find(o=>o.id===selectedOccasion);const pt=oc?oc.label:"Personal Du'a";const w=window.open("","_blank");w.document.write('<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,700&family=Amiri:wght@400;700&display=swap%22 rel="stylesheet"/><style>body{font-family:"Cormorant Garamond",serif;max-width:700px;margin:40px auto;padding:20px;color:#2c2419;line-height:1.8;background:#fff;}h1{text-align:center;font-size:28px;color:#8b6914;margin:30px 0 15px;}h2{font-size:22px;color:#8b6914;margin:28px 0 12px;}p{font-size:16px;margin:4px 0;color:#2c2419;}strong{color:#8b6914;}em{color:#5a4520;}.divider{text-align:center;margin:20px 0;color:#c9a96e;opacity:.5;}.footer{text-align:center;font-size:12px;color:#7a6b50;margin-top:30px;padding-top:20px;border-top:1px solid #d4c4a0;}</style></head><body><div style="text-align:center;margin-bottom:30px"><div style="font-family:Amiri,serif;font-size:24px;color:#8b6914;direction:rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><div style="font-size:26px;margin:8px 0;color:#1a1208;font-weight:300">A Du\'a for '+esc(pt)+'</div><div style="font-size:14px;color:#7a6b50;font-style:italic">A personalized supplication for '+esc(u)+'</div></div>'+c+'<div class="footer">Generated at mydua.ai — support@mydua.ai</div><script>window.print();<\/script></body></html>');w.document.close();}
     function startOver(){document.getElementById("resultSection").style.display="none";["sharePanel","smsPanel"].forEach(p=>document.getElementById(p).style.display="none");generatedDuaText="";currentDuaId=null;currentEmailToken="";window.scrollTo({top:0,behavior:"smooth"});}
     function showError(msg){const e=document.getElementById("errorMsg");e.textContent=msg;e.style.display="block";}
     function hideError(){document.getElementById("errorMsg").style.display="none";}
-
+ 
     let selectedSupportAmount="10";
     function selectAmount(amt){selectedSupportAmount=amt;document.querySelectorAll(".support-amt").forEach(b=>{if(b.dataset.amt===amt){b.style.borderColor="var(--gold)";b.style.background="rgba(201,169,110,0.12)";}else{b.style.borderColor="rgba(201,169,110,0.25)";b.style.background="rgba(255,255,255,0.03)";}});document.getElementById("customAmountWrap").style.display=amt==="custom"?"block":"none";}
     async function handleSupport(){const btn=document.getElementById("supportBtn");btn.disabled=true;btn.textContent="Redirecting to Stripe...";const body={amount:selectedSupportAmount};if(selectedSupportAmount==="custom"){const val=parseInt(document.getElementById("customAmountInput").value);if(!val||val<1){alert("Please enter an amount of at least $1.");btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";return;}body.customAmount=val;}try{const res=await fetch("/api/create-support-session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to create payment session");}const data=await res.json();window.location.href=data.url;}catch(e){alert("Payment error: "+e.message);btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";}}
-
+ 
     renderMembers();
   </script>
 </body>
 </html>
+ 
