@@ -349,158 +349,190 @@
   btn.textContent = "Generating...";
 
   const content = document.getElementById("duaContent");
-  const userName =
-    document.getElementById("userName").value.trim() || "Family";
+  const userName = document.getElementById("userName").value.trim() || "Family";
 
-  // --- Build a fresh wrapper ---
-  const wrapper = document.createElement("div");
-  wrapper.style.cssText =
-    "color:#2c2419;font-family:'Cormorant Garamond',Georgia,serif;" +
-    "font-size:14px;line-height:1.8;background:#ffffff;" +
-    "width:816px;padding:0;margin:0;";           // ← use px, not inches
+  if (!content || !content.innerHTML.trim()) {
+    btn.disabled = false;
+    btn.textContent = "Download PDF";
+    alert("No du'a content found to export.");
+    return;
+  }
 
-  // --- Header ---
-  const occasionTitle = OCCASIONS.find((o) => o.id === selectedOccasion);
+  const occasionTitle = OCCASIONS.find(o => o.id === selectedOccasion);
   const pdfTitle = occasionTitle ? occasionTitle.label : "Personal Du'a";
 
+  const opt = {
+    margin: [0.5, 0.6, 0.5, 0.6],
+    filename: "dua-" + userName.toLowerCase().replace(/\s+/g, "-") + ".pdf",
+    image: { type: "jpeg", quality: 0.98 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      backgroundColor: "#ffffff"
+    },
+    jsPDF: {
+      unit: "in",
+      format: "letter",
+      orientation: "portrait"
+    },
+    pagebreak: {
+      mode: ["css", "legacy"],
+      avoid: ["h1", "h2", ".divider"]
+    }
+  };
+
+  const renderRoot = document.createElement("div");
+  renderRoot.style.position = "fixed";
+  renderRoot.style.top = "0";
+  renderRoot.style.left = "0";
+  renderRoot.style.width = "816px";
+  renderRoot.style.background = "#ffffff";
+  renderRoot.style.zIndex = "-1";
+  renderRoot.style.opacity = "0";
+  renderRoot.style.pointerEvents = "none";
+  renderRoot.style.padding = "0";
+  renderRoot.style.margin = "0";
+
+  const wrapper = document.createElement("div");
+  wrapper.style.cssText = `
+    color:#2c2419;
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-size:14px;
+    line-height:1.8;
+    background:#ffffff;
+    width:6.8in;
+    padding:0;
+    margin:0 auto;
+  `;
+
   const header = document.createElement("div");
-  header.style.cssText =
-    "text-align:center;margin:0 0 24px 0;padding-bottom:16px;" +
-    "border-bottom:1px solid #d4c4a0;";
+  header.style.cssText = `
+    text-align:center;
+    margin:0 0 24px 0;
+    padding-bottom:16px;
+    border-bottom:1px solid #d4c4a0;
+  `;
   header.innerHTML =
-    '<div style="font-family:Amiri,serif;font-size:26px;color:#8b6914;' +
-    'margin-bottom:8px;text-align:center;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>' +
-    '<div style="font-size:28px;color:#1a1208;font-weight:300;' +
-    'letter-spacing:.04em;font-family:Cormorant Garamond,serif;">' +
-    "A Du'a for " + esc(pdfTitle) + "</div>" +
-    '<div style="font-size:14px;color:#7a6b50;font-style:italic;' +
-    'margin-top:6px;font-family:Cormorant Garamond,serif;">' +
-    "A personalized supplication for " + esc(userName) + "</div>";
+    '<div style="font-family:Amiri,serif;font-size:26px;color:#8b6914;margin-bottom:8px;text-align:center;">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>' +
+    '<div style="font-size:28px;color:#1a1208;font-weight:300;letter-spacing:.04em;font-family:Cormorant Garamond,serif;">A Du\'a for ' + esc(pdfTitle) + '</div>' +
+    '<div style="font-size:14px;color:#7a6b50;font-style:italic;margin-top:6px;font-family:Cormorant Garamond,serif;">A personalized supplication for ' + esc(userName) + '</div>';
+
   wrapper.appendChild(header);
 
-  // --- Clone & clean the du'a content ---
-  const clone = content.cloneNode(true);
+  const bodyContainer = document.createElement("div");
+  bodyContainer.style.cssText = "padding:0;margin:0;";
 
-  // Remove the AI-generated Bismillah + first divider
+  const clone = content.cloneNode(true);
+  clone.style.display = "block";
+  clone.style.visibility = "visible";
+  clone.style.opacity = "1";
+  clone.style.padding = "0";
+  clone.style.margin = "0";
+
   const children = Array.from(clone.children);
   let removedBismillah = false;
+
   for (let i = 0; i < Math.min(children.length, 5); i++) {
     const el = children[i];
-    const txt = el.textContent.trim();
-    if (
-      !removedBismillah &&
-      (txt.includes("بِسْمِ") || txt.includes("بسم"))
-    ) {
+    const txt = (el.textContent || "").trim();
+
+    if (!removedBismillah && (txt.includes("بِسْمِ") || txt.includes("بسم"))) {
       el.remove();
       removedBismillah = true;
       continue;
     }
+
     if (
       removedBismillah &&
-      (el.classList?.contains("divider") ||
-        el.style?.height === "12px" ||
-        txt === "")
+      (
+        el.classList.contains("divider") ||
+        (el.style && el.style.height === "12px") ||
+        txt === ""
+      )
     ) {
       el.remove();
       break;
     }
   }
 
-  // Inline-style the cloned nodes so html2canvas picks them up
-  clone.style.cssText = "padding:0;margin:0;";
-  clone.querySelectorAll("h1,h2").forEach((h) => {
-    h.style.cssText =
-      "color:#8b6914;page-break-after:avoid;margin:20px 0 8px 0;" +
-      "font-family:'Cormorant Garamond',Georgia,serif;";
+  clone.querySelectorAll("h1, h2").forEach(h => {
+    h.style.cssText = `
+      color:#8b6914;
+      page-break-after:avoid;
+      margin:20px 0 8px 0;
+      font-family:Cormorant Garamond, Georgia, serif;
+    `;
   });
-  clone.querySelectorAll("p").forEach((p) => {
-    p.style.cssText = "color:#2c2419;orphans:3;widows:3;margin:4px 0;";
+
+  clone.querySelectorAll("p").forEach(p => {
+    p.style.cssText = `
+      color:#2c2419;
+      orphans:3;
+      widows:3;
+      margin:4px 0;
+      white-space:pre-wrap;
+    `;
   });
-  clone.querySelectorAll("strong").forEach((s) => {
+
+  clone.querySelectorAll("strong").forEach(s => {
     s.style.color = "#8b6914";
   });
-  clone.querySelectorAll("em").forEach((e) => {
+
+  clone.querySelectorAll("em").forEach(e => {
     e.style.color = "#5a4520";
   });
-  clone.querySelectorAll(".divider").forEach((d) => {
-    d.style.cssText =
-      "text-align:center;margin:12px 0;color:#c9a96e;opacity:.5;" +
-      "font-size:14px;page-break-after:avoid;";
+
+  clone.querySelectorAll(".divider").forEach(d => {
+    d.style.cssText = `
+      text-align:center;
+      margin:12px 0;
+      color:#c9a96e;
+      opacity:.5;
+      font-size:14px;
+      page-break-after:avoid;
+    `;
     d.innerHTML = "✦";
   });
 
-  // Move cleaned nodes into wrapper
-  while (clone.firstChild) wrapper.appendChild(clone.firstChild);
+  bodyContainer.appendChild(clone);
+  wrapper.appendChild(bodyContainer);
 
-  // --- Footer ---
   const footer = document.createElement("div");
-  footer.style.cssText =
-    "text-align:center;margin-top:24px;padding-top:16px;" +
-    "border-top:1px solid #d4c4a0;";
+  footer.style.cssText = `
+    text-align:center;
+    margin-top:24px;
+    padding-top:16px;
+    border-top:1px solid #d4c4a0;
+  `;
   footer.innerHTML =
-    '<div style="font-family:Amiri,serif;font-size:18px;color:#8b6914;' +
-    'margin-bottom:8px;text-align:center;">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</div>' +
-    '<p style="font-size:12px;color:#7a6b50;font-style:italic;' +
-    "font-family:'Cormorant Garamond',serif;\">Please verify all Quranic " +
-    "verses and Hadith references with authentic Islamic sources.</p>" +
-    '<p style="font-size:11px;color:#9a8d7a;margin-top:8px;' +
-    "font-family:'Cormorant Garamond',serif;\">Generated at mydua.ai — " +
-    "support@mydua.ai</p>";
+    '<div style="font-family:Amiri,serif;font-size:18px;color:#8b6914;margin-bottom:8px;text-align:center;">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</div>' +
+    '<p style="font-size:12px;color:#7a6b50;font-style:italic;font-family:Cormorant Garamond,serif;">Please verify all Quranic verses and Hadith references with authentic Islamic sources.</p>' +
+    '<p style="font-size:11px;color:#9a8d7a;margin-top:8px;font-family:Cormorant Garamond,serif;">Generated at mydua.ai — support@mydua.ai</p>';
+
   wrapper.appendChild(footer);
+  renderRoot.appendChild(wrapper);
+  document.body.appendChild(renderRoot);
 
-  // ─────────────────────────────────────────────
-  //  KEY FIX: keep the wrapper ON-screen but invisible so html2canvas
-  //  can still measure & paint it.  "left:-9999px" makes many browsers
-  //  skip rendering entirely → blank PDF.
-  // ─────────────────────────────────────────────
-  wrapper.style.position = "fixed";
-  wrapper.style.left = "0";
-  wrapper.style.top = "0";
-  wrapper.style.zIndex = "-9999";
-  wrapper.style.opacity = "0";          // invisible to user
-  wrapper.style.pointerEvents = "none"; // non-interactive
-  document.body.appendChild(wrapper);
-
-  // Small delay so the browser paints + loads any web-fonts
   setTimeout(() => {
-    const opt = {
-      margin: [0.5, 0.6, 0.5, 0.6],
-      filename:
-        "dua-" + userName.toLowerCase().replace(/\s+/g, "-") + ".pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        backgroundColor: "#ffffff",
-        scrollX: 0,
-        scrollY: -window.scrollY,   // ← compensate for current scroll
-        windowWidth: wrapper.scrollWidth,
-        windowHeight: wrapper.scrollHeight,
-      },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-      pagebreak: { mode: ["css"], avoid: ["h2"] },
-    };
-
     html2pdf()
       .set(opt)
       .from(wrapper)
       .save()
       .then(() => {
-        document.body.removeChild(wrapper);
+        document.body.removeChild(renderRoot);
         btn.disabled = false;
         btn.textContent = "Download PDF";
         fetch(API.trackPdf, { method: "POST" }).catch(() => {});
       })
       .catch((err) => {
-        console.error("PDF generation error:", err);
-        document.body.removeChild(wrapper);
+        console.error("PDF generation failed:", err);
+        document.body.removeChild(renderRoot);
         btn.disabled = false;
         btn.textContent = "Download PDF";
-        alert("PDF generation failed. Try printing instead (Ctrl+P).");
+        alert("PDF generation failed. Try printing instead.");
       });
-  }, 300); // 300 ms lets fonts + layout settle
+  }, 300);
 }
-
     async function saveDua(){if(currentDuaId)return{id:currentDuaId,shareUrl:window.location.origin+"/shared/"+currentDuaId+"?ref=share",emailToken:currentEmailToken};const userName=document.getElementById("userName").value.trim();const res=await fetch(API.save,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({userName,dua:generatedDuaText,members})});if(!res.ok)throw new Error("Failed to save");const data=await res.json();currentDuaId=data.id;currentEmailToken=data.emailToken||"";return data;}
     async function shareDua(){const panel=document.getElementById("sharePanel");if(panel.style.display==="block"){panel.style.display="none";return;}document.getElementById("smsPanel").style.display="none";try{const data=await saveDua();document.getElementById("shareLinkInput").value=data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share";panel.style.display="block";}catch(e){alert("Failed to create share link.");}}
     function copyShareLink(){navigator.clipboard.writeText(document.getElementById("shareLinkInput").value).then(()=>{const e=document.getElementById("shareSuccess");e.textContent="Link copied!";e.style.display="block";setTimeout(()=>e.style.display="none",3000);});}
