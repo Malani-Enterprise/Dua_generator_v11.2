@@ -1,7 +1,7 @@
 """
-mydua.ai — Backend API (v1.4.2 Production)
+mydua.ai — Backend API (v1.4.3 Production)
 ==========================================
-v1.4.2 Changes:
+v1.4.3 Changes:
   - Solo user mode: single user gets a flowing personal du'a (no individual family sections)
   - Shorter natural output for solo user (~1200-1500 words) within same max_tokens ceiling
   - No truncation — prompt instructs model to complete naturally at shorter length
@@ -952,7 +952,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("mydua.ai v1.4.2 — Production")
+    logger.info("mydua.ai v1.4.3 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -989,7 +989,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.4.2",
+    version="1.4.3",
     lifespan=lifespan,
 )
 
@@ -1507,7 +1507,7 @@ async def health_check():
     checks = {
         "status": "ok",
         "provider": AI_PROVIDER,
-        "version": "1.4.2",
+        "version": "1.4.3",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable

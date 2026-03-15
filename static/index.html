@@ -191,7 +191,7 @@
       document.querySelectorAll(".concern-tag").forEach(tag=>{tag.addEventListener("click",()=>{tag.classList.toggle("selected");const textarea=document.getElementById("userConcerns");const selected=Array.from(document.querySelectorAll(".concern-tag.selected")).map(t=>t.dataset.tag);const manual=textarea.value.split(",").map(s=>s.trim()).filter(s=>s&&!document.querySelector('.concern-tag[data-tag="'+s+'"]'));textarea.value=[...selected,...manual].join(", ");updateUserConcernsCount();trackFormStart();});});
     });
 
-    const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague"];
+    const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Mother In Law","Father In Law","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague","Pet"];
     const AGE_RANGES=["Under 5","5-10","11-15","16-20","21-30","31-40","41-50","51-60","61-70","70+"];
     let members=[],generatedDuaText="",currentDuaId=null,currentEmailToken="";
     let selectedOccasion="ramadan";
