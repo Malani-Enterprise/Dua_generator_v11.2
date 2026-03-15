@@ -1,7 +1,18 @@
 """
-mydua.ai — Backend API (v1.4.3 Production)
+mydua.ai — Backend API (v1.4.4 Production)
 ==========================================
-v1.4.3 Changes:
+v1.4.4 Changes:
+  - Du'a length toggle: Quick / Standard / Detailed (user-selectable)
+  - Ramadan defaults to Detailed; other occasions default to Standard
+  - Natural naming: skip relationship/age labels when person is unique
+  - Concern tags on family member cards (collapsible pill grid per member)
+  - Smart age dropdown: exact ages 1-20 for kids, decade ranges (20s-70+) for adults
+  - Edit & Regenerate button on result page (retains inputs, skipCache: true)
+  - Remove Your Name field from About You (keep family names only)
+  - Family name field hint: "Can be a nickname or 😊"
+  - Inline hint font size bumped from 12px to 14px
+
+v1.4.4 Changes:
   - Solo user mode: single user gets a flowing personal du'a (no individual family sections)
   - Shorter natural output for solo user (~1200-1500 words) within same max_tokens ceiling
   - No truncation — prompt instructs model to complete naturally at shorter length
@@ -712,31 +723,140 @@ Follow the length guidance provided in the user message.
 # Dynamic Output Length
 # ══════════════════════════════════════════════════
 
-def get_length_instruction(member_count: int, is_solo: bool = False) -> str:
-    if is_solo:
-        return (
+def normalize_age_for_prompt(age_range: str) -> str:
+    """
+    Map the smart age dropdown values (exact ages 1-20, decade ranges)
+    to descriptive age context for the AI prompt.
+    """
+    if not age_range:
+        return ""
+    a = age_range.strip()
+    # Exact ages
+    if a == "Under 1":
+        return "infant (under 1 year old)"
+    if a.isdigit():
+        n = int(a)
+        if n <= 4:
+            return f"{n} years old (tender early childhood)"
+        elif n <= 10:
+            return f"{n} years old (childhood)"
+        elif n <= 15:
+            return f"{n} years old (early adolescence)"
+        elif n <= 20:
+            return f"{n} years old (youth)"
+        else:
+            return f"{n} years old"
+    # Decade ranges
+    decade_map = {
+        "20s": "in their 20s (building a life)",
+        "30s": "in their 30s (prime years)",
+        "40s": "in their 40s (wisdom and influence)",
+        "50s": "in their 50s (gratitude and legacy)",
+        "60s": "in their 60s (comfort and dignity)",
+        "70+": "70 or older (mercy and spiritual readiness)",
+    }
+    if a in decade_map:
+        return decade_map[a]
+    # Legacy bracket format (backward compat)
+    return a
+
+
+# ── Length Tiers: Quick / Standard / Detailed ──
+# Tier can be user-selected or auto-assigned by occasion.
+
+LENGTH_TIERS = {
+    "quick": {
+        "solo": (
+            "Write a concise, heartfelt du'a of approximately 600-800 words. "
+            "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
+            "Keep it focused: a brief opening praising Allah, a personal supplication, and a closing with Ameen. "
+            "End with آمِين يَا رَبَّ الْعَالَمِين."
+        ),
+        "family": {
+            2: "Write a concise du'a of approximately 600-900 words total. 1 Quranic verse per person. Brief opening, individual sections, short closing with Ameen.",
+            4: "Write a concise du'a of approximately 800-1200 words total. 1 Quranic verse per person. Brief sections. Complete with family closing and Ameen.",
+            6: "Write a concise du'a of approximately 1000-1400 words total. 1 Quranic verse per person. Brief sections. Complete with family closing and Ameen.",
+            99: "Write a concise du'a of approximately 1200-1600 words total. 1 Quranic verse per person. Brief sections. Complete with family closing and Ameen.",
+        },
+    },
+    "standard": {
+        "solo": (
             "Write a deeply personal, heartfelt du'a of approximately 1200-1500 words total. "
             "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
             "Instead, weave all prayers into a single flowing supplication with: "
             "a rich opening praising Allah, a personal section addressing the supplicant's concerns and life, "
             "and a closing with forgiveness, mercy, and Ameen. "
             "Keep it intimate and complete — do not cut short. End with آمِين يَا رَبَّ الْعَالَمِين."
-        )
-    elif member_count <= 2:
-        return "Write a heartfelt du'a of approximately 1200-1800 words total. Include 1-2 Quranic verses per person with a rich opening and closing. Do not cut the du'a short — complete every section fully, including the family closing and Ameen."
-    elif member_count <= 4:
-        return "Write a comprehensive du'a of approximately 1500-2000 words total. Include 1-2 Quranic verses per person. Complete every section fully including the family closing and Ameen."
-    elif member_count <= 6:
-        return "Write a detailed du'a of approximately 2000-2500 words total. Include 1-2 Quranic verses per person. Complete every section fully including the family closing and Ameen."
-    else:
-        return "Write a thorough du'a of approximately 2500-3000 words total. Include 1-2 Quranic verses per person. Complete every section fully including the family closing and Ameen."
+        ),
+        "family": {
+            2: "Write a heartfelt du'a of approximately 1200-1800 words total. Include 1-2 Quranic verses per person with a rich opening and closing. Do not cut the du'a short — complete every section fully, including the family closing and Ameen.",
+            4: "Write a comprehensive du'a of approximately 1500-2000 words total. Include 1-2 Quranic verses per person. Complete every section fully including the family closing and Ameen.",
+            6: "Write a detailed du'a of approximately 2000-2500 words total. Include 1-2 Quranic verses per person. Complete every section fully including the family closing and Ameen.",
+            99: "Write a thorough du'a of approximately 2500-3000 words total. Include 1-2 Quranic verses per person. Complete every section fully including the family closing and Ameen.",
+        },
+    },
+    "detailed": {
+        "solo": (
+            "Write a rich, deeply personal du'a of approximately 1800-2200 words total. "
+            "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
+            "Instead, weave all prayers into a single flowing supplication with: "
+            "an extensive opening praising Allah with multiple Names and attributes, "
+            "a deeply personal section that addresses every concern with relevant Quranic verses and Hadith, "
+            "and a rich closing with forgiveness, mercy, occasion-specific references, and Ameen. "
+            "Take your time — let every prayer breathe. End with آمِين يَا رَبَّ الْعَالَمِين."
+        ),
+        "family": {
+            2: "Write a rich, deeply detailed du'a of approximately 2000-2500 words total. Include 2-3 Quranic verses per person. Rich opening with multiple Names of Allah. Each person's section should be thorough and deeply personal. Expansive family closing with Ameen.",
+            4: "Write a rich, deeply detailed du'a of approximately 2500-3200 words total. Include 2-3 Quranic verses per person. Thorough and deeply personal sections. Expansive family closing with Ameen.",
+            6: "Write a rich, deeply detailed du'a of approximately 3000-3800 words total. Include 2-3 Quranic verses per person. Thorough and deeply personal sections. Expansive family closing with Ameen.",
+            99: "Write a rich, deeply detailed du'a of approximately 3500-4500 words total. Include 2-3 Quranic verses per person. Thorough and deeply personal sections. Expansive family closing with Ameen.",
+        },
+    },
+}
 
-def get_max_tokens(member_count: int, is_solo: bool = False) -> int:
-    if is_solo: return 4096  # Same ceiling — but shorter prompt means natural completion, no truncation
-    elif member_count <= 2: return 4096
-    elif member_count <= 4: return 6000
-    elif member_count <= 6: return 7500
-    else: return 8192
+# Default tier per occasion (#11)
+OCCASION_DEFAULT_TIER = {
+    "ramadan": "detailed",
+}
+# All other occasions default to "standard"
+
+
+def get_length_instruction(member_count: int, is_solo: bool = False, tier: str = "standard") -> str:
+    tier = tier if tier in LENGTH_TIERS else "standard"
+    tier_data = LENGTH_TIERS[tier]
+    if is_solo:
+        return tier_data["solo"]
+    family = tier_data["family"]
+    if member_count <= 2:
+        return family[2]
+    elif member_count <= 4:
+        return family[4]
+    elif member_count <= 6:
+        return family[6]
+    else:
+        return family[99]
+
+
+def get_max_tokens(member_count: int, is_solo: bool = False, tier: str = "standard") -> int:
+    tier = tier if tier in LENGTH_TIERS else "standard"
+    if tier == "quick":
+        if is_solo: return 2048
+        elif member_count <= 2: return 2048
+        elif member_count <= 4: return 3000
+        elif member_count <= 6: return 4096
+        else: return 5000
+    elif tier == "detailed":
+        if is_solo: return 6000
+        elif member_count <= 2: return 6000
+        elif member_count <= 4: return 8000
+        elif member_count <= 6: return 8192
+        else: return 8192
+    else:  # standard
+        if is_solo: return 4096
+        elif member_count <= 2: return 4096
+        elif member_count <= 4: return 6000
+        elif member_count <= 6: return 7500
+        else: return 8192
 
 
 # ══════════════════════════════════════════════════
@@ -777,6 +897,7 @@ class GenerateDuaRequest(BaseModel):
     userName: str = ""
     members: list[FamilyMember]
     occasion: str = "general"
+    lengthTier: str = ""  # "quick", "standard", "detailed" — empty means use occasion default
     skipCache: bool = False
     deliveryMode: str = "instant"
     userEmail: Optional[str] = None  # Fix #7: Validated field instead of header
@@ -952,7 +1073,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("mydua.ai v1.4.3 — Production")
+    logger.info("mydua.ai v1.4.4 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -989,7 +1110,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.4.3",
+    version="1.4.4",
     lifespan=lifespan,
 )
 
@@ -1067,17 +1188,64 @@ OCCASION_DISPLAY = {
 # Prompt Builder
 # ══════════════════════════════════════════════════
 
-def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "general") -> str:
+def _describe_member_naturally(m: FamilyMember, all_members: list[FamilyMember]) -> str:
+    """
+    #10 Natural naming: Describe a family member for the prompt using
+    natural language instead of rigid labels. Skip relationship/age labels
+    when the person is uniquely identifiable by name alone. Let age inform
+    the AI's tone without stating it as a label when unnecessary.
+    """
+    name = m.name.strip() or "unnamed"
+    rel = m.relationship.strip()
+    age_desc = normalize_age_for_prompt(m.ageRange)
+    gender = m.gender.strip()
+    concerns = m.concerns.strip() if m.concerns else ""
+
+    # Count how many members share this relationship
+    same_rel = [x for x in all_members if x.relationship.strip().lower() == rel.lower()] if rel else []
+    is_unique_rel = len(same_rel) <= 1
+
+    # Build a natural description
+    parts = []
+    if rel and rel.lower() not in ("self", "myself", "me", ""):
+        parts.append(f"{name}, my {rel.lower()}")
+    else:
+        parts.append(name)
+
+    # Only add age explicitly if there are multiple members with the same relationship
+    # (e.g., two daughters — age helps distinguish). Otherwise let it inform tone.
+    if age_desc:
+        if is_unique_rel:
+            parts.append(f"({age_desc} — let this inform the tone and prayers, but don't state the age explicitly in the du'a)")
+        else:
+            parts.append(f"({age_desc})")
+
+    if gender and not rel:
+        parts.append(f"[{gender}]")
+
+    desc = " ".join(parts)
+    if concerns:
+        desc += f"\n      Pray for: {concerns}"
+    else:
+        desc += "\n      Pray for: General well-being"
+    return desc
+
+
+def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "general",
+                 tier: str = "standard") -> str:
     member_count = len(members)
 
     # If name is blank, use second-person address
     display_name = user_name.strip() if user_name else ""
-    name_for_prompt = display_name if display_name else "the supplicant"
 
     # Detect solo user: only 1 member whose relationship is "Self" (or empty/unset)
     is_solo = (member_count == 1 and members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
 
-    length_instruction = get_length_instruction(member_count, is_solo=is_solo)
+    # Resolve tier: user choice > occasion default > "standard"
+    if not tier or tier not in LENGTH_TIERS:
+        tier = OCCASION_DEFAULT_TIER.get(occasion, "standard")
+
+    length_instruction = get_length_instruction(member_count, is_solo=is_solo, tier=tier)
     occasion_label = OCCASION_LABELS.get(occasion, OCCASION_LABELS["general"])
 
     if is_solo:
@@ -1097,14 +1265,16 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
         prompt += "  2. Personal supplication — Address the person's life, concerns, and blessings in a natural, flowing way\n"
         prompt += "  3. Closing — Forgiveness, mercy, occasion-appropriate references, and Ameen\n\n"
 
+        age_desc = normalize_age_for_prompt(m.ageRange)
         prompt += "ABOUT THE PERSON:\n\n"
         prompt += f"   Name: {m.name}\n"
-        prompt += f"   Age Range: {m.ageRange or 'Not specified'}\n"
+        if age_desc:
+            prompt += f"   Age: {age_desc} — let this inform the tone and prayers naturally, but don't state the age explicitly.\n"
         prompt += f"   Gender: {m.gender or 'Not specified'}\n"
         prompt += f"   Concerns/Prayer requests: {m.concerns or 'General well-being, faith, guidance, and mercy'}\n\n"
 
     else:
-        # ── Family prompt: original structure with individual sections ──
+        # ── Family prompt: natural descriptions with individual sections ──
         if display_name:
             prompt = f"Please write a personalized du'a for {display_name} and their family.\n\n"
         else:
@@ -1114,11 +1284,14 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
 
         prompt += "FAMILY MEMBERS:\n\n"
         for m in members:
-            prompt += f"   Name: {m.name}\n"
-            prompt += f"   Relationship: {m.relationship or 'Not specified'}\n"
-            prompt += f"   Age Range: {m.ageRange or 'Not specified'}\n"
-            prompt += f"   Gender: {m.gender or 'Not specified'}\n"
-            prompt += f"   Concerns/Prayer requests: {m.concerns or 'General well-being'}\n\n"
+            prompt += f"   • {_describe_member_naturally(m, members)}\n\n"
+
+        prompt += (
+            "NAMING GUIDANCE: Use each person's name naturally. "
+            "Do NOT repeat their relationship label or age as a heading — "
+            "e.g. use '## A Du'a for Amina' not '## A Du'a for Amina, My Daughter (Age 8)'. "
+            "Let the age and relationship inform the tone, prayers, and verse selection silently.\n\n"
+        )
 
     return prompt
 
@@ -1302,8 +1475,9 @@ async def poll_batch_job(job_id: str):
 
 async def generate_dua_text(prompt: str, member_count: int = 1, is_solo: bool = False,
                             delivery_mode: str = "instant",
-                            user_name: str = "", user_email: str = "") -> str:
-    max_tokens = get_max_tokens(member_count, is_solo=is_solo)
+                            user_name: str = "", user_email: str = "",
+                            tier: str = "standard") -> str:
+    max_tokens = get_max_tokens(member_count, is_solo=is_solo, tier=tier)
     if AI_PROVIDER == "anthropic":
         if not ANTHROPIC_API_KEY:
             raise HTTPException(500, "Anthropic API key not configured.")
@@ -1507,7 +1681,7 @@ async def health_check():
     checks = {
         "status": "ok",
         "provider": AI_PROVIDER,
-        "version": "1.4.3",
+        "version": "1.4.4",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable
@@ -1573,7 +1747,10 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
                 db.track_email(req.userEmail, req.userName)
             return {"dua": cached, "cached": True}
 
-    prompt = build_prompt(req.userName, valid_members, req.occasion)
+    # Resolve length tier: user selection > occasion default > "standard"
+    tier = req.lengthTier if req.lengthTier in LENGTH_TIERS else OCCASION_DEFAULT_TIER.get(req.occasion, "standard")
+
+    prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier)
 
     # Detect solo user for token/length optimization
     is_solo = (len(valid_members) == 1 and valid_members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
@@ -1585,6 +1762,7 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
             delivery_mode=req.deliveryMode,
             user_name=req.userName,
             user_email=req.userEmail or "",
+            tier=tier,
         )
     except httpx.HTTPStatusError as e:
         status = e.response.status_code

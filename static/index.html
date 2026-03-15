@@ -52,15 +52,32 @@
 
     <div id="formSection" class="form-wrap fade-in">
       <div class="about-you-card">
+        <div class="field-group" style="margin-bottom:16px">
+          <label for="occasionSelect">Occasion <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Helps weave the right verses and Hadith</span></label>
+          <select id="occasionSelect" onchange="selectedOccasion=this.value;updateLengthDefault();trackFormStart();">
+            <option value="ramadan">🌙  Ramadan</option>
+            <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
+            <option value="general" disabled>🤲  General — Coming Soon</option>
+            <option value="illness" disabled>💚  Healing — Coming Soon</option>
+            <option value="exams" disabled>📖  Exams — Coming Soon</option>
+            <option value="travel" disabled>✈️  Travel — Coming Soon</option>
+            <option value="newborn" disabled>👶  New Baby — Coming Soon</option>
+            <option value="marriage" disabled>💍  Marriage — Coming Soon</option>
+            <option value="grief" disabled>🕊️  Grief — Coming Soon</option>
+            <option value="hajj" disabled>🕋  Hajj — Coming Soon</option>
+            <option value="gratitude" disabled>🌿  Gratitude — Coming Soon</option>
+          </select>
+        </div>
         <div style="text-align:center;margin:0 0 16px;padding:10px 14px;border-radius:10px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.1);">
           <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin:0;"><span style="color:var(--gold);">🔒</span> <strong style="color:var(--gold);">Your du'a is private.</strong> Your names, concerns, and personal details are used only to generate your du'a and are never shared publicly. Du'as are only visible to you unless you choose to share them.</p>
         </div>
-        <div class="grid-2">
-          <div><label for="userName">Your Name</label><input type="text" id="userName" class="name-input" placeholder="Enter your name" /><p style="font-size:11px;color:var(--text-dim);margin-top:4px;font-style:italic;">Optional — leave blank for a general du'a</p></div>
-          <div><label for="userEmail">Your Email <span style="color:#c9a96e;">*</span></label><input type="email" id="userEmail" placeholder="name@example.com" required /><p style="font-size:11px;color:var(--text-dim);margin-top:4px;font-style:italic;line-height:1.4;">Your email is only used to send you your du'a. We never share it with anyone.</p></div>
+        <div class="field-group" style="margin-bottom:16px">
+          <label for="userEmail">Your Email <span style="color:#c9a96e;">*</span> <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Only used to send your du'a</span></label>
+          <input type="email" id="userEmail" placeholder="name@example.com" required />
         </div>
+        <input type="hidden" id="userName" value="" />
         <div class="grid-2">
-          <div><label for="userAge">Age Range</label><select id="userAge"><option value="">Select...</option></select></div>
+          <div><label for="userAge">Age</label><select id="userAge"><option value="">Select...</option></select></div>
           <div><label for="userGender">Gender</label><select id="userGender"><option value="">Select...</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
         </div>
         <div class="field-group" style="margin-top:16px">
@@ -80,29 +97,15 @@
               <button type="button" class="concern-tag" data-tag="Finding spouse">Finding spouse</button>
               <button type="button" class="concern-tag" data-tag="School">School</button>
               <button type="button" class="concern-tag" data-tag="Trauma">Trauma</button>
+              <button type="button" class="concern-tag" data-tag="Protection">Protection</button>
             </div>
             <div class="concern-fade" id="concernFade"></div>
           </div>
-          <span class="tag-toggle" id="tagToggle" onclick="toggleTags()">Show more ▾</span>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
+            <span class="tag-toggle" id="tagToggle" onclick="toggleTags()">Show more ▾</span>
+            <span id="userConcernsCount" style="font-size:12px;color:var(--gold);">0 / 1000</span>
+          </div>
           <textarea id="userConcerns" rows="2" maxlength="1000" placeholder="Add anything specific you'd like included..." style="margin-top:8px;"></textarea>
-          <div id="userConcernsCount" style="margin-top:4px;font-size:12px;color:var(--gold);">0 / 1000</div>
-        </div>
-        <div class="field-group" style="margin-top:16px">
-          <label for="occasionSelect">Occasion</label>
-          <p style="font-size:13px;color:var(--text-muted);margin-bottom:6px;font-style:italic;">What is this du'a for? This helps weave the right Quranic verses and Hadith.</p>
-          <select id="occasionSelect" onchange="selectedOccasion=this.value;trackFormStart();">
-            <option value="ramadan">🌙  Ramadan</option>
-            <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
-            <option value="general" disabled>🤲  General — Coming Soon</option>
-            <option value="illness" disabled>💚  Healing — Coming Soon</option>
-            <option value="exams" disabled>📖  Exams — Coming Soon</option>
-            <option value="travel" disabled>✈️  Travel — Coming Soon</option>
-            <option value="newborn" disabled>👶  New Baby — Coming Soon</option>
-            <option value="marriage" disabled>💍  Marriage — Coming Soon</option>
-            <option value="grief" disabled>🕊️  Grief — Coming Soon</option>
-            <option value="hajj" disabled>🕋  Hajj — Coming Soon</option>
-            <option value="gratitude" disabled>🌿  Gratitude — Coming Soon</option>
-          </select>
         </div>
       </div>
 
@@ -114,6 +117,15 @@
             <div class="add-member-cta">Add Family or Friend</div>
             <div class="add-member-sub">Include your loved ones in your du'a</div>
           </div>
+        </div>
+      </div>
+
+      <div class="field-group" style="margin-bottom:16px">
+        <label>Du'a Length</label>
+        <div id="lengthToggle" style="display:flex;gap:0;background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:10px;overflow:hidden;">
+          <button type="button" class="length-pill" data-tier="quick" onclick="selectLength('quick')" style="flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Quick<span style="display:block;font-size:11px;font-weight:400;color:var(--text-dim);margin-top:2px;">~2 min read</span></button>
+          <button type="button" class="length-pill" data-tier="standard" onclick="selectLength('standard')" style="flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Standard<span style="display:block;font-size:11px;font-weight:400;color:var(--text-dim);margin-top:2px;">~5 min read</span></button>
+          <button type="button" class="length-pill active" data-tier="detailed" onclick="selectLength('detailed')" style="flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:rgba(201,169,110,0.12);font-family:'Cormorant Garamond',serif;transition:all .2s;">Detailed<span style="display:block;font-size:11px;font-weight:400;color:var(--gold);opacity:.7;margin-top:2px;">~10 min read</span></button>
         </div>
       </div>
 
@@ -158,6 +170,7 @@
             <button class="icon-tile tile-fb" onclick="shareFacebook()"><svg viewBox="0 0 24 24" fill="none" stroke="#4267b2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg><span class="icon-lbl">Facebook</span></button>
             <button class="icon-tile tile-ig" onclick="shareInstagram()"><svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span class="icon-lbl">Instagram</span></button>
             <button class="icon-tile tile-tk" onclick="shareTikTok()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg><span class="icon-lbl">TikTok</span></button>
+            <button class="icon-tile" onclick="editAndRegenerate()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="icon-lbl">Edit</span></button>
             <button class="icon-tile" onclick="startOver()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg><span class="icon-lbl">Start over</span></button>
           </div>
         </div>
@@ -187,15 +200,35 @@
     function updateUserConcernsCount(){const el=document.getElementById("userConcerns");const counter=document.getElementById("userConcernsCount");if(el&&counter){counter.textContent=(el.value.length)+" / 1000";}}
     function toggleTags(){const wrap=document.getElementById("concernTagsWrap");const btn=document.getElementById("tagToggle");const fade=document.getElementById("concernFade");if(wrap.classList.contains("expanded")){wrap.classList.remove("expanded");fade.classList.remove("hidden");btn.textContent="Show more ▾";}else{wrap.classList.add("expanded");fade.classList.add("hidden");btn.textContent="Show less ▴";}}
     function updateMemberConcernCount(i,textarea){const counter=document.getElementById("memberConcernsCount"+i);if(counter){counter.textContent=(textarea.value.length)+" / 1000";}}
-    document.addEventListener("DOMContentLoaded",()=>{["userName","userEmail","userConcerns"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("focus",trackFormStart,{once:true});}});const userConcernsEl=document.getElementById("userConcerns");if(userConcernsEl){userConcernsEl.addEventListener("input",updateUserConcernsCount);updateUserConcernsCount();}
+    document.addEventListener("DOMContentLoaded",()=>{["userEmail","userConcerns"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("focus",trackFormStart,{once:true});}});const userConcernsEl=document.getElementById("userConcerns");if(userConcernsEl){userConcernsEl.addEventListener("input",updateUserConcernsCount);updateUserConcernsCount();}
       document.querySelectorAll(".concern-tag").forEach(tag=>{tag.addEventListener("click",()=>{tag.classList.toggle("selected");const textarea=document.getElementById("userConcerns");const selected=Array.from(document.querySelectorAll(".concern-tag.selected")).map(t=>t.dataset.tag);const manual=textarea.value.split(",").map(s=>s.trim()).filter(s=>s&&!document.querySelector('.concern-tag[data-tag="'+s+'"]'));textarea.value=[...selected,...manual].join(", ");updateUserConcernsCount();trackFormStart();});});
     });
 
     const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Mother In Law","Father In Law","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague","Pet"];
-    const AGE_RANGES=["Under 5","5-10","11-15","16-20","21-30","31-40","41-50","51-60","61-70","70+"];
+    const AGE_RANGES=["Under 1","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","20s","30s","40s","50s","60s","70+"];
     let members=[],generatedDuaText="",currentDuaId=null,currentEmailToken="";
     let selectedOccasion="ramadan";
+    let selectedLengthTier="detailed"; // Ramadan defaults to detailed
+    const CONCERN_TAGS=["Guidance","Health","Patience","Forgiveness","Strong iman","Success","Anxiety","Depression","Finances","Marriage","Finding spouse","School","Trauma","Protection"];
     const OCCASIONS=[{id:"ramadan",label:"Ramadan",icon:"🌙"},{id:"jumuah",label:"Jumu'ah",icon:"🕌"},{id:"general",label:"General",icon:"🤲"},{id:"illness",label:"Healing",icon:"💚"},{id:"travel",label:"Travel",icon:"✈️"},{id:"newborn",label:"New Baby",icon:"👶"},{id:"marriage",label:"Marriage",icon:"💍"},{id:"grief",label:"Grief",icon:"🕊️"},{id:"hajj",label:"Hajj",icon:"🕋"},{id:"gratitude",label:"Gratitude",icon:"🌿"}];
+    const OCCASION_DEFAULT_TIERS={ramadan:"detailed"};
+
+    // Length toggle
+    function selectLength(tier){
+      selectedLengthTier=tier;
+      document.querySelectorAll(".length-pill").forEach(p=>{
+        if(p.dataset.tier===tier){p.style.color="var(--gold)";p.style.fontWeight="600";p.style.background="rgba(201,169,110,0.12)";p.classList.add("active");
+          const sub=p.querySelector("span");if(sub){sub.style.color="var(--gold)";sub.style.opacity=".7";}
+        }else{p.style.color="var(--text-muted)";p.style.fontWeight="500";p.style.background="transparent";p.classList.remove("active");
+          const sub=p.querySelector("span");if(sub){sub.style.color="var(--text-dim)";sub.style.opacity="1";}
+        }
+      });
+      trackFormStart();
+    }
+    function updateLengthDefault(){
+      const defaultTier=OCCASION_DEFAULT_TIERS[selectedOccasion]||"standard";
+      selectLength(defaultTier);
+    }
 
     (function showSeasonalBanner(){
       const banner=document.getElementById("seasonalBanner");
@@ -208,8 +241,32 @@
 
     const uAge=document.getElementById("userAge");
     AGE_RANGES.forEach(a=>{const o=document.createElement("option");o.value=a;o.textContent=a;uAge.appendChild(o);});
-    function emptyMember(){return{name:"",relationship:"",ageRange:"",gender:"",attributes:"",concerns:""};}
+    function emptyMember(){return{name:"",relationship:"",ageRange:"",gender:"",attributes:"",concerns:"",selectedTags:[]};}
     function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+    function buildMemberConcernTags(i,selectedTags){
+      return CONCERN_TAGS.map(tag=>{
+        const sel=selectedTags.includes(tag)?"selected":"";
+        return `<button type="button" class="concern-tag ${sel}" data-member="${i}" data-tag="${tag}" onclick="toggleMemberTag(${i},'${tag}',this)">${tag}</button>`;
+      }).join("");
+    }
+    function toggleMemberTag(i,tag,el){
+      if(!members[i].selectedTags)members[i].selectedTags=[];
+      const idx=members[i].selectedTags.indexOf(tag);
+      if(idx>=0){members[i].selectedTags.splice(idx,1);el.classList.remove("selected");}
+      else{members[i].selectedTags.push(tag);el.classList.add("selected");}
+      syncMemberConcerns(i);
+    }
+    function syncMemberConcerns(i){
+      const tags=members[i].selectedTags||[];
+      const textarea=document.getElementById("memberConcernsText"+i);
+      if(!textarea)return;
+      const manual=textarea.value.split(",").map(s=>s.trim()).filter(s=>s&&!CONCERN_TAGS.includes(s));
+      const combined=[...tags,...manual].join(", ");
+      members[i].concerns=combined;
+      textarea.value=combined;
+      updateMemberConcernCount(i,textarea);
+    }
 
     function renderMembers(){
       const c=document.getElementById("membersContainer");c.innerHTML="";
@@ -217,14 +274,33 @@
       if(!members.length){merged.style.display="flex";return;}
       merged.style.display="none";
       members.forEach((m,i)=>{
+        if(!m.selectedTags)m.selectedTags=[];
         const card=document.createElement("div");card.className="member-card fade-in";card.style.animationDelay=(i*.05)+"s";
-        card.innerHTML=`<button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button><div class="grid-2"><div><label>Name</label><input type="text" placeholder="e.g. Sumaira" value="${esc(m.name)}" oninput="members[${i}].name=this.value"/></div><div><label>Relationship</label><select onchange="members[${i}].relationship=this.value"><option value="">Select...</option>${RELATIONSHIPS.map(r=>`<option value="${r}"${m.relationship===r?" selected":""}>${r}</option>`).join("")}</select></div></div><div class="grid-2"><div><label>Age Range</label><select onchange="members[${i}].ageRange=this.value"><option value="">Select...</option>${AGE_RANGES.map(a=>`<option value="${a}"${m.ageRange===a?" selected":""}>${a}</option>`).join("")}</select></div><div><label>Gender</label><select onchange="members[${i}].gender=this.value"><option value="">Select...</option><option value="Male"${m.gender==="Male"?" selected":""}>Male</option><option value="Female"${m.gender==="Female"?" selected":""}>Female</option></select></div></div><div class="field-group"><label>Concerns / What to pray for</label><textarea rows="2" maxlength="1000" placeholder="e.g. Health, exams, guidance..." oninput="members[${i}].concerns=this.value; updateMemberConcernCount(${i}, this)">${esc(m.concerns)}</textarea><div id="memberConcernsCount${i}" style="margin-top:4px;font-size:12px;color:var(--gold);">${(m.concerns||"").length} / 1000</div></div>`;
+        card.innerHTML=`<button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button><div class="grid-2"><div><label>Name <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:13px;">Can be a nickname or \u{1F60A}</span></label><input type="text" placeholder="e.g. Sumaira" value="${esc(m.name)}" oninput="members[${i}].name=this.value"/></div><div><label>Relationship</label><select onchange="members[${i}].relationship=this.value"><option value="">Select...</option>${RELATIONSHIPS.map(r=>`<option value="${r}"${m.relationship===r?" selected":""}>${r}</option>`).join("")}</select></div></div><div class="grid-2"><div><label>Age</label><select onchange="members[${i}].ageRange=this.value"><option value="">Select...</option>${AGE_RANGES.map(a=>`<option value="${a}"${m.ageRange===a?" selected":""}>${a}</option>`).join("")}</select></div><div><label>Gender</label><select onchange="members[${i}].gender=this.value"><option value="">Select...</option><option value="Male"${m.gender==="Male"?" selected":""}>Male</option><option value="Female"${m.gender==="Female"?" selected":""}>Female</option></select></div></div><div class="field-group"><label>What to pray for</label><div class="concern-tags-wrap" id="memberTagsWrap${i}" style="max-height:44px;"><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;">${buildMemberConcernTags(i,m.selectedTags)}</div><div class="concern-fade" id="memberFade${i}"></div></div><span class="tag-toggle" onclick="toggleMemberTags(${i})" id="memberTagToggle${i}">Show more ▾</span><textarea id="memberConcernsText${i}" rows="2" maxlength="1000" placeholder="Add anything specific..." oninput="members[${i}].concerns=this.value; updateMemberConcernCount(${i}, this)" style="margin-top:8px;">${esc(m.concerns)}</textarea><div id="memberConcernsCount${i}" style="margin-top:4px;font-size:12px;color:var(--gold);">${(m.concerns||"").length} / 1000</div></div>`;
         c.appendChild(card);
       });
       const addBtn=document.createElement("button");addBtn.className="add-btn";addBtn.onclick=function(){addMember();};addBtn.textContent="+ Add Another";c.appendChild(addBtn);
     }
+    function toggleMemberTags(i){
+      const wrap=document.getElementById("memberTagsWrap"+i);
+      const fade=document.getElementById("memberFade"+i);
+      const btn=document.getElementById("memberTagToggle"+i);
+      if(wrap.classList.contains("expanded")){wrap.classList.remove("expanded");wrap.style.maxHeight="44px";fade.classList.remove("hidden");btn.textContent="Show more ▾";}
+      else{wrap.classList.add("expanded");wrap.style.maxHeight="400px";fade.classList.add("hidden");btn.textContent="Show less ▴";}
+    }
     function addMember(){members.push(emptyMember());renderMembers();}
     function removeMember(i){members.splice(i,1);renderMembers();}
+
+    // Edit & Regenerate (#12): scroll back to form, retain all inputs, force skipCache
+    function editAndRegenerate(){
+      document.getElementById("resultSection").style.display="none";
+      ["emailPanel","sharePanel","smsPanel"].forEach(p=>document.getElementById(p).style.display="none");
+      generatedDuaText="";currentDuaId=null;currentEmailToken="";
+      // Form inputs are still intact — just scroll back
+      document.getElementById("formSection").scrollIntoView({behavior:"smooth"});
+      // Mark that next generation should skip cache
+      document.getElementById("generateBtn").dataset.skipCache="true";
+    }
 
     async function generateDua(){
       const userName=document.getElementById("userName").value.trim();
@@ -233,10 +309,12 @@
       if(!userEmail||!userEmail.includes("@")){showError("Please enter a valid email address.");return;}
       const userInfo={name:userName,relationship:"Self",ageRange:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,attributes:"",concerns:document.getElementById("userConcerns").value.trim()};
       const allMembers=[userInfo,...members.filter(m=>m.name.trim())];
+      const shouldSkipCache=btn.dataset.skipCache==="true";
+      btn.dataset.skipCache="false";
       hideError();btn.disabled=true;
       btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...";loadEl.style.display="block";
       try{
-        const res=await fetch(API.generate,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({userName,members:allMembers,occasion:selectedOccasion,deliveryMode:"instant",userEmail,referred:isReferred})});
+        const res=await fetch(API.generate,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({userName,members:allMembers,occasion:selectedOccasion,lengthTier:selectedLengthTier,deliveryMode:"instant",userEmail,referred:isReferred,skipCache:shouldSkipCache})});
         if(res.status===429){const d=await res.json();const msg=typeof d.detail==="string"?d.detail:Array.isArray(d.detail)?d.detail.map(e=>e.msg||e).join(", "):"Rate limit exceeded.";showError(msg);btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";return;}
         if(!res.ok){const d=await res.json().catch(()=>({}));const msg=typeof d.detail==="string"?d.detail:Array.isArray(d.detail)?d.detail.map(e=>e.msg||e).join(", "):JSON.stringify(d.detail||"Server error");throw new Error(msg);}
         const data=await res.json();
