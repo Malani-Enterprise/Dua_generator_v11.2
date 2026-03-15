@@ -58,7 +58,7 @@ import aiosmtplib
 from dotenv import load_dotenv
 from fastapi import FastAPI, HTTPException, Request, BackgroundTasks
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse, StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, EmailStr, field_validator
 
@@ -1365,6 +1365,55 @@ async def call_anthropic(prompt: str, max_tokens: int = 8000) -> str:
                 raise
 
 
+async def call_anthropic_stream(prompt: str, max_tokens: int = 8000):
+    """Stream tokens from Anthropic via SSE. Yields text deltas as they arrive."""
+    last_error = None
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            async with http_client.stream(
+                "POST",
+                "https://api.anthropic.com/v1/messages",
+                headers={
+                    "Content-Type": "application/json",
+                    "x-api-key": ANTHROPIC_API_KEY,
+                    "anthropic-version": "2023-06-01",
+                },
+                json={
+                    "model": ANTHROPIC_MODEL,
+                    "max_tokens": max_tokens,
+                    "stream": True,
+                    "system": SYSTEM_PROMPT,
+                    "messages": [{"role": "user", "content": prompt}],
+                },
+            ) as response:
+                response.raise_for_status()
+                event_type = None
+                async for line in response.aiter_lines():
+                    if line.startswith("event: "):
+                        event_type = line[7:].strip()
+                    elif line.startswith("data: ") and event_type == "content_block_delta":
+                        try:
+                            data = json.loads(line[6:])
+                            delta = data.get("delta", {})
+                            if delta.get("type") == "text_delta":
+                                yield delta["text"]
+                        except (json.JSONDecodeError, KeyError):
+                            pass
+                    elif line.startswith("data: ") and event_type == "message_stop":
+                        return
+                return  # Stream ended normally
+        except (httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as e:
+            last_error = e
+            status = getattr(getattr(e, "response", None), "status_code", 0)
+            if isinstance(e, httpx.HTTPStatusError) and status not in RETRYABLE_STATUS_CODES:
+                raise
+            if attempt < MAX_RETRIES:
+                logger.warning(f"Anthropic stream attempt {attempt + 1} failed ({type(e).__name__}), retrying in {RETRY_BACKOFF}s...")
+                await asyncio.sleep(RETRY_BACKOFF * (attempt + 1))
+            else:
+                raise
+
+
 async def call_anthropic_batch(prompt: str, max_tokens: int, user_name: str, user_email: str) -> str:
     """Non-blocking batch submission. Returns job_id immediately."""
     request_id = uuid.uuid4().hex[:8]
@@ -1820,6 +1869,91 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
         background_tasks.add_task(auto_email)
 
     return {"dua": dua_text, "cached": False}
+
+
+@app.post("/api/generate-dua-stream")
+async def generate_dua_stream(req: GenerateDuaRequest, request: Request):
+    """SSE streaming endpoint — sends du'a tokens as they arrive from Anthropic."""
+    valid_members = [m for m in req.members if m.name.strip()]
+    if not valid_members:
+        if req.userName.strip():
+            raise HTTPException(400, "Please add at least one family member with a name.")
+        else:
+            valid_members = [FamilyMember(name="", relationship="Self", ageRange="", gender="", attributes="", concerns=req.members[0].concerns if req.members else "")]
+
+    client_ip = get_client_ip(request)
+    allowed, remaining = db.rate_limit_check(f"gen:{client_ip}", max_requests=5, window_seconds=3600)
+    if not allowed:
+        raise HTTPException(429, "Rate limit exceeded. Please try again later.")
+
+    # Check cache — if cached, send full text as single SSE event
+    if not req.skipCache:
+        cache_key = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members])
+        cached = db.cache_get(cache_key)
+        if cached:
+            db.track("duas_generated")
+            if req.userEmail:
+                db.track_email(req.userEmail, req.userName)
+
+            async def cached_stream():
+                yield f"data: {json.dumps({'type': 'delta', 'text': cached})}\n\n"
+                yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
+            return StreamingResponse(cached_stream(), media_type="text/event-stream",
+                                     headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+
+    tier = req.lengthTier if req.lengthTier in LENGTH_TIERS else OCCASION_DEFAULT_TIER.get(req.occasion, "standard")
+    prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier)
+    is_solo = (len(valid_members) == 1 and valid_members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
+    max_tokens = get_max_tokens(len(valid_members), is_solo=is_solo, tier=tier)
+
+    async def event_stream():
+        full_text = []
+        try:
+            async for chunk in call_anthropic_stream(prompt, max_tokens):
+                full_text.append(chunk)
+                yield f"data: {json.dumps({'type': 'delta', 'text': chunk})}\n\n"
+
+            # Stream complete — send done event
+            yield f"data: {json.dumps({'type': 'done'})}\n\n"
+
+            # Post-stream: cache, track, auto-email (fire-and-forget)
+            complete_text = "".join(full_text)
+            if complete_text:
+                ck = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members])
+                db.cache_put(ck, complete_text)
+                db.track("duas_generated")
+                if req.userEmail:
+                    db.track_email(req.userEmail, req.userName)
+                db.log_event("dua_generated", detail=f"members:{len(valid_members)},stream:true", ip=client_ip,
+                             user_agent=request.headers.get("user-agent", ""),
+                             referrer=request.headers.get("referer", ""))
+                if req.referred:
+                    db.track("referred_generations")
+                # Auto-send email
+                if req.userEmail and (RESEND_API_KEY or SMTP_USERNAME):
+                    try:
+                        await send_dua_email(req.userEmail, req.userName or "Friend", complete_text, share_url=None)
+                        db.track("emails_sent")
+                        logger.info(f"Auto-email sent to {req.userEmail}")
+                    except Exception as e:
+                        logger.error(f"Auto-email failed for {req.userEmail}: {e}")
+
+        except httpx.HTTPStatusError as e:
+            status = e.response.status_code
+            detail = e.response.text[:200]
+            logger.error(f"AI API stream error {status}: {detail}")
+            yield f"data: {json.dumps({'type': 'error', 'message': f'AI service error {status}.'})}\n\n"
+        except httpx.ConnectError:
+            yield f"data: {json.dumps({'type': 'error', 'message': 'Cannot connect to AI service.'})}\n\n"
+        except httpx.TimeoutException:
+            yield f"data: {json.dumps({'type': 'error', 'message': 'AI service timed out. Try fewer family members.'})}\n\n"
+        except Exception as e:
+            logger.error(f"Stream error: {type(e).__name__}: {e}")
+            yield f"data: {json.dumps({'type': 'error', 'message': f'Generation failed: {type(e).__name__}'})}\n\n"
+
+    return StreamingResponse(event_stream(), media_type="text/event-stream",
+                             headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
 @app.get("/api/job/{job_id}")
