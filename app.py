@@ -1,6 +1,12 @@
 """
-MyDua.AI — Backend API (v1.5.0 Production)
+MyDua.AI — Backend API (v1.5.1 Production)
 ==========================================
+v1.5.1 Changes (Progress Bar UX Fix):
+  - Progress bar + scroll now trigger on first stream chunk, not HTTP headers
+  - Eliminates 10-15s dead gap between progress completing and du'a appearing
+  - Multi-language support (en, es, ur, ar) with RTL
+  - Fast-fail API key validation on streaming endpoint
+
 v1.5.0 Changes (Audit Remediation):
   SECURITY:
   - Content-Security-Policy + Permissions-Policy headers
@@ -1006,71 +1012,75 @@ def normalize_age_for_prompt(age_range: str) -> str:
 LENGTH_TIERS = {
     "quick": {
         # "A breath of du'a." — after wudu, between tasks, a brief moment of supplication.
-        # ~500 words | 2 Names of Allah | 1 Quranic reference
+        # Reading time: 15-30 seconds (~40-75 words) | 1 Name of Allah | 1 Quranic reference
         "solo": (
-            "Write a focused, heartfelt du'a of approximately 400-500 words. "
+            "Write a very brief, focused du'a of approximately 40-75 words ONLY. "
+            "This is meant to be read in 15-30 seconds — keep it extremely concise. "
             "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
-            "Keep it concise but sincere: a brief opening praising Allah invoking 2 of His Names (Asma ul-Husna), "
-            "1 Quranic reference, 2-3 sentences of personal supplication addressing the person's concerns, "
-            "and a short closing with Ameen. This du'a is for a brief moment — after wudu, between tasks, "
-            "a quick supplication at one's desk — but it must still feel sourced and heartfelt. "
-            "End with آمِين يَا رَبَّ الْعَالَمِين."
+            "Structure: 1-2 sentences opening with Bismillah invoking 1 Name of Allah (Asma ul-Husna), "
+            "1 brief Quranic reference, 1-2 sentences of personal supplication, "
+            "and close with آمِين يَا رَبَّ الْعَالَمِين. "
+            "Do NOT use section headers or ornamental breaks. Keep it as a single flowing paragraph. "
+            "Brevity is essential — the word count is a hard constraint."
         ),
         "family": {
-            2: "Write a focused du'a of approximately 500-600 words total. Invoke 2 Names of Allah in the opening. Include 1 Quranic reference. 2-3 sentences per person. Brief but sincere opening, concise individual sections, short family closing with Ameen.",
-            4: "Write a focused du'a of approximately 600-750 words total. Invoke 2 Names of Allah. 1 Quranic reference. 2-3 sentences per person. Brief opening, concise sections, short closing with Ameen.",
-            6: "Write a focused du'a of approximately 700-850 words total. Invoke 2 Names of Allah. 1 Quranic reference. 2-3 sentences per person. Brief opening, concise sections, short closing with Ameen.",
-            99: "Write a focused du'a of approximately 800-1000 words total. Invoke 2 Names of Allah. 1 Quranic reference. 2-3 sentences per person. Brief opening, concise sections, short closing with Ameen.",
+            2: "Write a very brief du'a of approximately 75-100 words total. Reading time: 30 seconds. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. No section headers. Single flowing paragraph with Ameen. The word count is a hard constraint.",
+            4: "Write a brief du'a of approximately 100-130 words total. Reading time: ~45 seconds. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. Minimal structure, short closing with Ameen. The word count is a hard constraint.",
+            6: "Write a brief du'a of approximately 130-160 words total. Reading time: ~1 minute. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. Minimal structure, short closing with Ameen. The word count is a hard constraint.",
+            99: "Write a brief du'a of approximately 160-200 words total. Reading time: ~1 minute. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. Minimal structure, short closing with Ameen. The word count is a hard constraint.",
         },
     },
     "post_salah": {
         # "After prayer reflection." — the natural window after completing salah.
-        # ~1,000 words | 7 Names of Allah | ~5 Quranic/Hadith references
+        # Reading time: 3-5 minutes (~450-750 words) | 4 Names of Allah | ~3 Quranic/Hadith references
         "solo": (
-            "Write a deeply personal, heartfelt du'a of approximately 900-1100 words total. "
+            "Write a heartfelt du'a of approximately 450-600 words total. "
+            "This is meant to be read in 3-5 minutes — keep it meaningful but measured. "
             "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
             "Instead, weave all prayers into a single flowing supplication with: "
-            "a full opening with Bismillah, praise, and glorification of Allah invoking 7 of His Names (Asma ul-Husna) with their relevance, "
-            "include approximately 5 Quranic verses or authentic Hadith references woven naturally throughout, "
-            "a personal section addressing the supplicant's concerns and life with spiritual depth, "
+            "an opening with Bismillah, praise, and glorification of Allah invoking 4 of His Names (Asma ul-Husna) with their relevance, "
+            "include approximately 3 Quranic verses or authentic Hadith references woven naturally throughout, "
+            "a personal section addressing the supplicant's concerns with spiritual depth, "
             "and a closing with forgiveness, mercy, and Ameen. "
             "This is the post-salah du'a — the natural window after completing prayer where the heart is open. "
-            "Keep it intimate and complete — do not cut short. End with آمِين يَا رَبَّ الْعَالَمِين."
+            "End with آمِين يَا رَبَّ الْعَالَمِين."
         ),
         "family": {
-            2: "Write a heartfelt du'a of approximately 1000-1200 words total. Invoke 7 Names of Allah in the opening and throughout. Include approximately 5 Quranic/Hadith references total. Full opening with Bismillah and praise. Detailed individual sections. Complete family closing with Ameen.",
-            4: "Write a heartfelt du'a of approximately 1200-1500 words total. Invoke 7 Names of Allah. ~5 Quranic/Hadith references. Full opening, detailed individual sections, complete family closing with Ameen.",
-            6: "Write a heartfelt du'a of approximately 1400-1700 words total. Invoke 7 Names of Allah. ~5 Quranic/Hadith references. Full opening, individual sections, complete family closing with Ameen.",
-            99: "Write a heartfelt du'a of approximately 1600-2000 words total. Invoke 7 Names of Allah. ~5 Quranic/Hadith references. Full opening, individual sections, complete family closing with Ameen.",
+            2: "Write a heartfelt du'a of approximately 550-700 words total. Reading time: 3-5 minutes. Invoke 4 Names of Allah. Include approximately 3 Quranic/Hadith references. Opening with Bismillah and praise. Concise individual sections. Complete family closing with Ameen.",
+            4: "Write a heartfelt du'a of approximately 650-800 words total. Reading time: 4-5 minutes. Invoke 4 Names of Allah. ~3 Quranic/Hadith references. Full opening, individual sections, family closing with Ameen.",
+            6: "Write a heartfelt du'a of approximately 750-900 words total. Reading time: ~5 minutes. Invoke 4 Names of Allah. ~3 Quranic/Hadith references. Full opening, individual sections, family closing with Ameen.",
+            99: "Write a heartfelt du'a of approximately 850-1000 words total. Reading time: ~5 minutes. Invoke 4 Names of Allah. ~3 Quranic/Hadith references. Full opening, individual sections, family closing with Ameen.",
         },
     },
     "sujood": {
         # "Deep prostration prayer." — extended moments in sujood during tahajjud or night prayer.
-        # ~2,000 words | 13 Names of Allah | ~12 Quranic/Hadith references
+        # Reading time: 8-10 minutes (~1200-1500 words) | 8 Names of Allah | ~7 Quranic/Hadith references
         "solo": (
-            "Write a rich, deeply personal du'a of approximately 1800-2200 words total. "
+            "Write a rich, deeply personal du'a of approximately 1200-1500 words total. "
+            "This is meant to be read in 8-10 minutes — give it spiritual depth and emotional weight. "
             "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
             "Instead, weave all prayers into a single flowing supplication with: "
-            "an extensive opening praising Allah invoking 13 of His Names (Asma ul-Husna), explaining the relevance of each, "
-            "approximately 12 Quranic verses and authentic Hadith references woven naturally throughout, "
-            "a deeply personal section that addresses every concern with multiple verses and spiritual depth, "
+            "an extensive opening praising Allah invoking 8 of His Names (Asma ul-Husna), explaining the relevance of each, "
+            "approximately 7 Quranic verses and authentic Hadith references woven naturally throughout, "
+            "a deeply personal section that addresses concerns with multiple verses and spiritual depth, "
             "and a rich closing with forgiveness, mercy, occasion-specific references, and Ameen. "
             "This is the sujood du'a — for those extended moments in prostration during tahajjud or night prayer "
             "where you want to pour your heart out. Let every prayer breathe. "
             "End with آمِين يَا رَبَّ الْعَالَمِين."
         ),
         "family": {
-            2: "Write a deeply detailed du'a of approximately 2000-2400 words total. Invoke 13 Names of Allah throughout. Include approximately 12 Quranic/Hadith references. Rich opening with multiple Names and their meanings. Each person's section should be thorough and deeply personal with multiple verses. Expansive family closing with Ameen.",
-            4: "Write a deeply detailed du'a of approximately 2400-3000 words total. Invoke 13 Names of Allah. ~12 Quranic/Hadith references. Rich opening, thorough and deeply personal sections. Expansive family closing with Ameen.",
-            6: "Write a deeply detailed du'a of approximately 2800-3500 words total. Invoke 13 Names of Allah. ~12 Quranic/Hadith references. Rich opening, deeply personal sections. Expansive family closing with Ameen.",
-            99: "Write a deeply detailed du'a of approximately 3200-4000 words total. Invoke 13 Names of Allah. ~12 Quranic/Hadith references. Rich opening, deeply personal sections. Expansive family closing with Ameen.",
+            2: "Write a deeply detailed du'a of approximately 1300-1600 words total. Reading time: 8-10 minutes. Invoke 8 Names of Allah throughout. Include approximately 7 Quranic/Hadith references. Rich opening. Each person's section should be thorough and deeply personal. Expansive family closing with Ameen.",
+            4: "Write a deeply detailed du'a of approximately 1500-1800 words total. Reading time: ~10 minutes. Invoke 8 Names of Allah. ~7 Quranic/Hadith references. Rich opening, thorough personal sections. Expansive family closing with Ameen.",
+            6: "Write a deeply detailed du'a of approximately 1700-2000 words total. Reading time: ~12 minutes. Invoke 8 Names of Allah. ~7 Quranic/Hadith references. Rich opening, deeply personal sections. Expansive family closing with Ameen.",
+            99: "Write a deeply detailed du'a of approximately 1900-2200 words total. Reading time: ~13 minutes. Invoke 8 Names of Allah. ~7 Quranic/Hadith references. Rich opening, deeply personal sections. Expansive family closing with Ameen.",
         },
     },
     "laylatul_qadr": {
         # "The night of nights." — the last 10 nights of Ramadan. Hold nothing back.
-        # ~2,400+ words | 16 Names of Allah | ~20 Quranic/Hadith references
+        # Reading time: ~30 minutes (~4500-5000 words) | 16 Names of Allah | ~20 Quranic/Hadith references
         "solo": (
-            "Write the most comprehensive, immersive du'a possible — approximately 2400-3000 words total. "
+            "Write the most comprehensive, immersive du'a possible — approximately 4500-5000 words total. "
+            "This is meant to be read over approximately 30 minutes — a complete spiritual journey. "
             "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
             "Instead, weave all prayers into a single flowing, deeply layered supplication with: "
             "a majestic opening praising Allah invoking 16 of His Names (Asma ul-Husna) with full explanations of their relevance, "
@@ -1083,12 +1093,20 @@ LENGTH_TIERS = {
             "End with آمِين يَا رَبَّ الْعَالَمِين."
         ),
         "family": {
-            2: "Write the most comprehensive du'a possible — approximately 2400-3000 words total. Invoke 16 Names of Allah with their meanings. Include approximately 20 Quranic/Hadith references. Majestic opening. Each person's section should be deeply layered with spiritual insight, emotional depth, and multiple references. Grand family closing with reunion in Jannah and Ameen. This is the Laylatul Qadr du'a — hold nothing back.",
-            4: "Write the most comprehensive du'a possible — approximately 3000-3800 words total. Invoke 16 Names of Allah. ~20 Quranic/Hadith references. Majestic opening. Deeply layered, spiritually rich sections for every person. Grand family closing with Ameen. Laylatul Qadr — hold nothing back.",
-            6: "Write the most comprehensive du'a possible — approximately 3500-4500 words total. Invoke 16 Names of Allah. ~20 Quranic/Hadith references. Majestic opening. Deeply layered sections. Grand family closing with Ameen. Laylatul Qadr — hold nothing back.",
-            99: "Write the most comprehensive du'a possible — approximately 4000-5500 words total. Invoke 16 Names of Allah. ~20 Quranic/Hadith references. Majestic opening. Deeply layered sections. Grand family closing with Ameen. Laylatul Qadr — hold nothing back.",
+            2: "Write the most comprehensive du'a possible — approximately 4500-5500 words total. Reading time: ~30 minutes. Invoke 16 Names of Allah with their meanings. Include approximately 20 Quranic/Hadith references. Majestic opening. Each person's section should be deeply layered with spiritual insight, emotional depth, and multiple references. Grand family closing with reunion in Jannah and Ameen. This is the Laylatul Qadr du'a — hold nothing back.",
+            4: "Write the most comprehensive du'a possible — approximately 5000-6000 words total. Reading time: ~35 minutes. Invoke 16 Names of Allah. ~20 Quranic/Hadith references. Majestic opening. Deeply layered, spiritually rich sections for every person. Grand family closing with Ameen. Laylatul Qadr — hold nothing back.",
+            6: "Write the most comprehensive du'a possible — approximately 5500-7000 words total. Reading time: ~40 minutes. Invoke 16 Names of Allah. ~20 Quranic/Hadith references. Majestic opening. Deeply layered sections. Grand family closing with Ameen. Laylatul Qadr — hold nothing back.",
+            99: "Write the most comprehensive du'a possible — approximately 6000-8000 words total. Reading time: ~45 minutes. Invoke 16 Names of Allah. ~20 Quranic/Hadith references. Majestic opening. Deeply layered sections. Grand family closing with Ameen. Laylatul Qadr — hold nothing back.",
         },
     },
+}
+
+# ── Word budget midpoints per tier/bucket (used by concern-density calculator) ──
+TIER_WORD_BUDGET = {
+    "quick":         {"solo": 58, 2: 88, 4: 115, 6: 145, 99: 180},
+    "post_salah":    {"solo": 525, 2: 625, 4: 725, 6: 825, 99: 925},
+    "sujood":        {"solo": 1350, 2: 1450, 4: 1650, 6: 1850, 99: 2050},
+    "laylatul_qadr": {"solo": 4750, 2: 5000, 4: 5500, 6: 6250, 99: 7000},
 }
 
 # Default tier per occasion
@@ -1115,31 +1133,35 @@ def get_length_instruction(member_count: int, is_solo: bool = False, tier: str =
 
 
 def get_max_tokens(member_count: int, is_solo: bool = False, tier: str = "post_salah") -> int:
+    """Token budget per tier, calibrated to reading-time targets (~1.3 tokens/word).
+    Quick: 15-30s (40-200 words) | Post Salah: 3-5 min (450-1000 words)
+    Sujood: 8-10 min (1200-2200 words) | Laylatul Qadr: ~30 min (4500-8000 words)
+    """
     tier = tier if tier in LENGTH_TIERS else "post_salah"
     if tier == "quick":
-        if is_solo: return 1500
-        elif member_count <= 2: return 1800
-        elif member_count <= 4: return 2200
-        elif member_count <= 6: return 2800
-        else: return 3200
+        if is_solo: return 200          # ~75 words max
+        elif member_count <= 2: return 250  # ~100 words
+        elif member_count <= 4: return 300  # ~130 words
+        elif member_count <= 6: return 350  # ~160 words
+        else: return 400                # ~200 words
     elif tier == "laylatul_qadr":
-        if is_solo: return 8192
-        elif member_count <= 2: return 8192
-        elif member_count <= 4: return 10000
-        elif member_count <= 6: return 12000
-        else: return 14000
+        if is_solo: return 7000         # ~5000 words
+        elif member_count <= 2: return 7500  # ~5500 words
+        elif member_count <= 4: return 8500  # ~6000 words
+        elif member_count <= 6: return 10000 # ~7000 words
+        else: return 11000              # ~8000 words
     elif tier == "sujood":
-        if is_solo: return 6000
-        elif member_count <= 2: return 6500
-        elif member_count <= 4: return 8000
-        elif member_count <= 6: return 8192
-        else: return 10000
+        if is_solo: return 2200         # ~1500 words
+        elif member_count <= 2: return 2400  # ~1600 words
+        elif member_count <= 4: return 2800  # ~1800 words
+        elif member_count <= 6: return 3200  # ~2000 words
+        else: return 3500               # ~2200 words
     else:  # post_salah (default)
-        if is_solo: return 3500
-        elif member_count <= 2: return 4000
-        elif member_count <= 4: return 5000
-        elif member_count <= 6: return 5500
-        else: return 6500
+        if is_solo: return 900          # ~600 words
+        elif member_count <= 2: return 1100  # ~700 words
+        elif member_count <= 4: return 1200  # ~800 words
+        elif member_count <= 6: return 1400  # ~900 words
+        else: return 1500               # ~1000 words
 
 
 # ══════════════════════════════════════════════════
@@ -1359,7 +1381,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("MyDua.AI v1.5.0 — Production")
+    logger.info("MyDua.AI v1.5.1 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -1396,7 +1418,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.5.0",
+    version="1.5.1",
     lifespan=lifespan,
 )
 
@@ -1621,6 +1643,79 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
             "e.g. use '## A Du'a for Amina' not '## A Du'a for Amina, My Daughter (Age 8)'. "
             "Let the age and relationship inform the tone, prayers, and verse selection silently.\n\n"
         )
+
+    # ══════════════════════════════════════════════════════════════════════
+    # SUPERSEDING RULE: Word count is the leading constraint.
+    # Concern-handling strategy scales dynamically based on words-per-concern.
+    # ══════════════════════════════════════════════════════════════════════
+    total_concerns = 0
+    for m in members:
+        concerns_text = m.concerns.strip() if m.concerns else ""
+        if concerns_text:
+            total_concerns += len([c for c in concerns_text.replace("\n", ",").split(",") if c.strip()])
+
+    if total_concerns > 0:
+        # Look up the word budget for this tier + member bucket
+        bucket = "solo" if is_solo else (2 if member_count <= 2 else 4 if member_count <= 4 else 6 if member_count <= 6 else 99)
+        word_budget = TIER_WORD_BUDGET.get(tier, {}).get(bucket, 500)
+
+        # Calculate available content words (after opening/closing overhead)
+        if is_solo:
+            overhead_frac = 0.20 if word_budget < 200 else 0.25
+            content_words = word_budget * (1 - overhead_frac)
+        else:
+            overhead_frac = 0.20 if word_budget < 200 else 0.25
+            member_overhead = member_count * 15  # per-member headers/transitions
+            content_words = max(1, word_budget * (1 - overhead_frac) - member_overhead)
+
+        wpc = content_words / total_concerns  # words per concern
+
+        # ── Strategy spectrum based on words-per-concern ──
+        if wpc < 8:
+            prompt += (
+                f"CONCERN STRATEGY (SUPERSEDING RULE — this overrides all other concern guidance): "
+                f"There are {total_concerns} concerns but only ~{int(content_words)} content words available. "
+                f"You MUST distill ALL concerns into 1-2 overarching spiritual themes "
+                f"(e.g. 'health & healing', 'guidance & provision', 'protection & mercy'). "
+                f"Do NOT attempt to address individual concerns — weave themes into a single heartfelt supplication. "
+                f"The word count is a hard constraint.\n\n"
+            )
+        elif wpc < 20:
+            prompt += (
+                f"CONCERN STRATEGY (SUPERSEDING RULE — this overrides all other concern guidance): "
+                f"There are {total_concerns} concerns across ~{int(content_words)} content words. "
+                f"Group each person's concerns into 1-2 key themes rather than addressing each individually. "
+                f"Prioritize spiritual depth over exhaustive coverage. "
+                f"The word count is a hard constraint.\n\n"
+            )
+        elif wpc < 40:
+            prompt += (
+                f"CONCERN STRATEGY: {total_concerns} concerns with adequate space. "
+                f"Address each concern briefly and individually in 1-2 sentences. "
+                f"Stay within the word count — be concise but personal.\n\n"
+            )
+        elif wpc < 80:
+            prompt += (
+                f"CONCERN STRATEGY: {total_concerns} concerns with good space available. "
+                f"Address each concern individually with moderate depth — a few sentences each, "
+                f"weaving in spiritual context and references where natural.\n\n"
+            )
+        elif wpc < 150:
+            prompt += (
+                f"CONCERN STRATEGY: {total_concerns} concerns with generous space. "
+                f"Explore each concern with full spiritual depth — multiple sentences, "
+                f"Quranic/Hadith references, and emotional resonance for each.\n\n"
+            )
+        else:
+            # Expansion mode: few concerns, large word budget
+            prompt += (
+                f"CONCERN STRATEGY (EXPANSION): Only {total_concerns} concern{'s' if total_concerns > 1 else ''} "
+                f"{'were' if total_concerns > 1 else 'was'} provided but you have ~{int(content_words)} words of content space. "
+                f"Do NOT write a short du'a — expand richly. Explore {'each concern' if total_concerns > 1 else 'the concern'} "
+                f"from multiple spiritual angles: its root causes, its emotional weight, relevant Quranic verses and Hadith, "
+                f"the Names of Allah that speak to it, prayers for both this life and the hereafter, "
+                f"and how Allah's mercy encompasses it. Fill the full word budget with depth and sincerity.\n\n"
+            )
 
     return prompt
 
@@ -2078,7 +2173,7 @@ async def send_dua_email(to_email: str, recipient_name: str, dua_text: str, shar
 async def health_check():
     checks = {
         "status": "ok",
-        "version": "1.5.0",
+        "version": "1.5.1",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable

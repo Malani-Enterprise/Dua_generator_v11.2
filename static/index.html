@@ -430,7 +430,7 @@
       progressStartTime = Date.now();
       var stageIdx = 0;
       var currentPct = 0;
-      var tierTimes = {quick:30,post_salah:60,sujood:90,laylatul_qadr:120};
+      var tierTimes = {quick:10,post_salah:20,sujood:40,laylatul_qadr:100};
       var expectedSec = tierTimes[selectedLengthTier] || 60;
       progressInterval = setInterval(function() {
         var elapsed = (Date.now() - progressStartTime) / 1000;
@@ -655,14 +655,11 @@
         const res=await fetch("/api/generate-dua-stream",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:controller.signal});
         if(res.status===429){const d=await res.json();const retryAfter=res.headers.get("Retry-After");const waitMsg=retryAfter?` Please try again in ${retryAfter} seconds.`:"";const msg=(typeof d.detail==="string"?d.detail:"Rate limit exceeded.")+waitMsg;showError(msg);btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";clearTimeout(sseTimeout);return;}
         if(!res.ok){const d=await res.json().catch(()=>({}));const msg=typeof d.detail==="string"?d.detail:Array.isArray(d.detail)?d.detail.map(e=>e.msg||e).join(", "):JSON.stringify(d.detail||"Server error");throw new Error(msg);}
-        // Show result section immediately so user sees du'a appearing
-        document.getElementById("resultSection").style.display="block";
+        // Prepare result section but keep progress bar visible until first text arrives
         document.getElementById("duaContent").innerHTML="";
         loadEl.textContent="Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...";
-        btn.innerHTML='<span class="spinner">✦</span> Writing...';endProgress();
-        setTimeout(()=>document.getElementById("resultSection").scrollIntoView({behavior:"smooth"}),100);
         // Read SSE stream
-        const reader=res.body.getReader();const decoder=new TextDecoder();let buffer="";let fullText="";
+        const reader=res.body.getReader();const decoder=new TextDecoder();let buffer="";let fullText="";let firstChunk=true;
         while(true){
           const{done,value}=await reader.read();
           if(done)break;
@@ -673,7 +670,10 @@
             if(!line.startsWith("data: "))continue;
             try{
               const evt=JSON.parse(line.slice(6));
-              if(evt.type==="delta"){fullText+=evt.text;renderDua(fullText);}
+              if(evt.type==="delta"){
+                if(firstChunk){firstChunk=false;endProgress();document.getElementById("resultSection").style.display="block";btn.innerHTML='<span class="spinner">✦</span> Writing...';setTimeout(()=>document.getElementById("resultSection").scrollIntoView({behavior:"smooth"}),100);}
+                fullText+=evt.text;renderDua(fullText);
+              }
               else if(evt.type==="error"){throw new Error(evt.message);}
               else if(evt.type==="done"){/* stream complete */}
             }catch(parseErr){if(parseErr.message&&!parseErr.message.includes("JSON"))throw parseErr;}
