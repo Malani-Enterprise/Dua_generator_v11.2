@@ -1,6 +1,12 @@
 """
-MyDua.AI — Backend API (v1.5.1 Production)
+MyDua.AI — Backend API (v1.5.2 Production)
 ==========================================
+v1.5.2 Changes (Tier Calibration & Dynamic Concern Strategy):
+  - Du'a tiers recalibrated to match reading-time targets (Quick: 15-30s, Post Salah: 3-5min, Sujood: 8-10min, LQ: ~30min)
+  - Superseding concern-density rule: word count drives strategy (theme-only → grouped → brief → moderate → deep → expansion)
+  - Tier-scaled timeouts: frontend and backend timeouts scale per tier (1min Quick to 6min Laylatul Qadr)
+  - Backend httpx timeout raised to 360s to support Laylatul Qadr generation
+
 v1.5.1 Changes (Progress Bar UX Fix):
   - Progress bar + scroll now trigger on first stream chunk, not HTTP headers
   - Eliminates 10-15s dead gap between progress completing and du'a appearing
@@ -1377,11 +1383,11 @@ async def lifespan(app):
         logger.critical("FATAL: SECRET_KEY is still the default value. Set a real secret in .env before running in production.")
         raise RuntimeError("Insecure SECRET_KEY — set a real value in .env")
 
-    http_client = httpx.AsyncClient(timeout=120)
+    http_client = httpx.AsyncClient(timeout=360)  # 6 min — covers Laylatul Qadr tier
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("MyDua.AI v1.5.1 — Production")
+    logger.info("MyDua.AI v1.5.2 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -1418,7 +1424,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.5.1",
+    version="1.5.2",
     lifespan=lifespan,
 )
 
@@ -2173,7 +2179,7 @@ async def send_dua_email(to_email: str, recipient_name: str, dua_text: str, shar
 async def health_check():
     checks = {
         "status": "ok",
-        "version": "1.5.1",
+        "version": "1.5.2",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable

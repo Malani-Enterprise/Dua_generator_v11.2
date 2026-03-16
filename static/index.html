@@ -430,7 +430,7 @@
       progressStartTime = Date.now();
       var stageIdx = 0;
       var currentPct = 0;
-      var tierTimes = {quick:10,post_salah:20,sujood:40,laylatul_qadr:100};
+      var tierTimes = {quick:10,post_salah:20,sujood:45,laylatul_qadr:180};
       var expectedSec = tierTimes[selectedLengthTier] || 60;
       progressInterval = setInterval(function() {
         var elapsed = (Date.now() - progressStartTime) / 1000;
@@ -649,8 +649,10 @@
       btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Connecting to our du'a service...";loadEl.style.display="block";startProgress();
       generatedDuaText="";currentDuaId=null;currentEmailToken="";
       const payload={userName,members:allMembers,occasion:selectedOccasion,lengthTier:selectedLengthTier,deliveryMode:"instant",userEmail,emailOptIn:true,referred:isReferred,skipCache:shouldSkipCache};
-      // SSE timeout: abort after 120s
-      const controller=new AbortController();const sseTimeout=setTimeout(()=>controller.abort(),120000);
+      // SSE timeout: scales with tier (longer du'as need more generation time)
+      var tierTimeouts={quick:60000,post_salah:120000,sujood:180000,laylatul_qadr:360000};
+      var sseTimeoutMs=tierTimeouts[selectedLengthTier]||120000;
+      const controller=new AbortController();const sseTimeout=setTimeout(()=>controller.abort(),sseTimeoutMs);
       try{
         const res=await fetch("/api/generate-dua-stream",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:controller.signal});
         if(res.status===429){const d=await res.json();const retryAfter=res.headers.get("Retry-After");const waitMsg=retryAfter?` Please try again in ${retryAfter} seconds.`:"";const msg=(typeof d.detail==="string"?d.detail:"Rate limit exceeded.")+waitMsg;showError(msg);btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";clearTimeout(sseTimeout);return;}
@@ -685,7 +687,7 @@
         clearTimeout(sseTimeout);
       }catch(err){
         clearTimeout(sseTimeout);
-        if(err.name==="AbortError"){showError("The connection timed out after 2 minutes. This usually means the server is not responding. Please check that the backend is running and your API key is configured, then try again.");}
+        if(err.name==="AbortError"){var mins=Math.round(sseTimeoutMs/60000);showError("The connection timed out after "+mins+" minute"+(mins>1?"s":"")+". This usually means the server is not responding. Please check that the backend is running and your API key is configured, then try again.");}
         else if(err.message==="Failed to fetch"){showError("Cannot connect to the server. Please check that the backend is running and try again.");}
         else{showError(err.message);}
       }
