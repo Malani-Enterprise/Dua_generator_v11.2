@@ -646,7 +646,7 @@
       const shouldSkipCache=btn.dataset.skipCache==="true";
       btn.dataset.skipCache="false";
       hideError();btn.disabled=true;
-      btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Connecting to our du'a service...";loadEl.style.display="block";
+      btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Connecting to our du'a service...";loadEl.style.display="block";startProgress();
       generatedDuaText="";currentDuaId=null;currentEmailToken="";
       const payload={userName,members:allMembers,occasion:selectedOccasion,lengthTier:selectedLengthTier,deliveryMode:"instant",userEmail,emailOptIn:true,referred:isReferred,skipCache:shouldSkipCache};
       // SSE timeout: abort after 120s
@@ -659,7 +659,7 @@
         document.getElementById("resultSection").style.display="block";
         document.getElementById("duaContent").innerHTML="";
         loadEl.textContent="Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...";
-        btn.innerHTML='<span class="spinner">✦</span> Writing...';
+        btn.innerHTML='<span class="spinner">✦</span> Writing...';endProgress();
         setTimeout(()=>document.getElementById("resultSection").scrollIntoView({behavior:"smooth"}),100);
         // Read SSE stream
         const reader=res.body.getReader();const decoder=new TextDecoder();let buffer="";let fullText="";
@@ -685,11 +685,11 @@
         clearTimeout(sseTimeout);
       }catch(err){
         clearTimeout(sseTimeout);
-        if(err.name==="AbortError"){showError("Your du'a is taking longer than expected. Please try again — sometimes a shorter length helps.");}
-        else if(err.message==="Failed to fetch"){showError("Cannot connect to the server. Please check your internet connection and try again.");}
+        if(err.name==="AbortError"){showError("The connection timed out after 2 minutes. This usually means the server is not responding. Please check that the backend is running and your API key is configured, then try again.");}
+        else if(err.message==="Failed to fetch"){showError("Cannot connect to the server. Please check that the backend is running and try again.");}
         else{showError(err.message);}
       }
-      finally{btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";hideProgress();}
+      finally{btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";hideProgress();saveFormState();}
     }
 
     function renderDua(text){const c=document.getElementById("duaContent");c.innerHTML="";text.split("\n").forEach(line=>{if(line.startsWith("## ")){const h=document.createElement("h2");h.innerHTML=renderInline(line.slice(3));c.appendChild(h);}else if(line.startsWith("# ")){const h=document.createElement("h1");h.innerHTML=renderInline(line.slice(2));c.appendChild(h);}else if(line.trim()==="---"){const d=document.createElement("div");d.className="divider";d.innerHTML='<div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div>';c.appendChild(d);}else if(line.trim()===""){const s=document.createElement("div");s.style.height="12px";c.appendChild(s);}else{const p=document.createElement("p");p.innerHTML=renderInline(line);c.appendChild(p);}});}
