@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0a1628"/>
+      <stop offset="100%" stop-color="#112240"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#dbb876"/>
+      <stop offset="50%" stop-color="#c9a96e"/>
+      <stop offset="100%" stop-color="#a8873f"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="512" height="512" rx="96" fill="url(#bg)"/>
+
+  <!-- Arabic دُعَاء -->
+  <text x="30" y="317" font-family="Amiri, Georgia, serif" font-size="156" fill="url(#gold)" text-anchor="start">دُعَاء</text>
+
+  <!-- "My" — elegant italic to match Cormorant Garamond's cursive feel -->
+  <text x="290" y="317" font-family="Cormorant Garamond, Georgia, serif" font-size="130" font-weight="300" font-style="italic" fill="#e8dcc8" text-anchor="start" letter-spacing="0.5">My</text>
+</svg>

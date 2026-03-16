@@ -2341,7 +2341,7 @@ async def save_dua(req: SaveDuaRequest, request: Request):
     client_ip = get_client_ip(request)
     allowed, _ = db.rate_limit_check(f"save:{client_ip}", max_requests=10, window_seconds=3600)
     if not allowed:
-        raise HTTPException(429, "Too many save requests.")
+        raise HTTPException(429, "Too many save requests.", headers={"Retry-After": "3600"})
 
     dua_id = uuid.uuid4().hex[:24]
     token = generate_email_token(dua_id)
@@ -2388,7 +2388,7 @@ async def email_dua(req: EmailDuaRequest, request: Request):
     client_ip = get_client_ip(request)
     allowed, _ = db.rate_limit_check(f"email:{client_ip}", max_requests=5, window_seconds=3600)
     if not allowed:
-        raise HTTPException(429, "Too many email requests.")
+        raise HTTPException(429, "Too many email requests.", headers={"Retry-After": "3600"})
 
     data = db.get_saved(req.duaId)
     if not data:
@@ -2879,6 +2879,37 @@ async def unsubscribe_page(email: str = "", token: str = ""):
 </body></html>""")
 
 
+@app.post("/unsubscribe")
+async def unsubscribe_oneclick(request: Request):
+    """RFC 8058 one-click unsubscribe via POST for email clients (List-Unsubscribe-Post header)."""
+    try:
+        # Accept form-encoded or query params
+        form = await request.form()
+        email = form.get("email", "") or request.query_params.get("email", "")
+        token = form.get("token", "") or request.query_params.get("token", "")
+    except Exception:
+        email = request.query_params.get("email", "")
+        token = request.query_params.get("token", "")
+
+    if not email or not token:
+        return JSONResponse(content={"detail": "Missing email or token."}, status_code=400)
+
+    if not verify_unsubscribe_token(email, token):
+        return JSONResponse(content={"detail": "Invalid or expired unsubscribe link."}, status_code=400)
+
+    # Mark as unsubscribed in database
+    try:
+        conn = db._get_conn()
+        conn.execute("UPDATE email_list SET unsubscribed = 1, unsubscribed_at = ? WHERE email = ?",
+                     (time.time(), email.lower().strip()))
+        conn.commit()
+        conn.close()
+    except Exception as e:
+        logger.error(f"Unsubscribe POST DB error: {e}")
+
+    return JSONResponse(content={"status": "unsubscribed"}, status_code=200)
+
+
 @app.get("/shared/{dua_id}", response_class=HTMLResponse)
 async def shared_page(dua_id: str):
     data = db.get_saved(dua_id)
@@ -3129,7 +3160,7 @@ async def generate_gift_dua(req: GiftDuaRequest, request: Request):
     client_ip = get_client_ip(request)
     allowed, _ = db.rate_limit_check(f"gen:{client_ip}", max_requests=5, window_seconds=3600)
     if not allowed:
-        raise HTTPException(429, "Rate limit exceeded. Please try again later.")
+        raise HTTPException(429, "Rate limit exceeded. Please try again later.", headers={"Retry-After": "3600"})
 
     occasion = GIFT_OCCASIONS.get(req.occasion, "care and love")
 
@@ -3199,7 +3230,7 @@ async def deliver_gift(req: GiftDeliverRequest, request: Request):
             raise HTTPException(400, "Recipient email is required.")
         allowed, _ = db.rate_limit_check(f"email:{client_ip}", max_requests=5, window_seconds=3600)
         if not allowed:
-            raise HTTPException(429, "Too many email requests.")
+            raise HTTPException(429, "Too many email requests.", headers={"Retry-After": "3600"})
 
         try:
             await send_gift_email(req.recipientEmail, gift["sender_name"],
