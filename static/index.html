@@ -1,31 +1,28 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-9GPN1KWF24"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-9GPN1KWF24');
-  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>MyDua.ai — Personalized Du'as for Every Occasion</title>
+  <title>MyDua.AI — Personalized Du'as for Every Occasion</title>
   <meta name="description" content="A du'a lives deep in your heart. We help it find its words — personalized supplications for every occasion, powered by Quran and authentic Hadith." />
-  <meta property="og:title" content="MyDua.ai — Personalized Du'as for Every Occasion" />
+  <meta property="og:title" content="MyDua.AI — Personalized Du'as for Every Occasion" />
   <meta property="og:description" content="A du'a lives deep in your heart. We help it find its words — personalized supplications for every occasion." />
-  <meta property="og:image" content="/static/og-image.png" />
+  <meta property="og:image" content="/og-image.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
   <meta property="og:type" content="website" />
-  <link rel="icon" type="image/svg+xml" href="/static/favicon.svg" />
+  <meta property="og:site_name" content="MyDua.AI" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="MyDua.AI — Personalized Du'as for Every Occasion" />
+  <meta name="twitter:description" content="A du'a lives deep in your heart. We help it find its words — personalized supplications for every occasion." />
+  <meta name="twitter:image" content="/og-image.png" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet" />
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js" defer></script>
   <style>
-    :root{--gold:#c9a96e;--gold-dim:rgba(201,169,110,0.3);--bg-deep:#0a1628;--bg-mid:#112240;--text-primary:#e8dcc8;--text-secondary:#d4c9b4;--text-muted:#8a7d6b;--text-dim:#5a5042;--error:#e8a0a0;--error-bg:rgba(200,100,100,0.1);--error-border:rgba(200,100,100,0.2);--success:#8bca8b;--success-bg:rgba(100,200,100,0.1);--card-bg:rgba(255,255,255,0.03);--card-border:rgba(201,169,110,0.12);--input-bg:rgba(255,255,255,0.04);--input-border:rgba(201,169,110,0.2);--input-focus-border:rgba(201,169,110,0.5);--input-focus-shadow:0 0 12px rgba(201,169,110,0.1);}
+    :root{--gold:#c9a96e;--gold-dim:rgba(201,169,110,0.3);--bg-deep:#0a1628;--bg-mid:#112240;--card-solid:#182845;--text-primary:#e8dcc8;--text-secondary:#d4c9b4;--text-muted:#8a7d6b;--text-dim:#5a5042;--error:#e8a0a0;--error-bg:rgba(200,100,100,0.1);--error-border:rgba(200,100,100,0.2);--success:#8bca8b;--success-bg:rgba(100,200,100,0.1);--card-bg:rgba(255,255,255,0.03);--card-border:rgba(201,169,110,0.12);--input-bg:rgba(255,255,255,0.04);--input-border:rgba(201,169,110,0.2);--input-focus-border:rgba(201,169,110,0.5);--input-focus-shadow:0 0 12px rgba(201,169,110,0.1);}
     *{margin:0;padding:0;box-sizing:border-box;}html{scroll-behavior:smooth;}body{font-family:'Cormorant Garamond',serif;background:linear-gradient(160deg,var(--bg-deep) 0%,var(--bg-mid) 40%,#0d1f3c 70%,#091525 100%);color:var(--text-primary);min-height:100vh;overflow-x:hidden;}::-webkit-scrollbar{width:6px;}::-webkit-scrollbar-track{background:transparent;}::-webkit-scrollbar-thumb{background:rgba(201,169,110,0.2);border-radius:3px;}::placeholder{color:var(--gold-dim)!important;}
     @keyframes fadeInUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}@keyframes pulse{0%,100%{opacity:.5;}50%{opacity:1;}}@keyframes gentleSpin{from{transform:rotate(0);}to{transform:rotate(360deg);}}@keyframes slideDown{from{opacity:0;max-height:0;}to{opacity:1;max-height:300px;}}.fade-in{animation:fadeInUp .7s ease-out both;}
     .bg-pattern{position:fixed;inset:0;z-index:0;pointer-events:none;}.bg-pattern svg{position:absolute;inset:0;opacity:.04;}.bg-orb{position:absolute;border-radius:50%;filter:blur(40px);}.bg-orb-1{top:10%;right:15%;width:400px;height:400px;background:radial-gradient(circle,rgba(201,169,110,.06) 0%,transparent 70%);}.bg-orb-2{bottom:20%;left:10%;width:300px;height:300px;background:radial-gradient(circle,rgba(201,169,110,.04) 0%,transparent 70%);filter:blur(30px);}
@@ -34,9 +31,10 @@
     .form-wrap{width:100%;max-width:640px;}label{display:block;margin-bottom:6px;font-size:13px;font-weight:600;color:var(--gold);letter-spacing:.05em;text-transform:uppercase;}label.main-label{font-size:15px;}input,select,textarea{width:100%;padding:12px 16px;border-radius:10px;border:1px solid var(--input-border);background:var(--input-bg);color:var(--text-primary);font-size:15px;font-family:'Cormorant Garamond',serif;outline:none;transition:border-color .3s,box-shadow .3s;}input:focus,select:focus,textarea:focus{border-color:var(--input-focus-border);box-shadow:var(--input-focus-shadow);}input.name-input{font-size:18px;padding:14px 18px;}select{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23c9a96e' d='M6 8L0 0h12z'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;}select option{background:var(--bg-mid);color:var(--text-primary);}select option:disabled{color:var(--text-dim);font-style:italic;}textarea{resize:vertical;min-height:60px;}
     .about-you-card{background:var(--card-bg);border-radius:16px;border:1px solid var(--card-border);padding:28px;backdrop-filter:blur(10px);margin-bottom:32px;}.about-you-title{font-size:20px;font-weight:600;color:var(--gold);margin-bottom:20px;}.member-card{background:var(--card-bg);border-radius:16px;border:1px solid var(--card-border);padding:24px;position:relative;backdrop-filter:blur(10px);transition:border-color .3s;margin-bottom:16px;}.member-card:hover{border-color:rgba(201,169,110,.25);}.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}.field-group{margin-bottom:16px;}.field-group:last-child{margin-bottom:0;}.remove-btn{position:absolute;top:12px;right:12px;background:rgba(255,255,255,.05);border:1px solid rgba(201,169,110,.15);border-radius:8px;color:var(--gold);width:30px;height:30px;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:all .2s;font-family:sans-serif;line-height:1;}.remove-btn:hover{background:rgba(200,100,100,.15);border-color:rgba(200,100,100,.3);}.add-btn{width:100%;padding:14px;margin-top:4px;border-radius:12px;border:1px dashed var(--gold-dim);background:transparent;color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.05em;}.add-btn:hover{background:rgba(201,169,110,.05);border-color:var(--input-focus-border);}
     .add-member-merged{display:flex;align-items:center;gap:12px;padding:14px 18px;border:1px dashed rgba(201,169,110,0.25);border-radius:14px;cursor:pointer;transition:all .2s;margin-bottom:16px;}.add-member-merged:hover{border-color:rgba(201,169,110,0.5);background:rgba(201,169,110,0.04);}.add-member-plus{font-size:28px;font-weight:300;color:var(--gold);opacity:.5;line-height:1;}.add-member-cta{font-size:15px;font-weight:600;color:var(--gold);font-family:'Cormorant Garamond',serif;}.add-member-sub{font-size:12px;color:var(--text-muted);font-style:italic;margin-top:2px;}.empty-state{text-align:center;padding:40px 20px;border:1px dashed var(--gold-dim);border-radius:16px;margin-bottom:16px;}.empty-state p{font-size:16px;color:var(--text-muted);font-style:italic;margin-bottom:4px;}.empty-state .small{font-size:13px;color:var(--text-dim);}
-    .concern-tag{padding:5px 12px;border-radius:16px;border:1px solid rgba(201,169,110,0.4);background:rgba(201,169,110,0.06);color:#b8a88a;font-family:'Cormorant Garamond',serif;font-size:13px;cursor:pointer;transition:all .3s;user-select:none;outline:none;}.concern-tag:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.12);}.concern-tag.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.15);font-weight:600;}
+    .concern-tag{display:inline-flex;align-items:center;padding:6px 14px;border-radius:16px;border:1px solid rgba(201,169,110,0.25);background:transparent;color:var(--text-muted);font-family:'Cormorant Garamond',serif;font-size:13px;cursor:pointer;transition:all .2s;user-select:none;outline:none;white-space:nowrap;flex-shrink:0;}.concern-tag:hover{border-color:rgba(201,169,110,0.5);color:var(--gold);}.concern-tag.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.1);font-weight:600;}
+    .concerns-outer{position:relative;}.concerns-wrap{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;overflow-y:hidden;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}.concerns-wrap::-webkit-scrollbar{display:none;}.concerns-fade{position:absolute;top:0;right:0;bottom:4px;width:60px;background:linear-gradient(to right,transparent 0%,var(--card-solid) 80%);pointer-events:none;transition:opacity .3s;z-index:2;}.concerns-fade-left{position:absolute;top:0;left:0;bottom:4px;width:60px;background:linear-gradient(to left,transparent 0%,var(--card-solid) 80%);pointer-events:none;z-index:2;}.concerns-fade.hidden{opacity:0;}.concerns-arrow{position:absolute;top:50%;right:4px;transform:translateY(-60%);color:var(--gold);font-size:42px;opacity:.6;pointer-events:none;z-index:3;transition:opacity .3s;animation:nudge 2s ease-in-out infinite;}.concerns-arrow.hidden{opacity:0;}.concerns-arrow-left{position:absolute;top:50%;left:4px;transform:translateY(-60%);color:var(--gold);font-size:42px;opacity:0;pointer-events:none;z-index:3;transition:opacity .3s;animation:nudge-left 2s ease-in-out infinite;}.concerns-arrow-left.visible{opacity:.6;}@keyframes nudge{0%,100%{transform:translateY(-60%) translateX(0);}50%{transform:translateY(-60%) translateX(3px);}}@keyframes nudge-left{0%,100%{transform:translateY(-60%) translateX(0);}50%{transform:translateY(-60%) translateX(-3px);}}
     .icon-tile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:8px;border:1px solid rgba(201,169,110,0.2);background:rgba(255,255,255,0.02);color:var(--gold);font-family:'Cormorant Garamond',serif;cursor:pointer;transition:all .2s;}.icon-tile:hover{border-color:rgba(201,169,110,0.4);background:rgba(201,169,110,0.06);}.icon-lbl{font-size:11px;color:#b8a88a;}.tile-wa{border-color:rgba(37,211,102,0.25);}.tile-wa:hover{background:rgba(37,211,102,0.08);}.tile-fb{border-color:rgba(66,103,178,0.25);}.tile-fb:hover{background:rgba(66,103,178,0.08);}.tile-ig{border-color:rgba(225,48,108,0.25);}.tile-ig:hover{background:rgba(225,48,108,0.08);}.tile-tk{border-color:rgba(201,169,110,0.2);}.concern-tags-wrap{position:relative;overflow:hidden;transition:max-height .5s ease;max-height:44px;}.concern-tags-wrap.expanded{max-height:400px;}.concern-fade{position:absolute;bottom:0;left:0;right:0;height:26px;background:linear-gradient(to bottom,transparent,var(--card-bg,rgba(10,22,40,1)));pointer-events:none;opacity:1;transition:opacity .5s ease .1s;}.concern-fade.hidden{opacity:0;transition:opacity .4s ease 0s;}.tag-toggle{font-size:12px;color:var(--gold);cursor:pointer;margin-top:4px;opacity:.7;display:inline-block;}.tag-toggle:hover{opacity:1;}
-    .generate-btn{width:100%;padding:18px;margin-top:16px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 50%,var(--gold) 100%);background-size:200% auto;color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:center;transition:all .4s;box-shadow:0 4px 24px rgba(201,169,110,.2);}.generate-btn:hover{background-position:right center;}.generate-btn:disabled{background:linear-gradient(135deg,#2a1f0e,#3d2c12);color:var(--gold);cursor:wait;box-shadow:none;}.loading-text{text-align:center;margin-top:16px;font-size:15px;color:var(--text-muted);font-style:italic;animation:pulse 2s ease-in-out infinite;}.spinner{display:inline-block;animation:gentleSpin 2s linear infinite;}.error-msg{padding:12px 16px;border-radius:10px;margin-top:16px;background:var(--error-bg);border:1px solid var(--error-border);color:var(--error);font-size:15px;display:none;}.success-msg{padding:12px 16px;border-radius:10px;margin-top:12px;background:var(--success-bg);border:1px solid rgba(100,200,100,.2);color:var(--success);font-size:15px;display:none;}
+    .generate-btn{width:100%;padding:18px;margin-top:16px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 50%,var(--gold) 100%);background-size:200% auto;color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:center;transition:all .4s;box-shadow:0 4px 24px rgba(201,169,110,.2);}.generate-btn:hover{background-position:right center;}.generate-btn:disabled{background:linear-gradient(135deg,#2a1f0e,#3d2c12);color:var(--gold);cursor:wait;box-shadow:none;}.loading-text{text-align:center;margin-top:0;font-size:15px;color:var(--text-muted);font-style:italic;animation:pulse 2s ease-in-out infinite;}.spinner{display:inline-block;animation:gentleSpin 2s linear infinite;}.error-msg{padding:12px 16px;border-radius:10px;margin-top:16px;background:var(--error-bg);border:1px solid var(--error-border);color:var(--error);font-size:15px;display:none;}.success-msg{padding:12px 16px;border-radius:10px;margin-top:12px;background:var(--success-bg);border:1px solid rgba(100,200,100,.2);color:var(--success);font-size:15px;display:none;}
     .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}.section-title{font-size:24px;font-weight:600;color:var(--gold);}.member-count{font-size:14px;color:var(--text-muted);}.result-wrap{width:100%;max-width:720px;margin-top:60px;}.result-card{background:var(--card-bg);border-radius:20px;border:1px solid rgba(201,169,110,.15);padding:40px 36px;backdrop-filter:blur(10px);box-shadow:0 8px 40px rgba(0,0,0,.2);}.result-actions{display:flex;justify-content:flex-end;gap:10px;margin-bottom:20px;flex-wrap:wrap;}.action-btn{padding:8px 20px;border-radius:8px;border:1px solid rgba(201,169,110,.3);background:rgba(255,255,255,.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.05em;}.action-btn:hover{background:rgba(201,169,110,.08);border-color:var(--input-focus-border);}.action-btn.copied{background:var(--success-bg);color:var(--success);}.action-btn:disabled{opacity:.5;cursor:wait;}
     .dua-content{overflow:visible;max-height:none;}.dua-content h1{font-size:32px;font-weight:700;color:var(--gold);margin-top:40px;margin-bottom:20px;line-height:1.3;text-align:center;}.dua-content h2{font-size:26px;font-weight:700;color:var(--gold);margin-top:36px;margin-bottom:16px;line-height:1.3;}.dua-content p{font-size:18px;line-height:1.8;color:var(--text-secondary);margin:6px 0;white-space:pre-wrap;}.dua-content strong{color:var(--gold);}.dua-content em{color:#b8a88a;font-style:italic;}
     .panel{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:20px 24px;margin-top:16px;animation:slideDown .3s ease-out;overflow:hidden;}.panel-title{font-size:16px;font-weight:600;color:var(--gold);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;}.panel-row{display:flex;gap:10px;align-items:end;}.panel-row input{flex:1;}.panel-btn{padding:12px 24px;border-radius:10px;border:none;cursor:pointer;background:var(--gold);color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;letter-spacing:.04em;transition:all .3s;white-space:nowrap;}.panel-btn:hover{opacity:.9;}.panel-btn:disabled{opacity:.5;cursor:wait;}.share-link-box{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(201,169,110,.15);}.share-link-box input{flex:1;border:none;background:transparent;color:var(--text-primary);font-size:14px;outline:none;padding:0;}.share-link-box button{padding:6px 16px;font-size:13px;}
@@ -45,6 +43,15 @@
   </style>
 </head>
 <body>
+  <div id="consentBanner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:10000;background:linear-gradient(135deg,#0a1628,#112240);border-top:2px solid #c9a96e;padding:16px 24px;font-family:'Cormorant Garamond',serif;">
+    <div style="max-width:900px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <p style="color:#e8dcc8;font-size:15px;margin:0;flex:1;min-width:200px;line-height:1.5;">We use anonymous analytics to improve your experience. No cookies are set — we only track page views and usage patterns via our server. <a href="/privacy" style="color:#c9a96e;text-decoration:underline;">Privacy Policy</a></p>
+      <div style="display:flex;gap:10px;flex-shrink:0;">
+        <button onclick="acceptConsent()" style="padding:8px 24px;background:#c9a96e;color:#0a1628;border:none;border-radius:6px;font-family:inherit;font-size:14px;font-weight:600;cursor:pointer;">Accept</button>
+        <button onclick="declineConsent()" style="padding:8px 24px;background:transparent;color:#c9a96e;border:1px solid #c9a96e;border-radius:6px;font-family:inherit;font-size:14px;cursor:pointer;">Decline</button>
+      </div>
+    </div>
+  </div>
   <div class="bg-pattern"><svg width="100%" height="100%"><defs><pattern id="ip" x="0" y="0" width="80" height="80" patternUnits="userSpaceOnUse"><circle cx="40" cy="40" r="35" fill="none" stroke="#c9a96e" stroke-width="0.5"/><circle cx="40" cy="40" r="25" fill="none" stroke="#c9a96e" stroke-width="0.5"/><circle cx="40" cy="40" r="15" fill="none" stroke="#c9a96e" stroke-width="0.3"/><line x1="40" y1="0" x2="40" y2="80" stroke="#c9a96e" stroke-width="0.3"/><line x1="0" y1="40" x2="80" y2="40" stroke="#c9a96e" stroke-width="0.3"/><line x1="0" y1="0" x2="80" y2="80" stroke="#c9a96e" stroke-width="0.2"/><line x1="80" y1="0" x2="0" y2="80" stroke="#c9a96e" stroke-width="0.2"/></pattern></defs><rect width="100%" height="100%" fill="url(#ip)"/></svg><div class="bg-orb bg-orb-1"></div><div class="bg-orb bg-orb-2"></div></div>
   <div class="container">
     <header class="header fade-in">
@@ -57,37 +64,40 @@
         </svg>
       </div>
       <div class="bismillah">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div>
-      <h1 class="title">Personalized Du'as for Every Occasion</h1>
-      <p class="subtitle">A du'a lives deep in your heart. We help it find its words.</p>
+      <h1 class="title">A du'a lives deep in your heart.<br>We help it find its words.</h1>
+      <p class="subtitle">Personalized Du'as for Every Occasion</p>
       <div id="seasonalBanner" style="margin-top:12px;padding:8px 20px;border-radius:10px;background:rgba(201,169,110,0.08);border:1px solid rgba(201,169,110,0.15);font-size:14px;color:#c9a96e;font-style:italic;display:none;"></div>
       <div class="divider"><div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div></div>
     </header>
 
     <div id="formSection" class="form-wrap fade-in">
       <div class="about-you-card">
-        <div class="field-group" style="margin-bottom:16px">
-          <label for="occasionSelect">Occasion <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Helps weave the right verses and Hadith</span></label>
-          <select id="occasionSelect" onchange="selectedOccasion=this.value;updateLengthDefault();trackFormStart();">
-            <option value="ramadan">🌙  Ramadan</option>
-            <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
-            <option value="general" disabled>🤲  General — Coming Soon</option>
-            <option value="illness" disabled>💚  Healing — Coming Soon</option>
-            <option value="exams" disabled>📖  Exams — Coming Soon</option>
-            <option value="travel" disabled>✈️  Travel — Coming Soon</option>
-            <option value="newborn" disabled>👶  New Baby — Coming Soon</option>
-            <option value="marriage" disabled>💍  Marriage — Coming Soon</option>
-            <option value="grief" disabled>🕊️  Grief — Coming Soon</option>
-            <option value="hajj" disabled>🕋  Hajj — Coming Soon</option>
-            <option value="gratitude" disabled>🌿  Gratitude — Coming Soon</option>
-          </select>
-        </div>
         <div style="text-align:center;margin:0 0 16px;padding:10px 14px;border-radius:10px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.1);">
           <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin:0;"><span style="color:var(--gold);">🔒</span> <strong style="color:var(--gold);">Your du'a is private.</strong> Your family's details and concerns are used only to generate your du'a and are never shared publicly. Du'as are only visible to you unless you choose to share them.</p>
         </div>
-        <div class="field-group" style="margin-bottom:16px">
-          <label for="userEmail">Your Email <span style="color:#c9a96e;">*</span> <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Only used to send your du'a</span></label>
-          <input type="email" id="userEmail" placeholder="name@example.com" required />
+        <div class="grid-2">
+          <div>
+            <label for="userEmail">Your Email <span style="color:#c9a96e;">*</span> <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Only used to send your du'a</span></label>
+            <input type="email" id="userEmail" placeholder="name@example.com" required />
+          </div>
+          <div>
+            <label for="occasionSelect">Occasion <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Weaves the right verses & Hadith</span></label>
+            <select id="occasionSelect" onchange="selectedOccasion=this.value;updateLengthDefault();trackFormStart();">
+              <option value="ramadan">🌙  Ramadan</option>
+              <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
+              <option value="general" disabled>🤲  General — Coming Soon</option>
+              <option value="illness" disabled>💚  Healing — Coming Soon</option>
+              <option value="exams" disabled>📖  Exams — Coming Soon</option>
+              <option value="travel" disabled>✈️  Travel — Coming Soon</option>
+              <option value="newborn" disabled>👶  New Baby — Coming Soon</option>
+              <option value="marriage" disabled>💍  Marriage — Coming Soon</option>
+              <option value="grief" disabled>🕊️  Grief — Coming Soon</option>
+              <option value="hajj" disabled>🕋  Hajj — Coming Soon</option>
+              <option value="gratitude" disabled>🌿  Gratitude — Coming Soon</option>
+            </select>
+          </div>
         </div>
+        <p style="margin-top:-8px;margin-bottom:16px;font-size:12px;color:var(--text-dim);line-height:1.4;">By providing your email, you agree to receive your du'a and occasional updates. You can <a href="/unsubscribe" style="color:var(--gold);">unsubscribe</a> anytime.</p>
         <input type="hidden" id="userName" value="" />
         <div class="grid-2">
           <div><label for="userAge">Age</label><select id="userAge"><option value="">Select...</option></select></div>
@@ -95,27 +105,14 @@
         </div>
         <div class="field-group" style="margin-top:16px">
           <label for="userConcerns">What would you like to pray for?</label>
-          <div class="concern-tags-wrap" id="concernTagsWrap">
-            <div id="concernTags" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;">
-              <button type="button" class="concern-tag" data-tag="Guidance">Guidance</button>
-              <button type="button" class="concern-tag" data-tag="Health">Health</button>
-              <button type="button" class="concern-tag" data-tag="Patience">Patience</button>
-              <button type="button" class="concern-tag" data-tag="Forgiveness">Forgiveness</button>
-              <button type="button" class="concern-tag" data-tag="Strong iman">Strong iman</button>
-              <button type="button" class="concern-tag" data-tag="Success">Success</button>
-              <button type="button" class="concern-tag" data-tag="Anxiety">Anxiety</button>
-              <button type="button" class="concern-tag" data-tag="Depression">Depression</button>
-              <button type="button" class="concern-tag" data-tag="Finances">Finances</button>
-              <button type="button" class="concern-tag" data-tag="Marriage">Marriage</button>
-              <button type="button" class="concern-tag" data-tag="Finding spouse">Finding spouse</button>
-              <button type="button" class="concern-tag" data-tag="School">School</button>
-              <button type="button" class="concern-tag" data-tag="Trauma">Trauma</button>
-              <button type="button" class="concern-tag" data-tag="Protection">Protection</button>
-            </div>
-            <div class="concern-fade" id="concernFade"></div>
+          <div class="concerns-outer" style="margin-bottom:6px;">
+            <div id="concernTags" class="concerns-wrap"></div>
+            <span class="concerns-arrow-left" id="concernsArrowLeft">‹</span>
+            <div class="concerns-fade-left" id="concernsFadeLeft"></div>
+            <div class="concerns-fade" id="concernsFade"></div>
+            <span class="concerns-arrow" id="concernsArrow">›</span>
           </div>
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:4px;">
-            <span class="tag-toggle" id="tagToggle" onclick="toggleTags()">Show more ▾</span>
+          <div style="display:flex;justify-content:flex-end;margin-top:4px;">
             <span id="userConcernsCount" style="font-size:12px;color:var(--gold);">0 / 1000</span>
           </div>
           <textarea id="userConcerns" rows="2" maxlength="1000" placeholder="Add anything specific you'd like included..." style="margin-top:8px;"></textarea>
@@ -136,9 +133,10 @@
       <div class="field-group" style="margin-bottom:0">
         <label>Du'a Length</label>
         <div id="lengthToggle" style="display:flex;gap:0;background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:10px;overflow:hidden;">
-          <button type="button" class="length-pill" data-tier="quick" onclick="selectLength('quick')" style="flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Quick<span style="display:block;font-size:11px;font-weight:400;color:var(--text-dim);margin-top:2px;">~2 min read</span></button>
-          <button type="button" class="length-pill" data-tier="standard" onclick="selectLength('standard')" style="flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Standard<span style="display:block;font-size:11px;font-weight:400;color:var(--text-dim);margin-top:2px;">~5 min read</span></button>
-          <button type="button" class="length-pill active" data-tier="detailed" onclick="selectLength('detailed')" style="flex:1;padding:10px 0;text-align:center;font-size:14px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:rgba(201,169,110,0.12);font-family:'Cormorant Garamond',serif;transition:all .2s;">Detailed<span style="display:block;font-size:11px;font-weight:400;color:var(--gold);opacity:.7;margin-top:2px;">~10 min read</span></button>
+          <button type="button" class="length-pill" data-tier="quick" onclick="selectLength('quick')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Quick<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">~30 sec</span></button>
+          <button type="button" class="length-pill" data-tier="post_salah" onclick="selectLength('post_salah')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Post Salah<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">~3-5 min</span></button>
+          <button type="button" class="length-pill" data-tier="sujood" onclick="selectLength('sujood')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Sujood<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">~8-10 min</span></button>
+          <button type="button" class="length-pill active" data-tier="laylatul_qadr" onclick="selectLength('laylatul_qadr')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:rgba(201,169,110,0.12);font-family:'Cormorant Garamond',serif;transition:all .2s;">Laylatul Qadr<span style="display:block;font-size:10px;font-weight:400;color:var(--gold);opacity:.7;margin-top:2px;">~30 min</span></button>
         </div>
       </div>
 
@@ -161,6 +159,7 @@
         <div id="customAmountWrap" style="display:none;margin-bottom:16px;max-width:200px;margin-left:auto;margin-right:auto;"><input type="number" id="customAmountInput" min="1" placeholder="Enter amount ($)" style="text-align:center;" /></div>
         <button id="supportBtn" onclick="handleSupport()" style="padding:14px 40px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 100%);color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:0.06em;transition:all 0.3s;box-shadow:0 3px 16px rgba(201,169,110,0.2);">Support — Jazak'Allah Khair</button>
         <p style="font-size:12px;color:var(--text-dim);margin-top:12px">Secure payment via Stripe. No account required.</p>
+        <p style="font-size:11px;color:var(--text-dim);margin-top:6px;opacity:0.7;">Donations are voluntary and non-refundable. MyDua.AI is not a registered charity — donations are <strong>not tax-deductible</strong>.</p>
       </div>
     </div>
 
@@ -190,6 +189,7 @@
         <div class="panel" id="emailPanel" style="display:none"><div class="panel-title">Email this Du'a</div><div class="panel-row"><div style="flex:1"><label for="emailInput">Recipient Email</label><input type="email" id="emailInput" placeholder="name@example.com" /></div><button class="panel-btn" id="emailSendBtn" onclick="sendEmail()">Send</button></div><div id="emailSuccess" class="success-msg"></div><div id="emailError" class="error-msg"></div></div>
         <div class="panel" id="smsPanel" style="display:none"><div class="panel-title">Send via SMS / iMessage</div><p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;">Opens your default messaging app with a link to the du'a.</p><div class="panel-row"><button class="panel-btn" onclick="sendSMS()">Open Messages</button></div></div>
         <div class="panel" id="sharePanel" style="display:none"><div class="panel-title">Share this Du'a</div><p style="font-size:14px;color:var(--text-muted);margin-bottom:12px">Anyone with this link can view the du'a.</p><div class="share-link-box"><input type="text" id="shareLinkInput" readonly /><button class="action-btn" onclick="copyShareLink()">Copy</button></div><div id="shareSuccess" class="success-msg"></div></div>
+        <div style="padding:8px 14px;margin-bottom:12px;border-radius:8px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.12);font-size:12px;color:var(--text-dim);line-height:1.5;"><strong style="color:var(--gold);">AI-Generated Content:</strong> This du'a was composed by artificial intelligence trained on Islamic sources. Please verify all Quranic verses and Hadith references with authentic scholarly sources before relying on them.</div>
         <div class="dua-content" id="duaContent"></div>
       </div>
       <div class="closing-note">May Allah accept your du'a and answer it in the best of ways.<br/><span class="closing-arabic">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</span></div>
@@ -199,32 +199,53 @@
       <span class="divider-star" style="opacity:.3">✦</span><br/>
       This tool generates du'as using AI. Please verify all Quranic verses<br/>and Hadith references with authentic Islamic sources.<br/><br/>
       <span style="color:var(--gold);font-size:12px;">🔒 Your du'a is private and never shared without your permission.</span><br/><br/>
-      Questions or feedback? <a href="mailto:support@mydua.ai">support@mydua.ai</a>
+      Questions or feedback? <a href="mailto:support@mydua.ai">support@mydua.ai</a><br/>
+      <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms of Service</a>
     </div>
   </div>
 
   <script>
     const API={generate:"/api/generate-dua",generateStream:"/api/generate-dua-stream",save:"/api/save-dua",email:"/api/email-dua",trackPdf:"/api/track-pdf",trackSms:"/api/track-sms",analytics:"/api/analytics"};
-    fetch("/api/track-pageview",{method:"POST"}).catch(()=>{});
-    const isReferred=(new URLSearchParams(window.location.search)).get("ref")==="share";
-    if(isReferred){fetch("/api/track-referral",{method:"POST"}).catch(()=>{});}
+    function hasTrackingConsent(){return localStorage.getItem("mydua_consent")==="accepted";}
+    function acceptConsent(){localStorage.setItem("mydua_consent","accepted");document.getElementById("consentBanner").style.display="none";initTracking();}
+    function declineConsent(){localStorage.setItem("mydua_consent","declined");document.getElementById("consentBanner").style.display="none";}
+    function showConsentBanner(){var c=localStorage.getItem("mydua_consent");if(!c){document.getElementById("consentBanner").style.display="block";}else if(c==="accepted"){initTracking();}}
+    function initTracking(){const isReferred=(new URLSearchParams(window.location.search)).get("ref")==="share";fetch("/api/track-pageview",{method:"POST"}).catch(()=>{});if(isReferred){fetch("/api/track-referral",{method:"POST"}).catch(()=>{});}}
+    showConsentBanner();
     let formStarted=false;
-    function trackFormStart(){if(!formStarted){formStarted=true;fetch("/api/track-form-start",{method:"POST"}).catch(()=>{});}}
+    function trackFormStart(){if(!formStarted&&hasTrackingConsent()){formStarted=true;fetch("/api/track-form-start",{method:"POST"}).catch(()=>{});}}
     function updateUserConcernsCount(){const el=document.getElementById("userConcerns");const counter=document.getElementById("userConcernsCount");if(el&&counter){counter.textContent=(el.value.length)+" / 1000";}}
-    function toggleTags(){const wrap=document.getElementById("concernTagsWrap");const btn=document.getElementById("tagToggle");const fade=document.getElementById("concernFade");if(wrap.classList.contains("expanded")){wrap.classList.remove("expanded");fade.classList.remove("hidden");btn.textContent="Show more ▾";}else{wrap.classList.add("expanded");fade.classList.add("hidden");btn.textContent="Show less ▴";}}
+    // toggleTags removed — concern tags now use single-row horizontal scroll
     function updateMemberConcernCount(i,textarea){const counter=document.getElementById("memberConcernsCount"+i);if(counter){counter.textContent=(textarea.value.length)+" / 1000";}}
+    function initConcernTags(){
+      const ct=document.getElementById("concernTags");ct.innerHTML="";
+      CONCERN_TAGS.forEach(tag=>{
+        const b=document.createElement("button");b.type="button";b.className="concern-tag";b.dataset.tag=tag;b.textContent=tag;
+        b.addEventListener("click",()=>{b.classList.toggle("selected");const textarea=document.getElementById("userConcerns");const selected=Array.from(ct.querySelectorAll(".concern-tag.selected")).map(t=>t.dataset.tag);const manual=textarea.value.split(",").map(s=>s.trim()).filter(s=>s&&!CONCERN_TAGS.includes(s));textarea.value=[...selected,...manual].join(", ");updateUserConcernsCount();trackFormStart();});
+        ct.appendChild(b);
+      });
+    }
+    function initConcernScroll(){
+      const cWrap=document.getElementById("concernTags");const cFade=document.getElementById("concernsFade");const cArrow=document.getElementById("concernsArrow");const cFadeLeft=document.getElementById("concernsFadeLeft");const cArrowLeft=document.getElementById("concernsArrowLeft");
+      function checkScroll(){const atEnd=cWrap.scrollLeft+cWrap.clientWidth>=cWrap.scrollWidth-10;const atStart=cWrap.scrollLeft<10;cFade.classList.toggle("hidden",atEnd);cArrow.classList.toggle("hidden",atEnd);cArrowLeft.classList.toggle("visible",!atStart);}
+      cWrap.addEventListener("scroll",checkScroll);new ResizeObserver(checkScroll).observe(cWrap);setTimeout(checkScroll,100);
+    }
     document.addEventListener("DOMContentLoaded",()=>{["userEmail","userConcerns"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("focus",trackFormStart,{once:true});}});const userConcernsEl=document.getElementById("userConcerns");if(userConcernsEl){userConcernsEl.addEventListener("input",updateUserConcernsCount);updateUserConcernsCount();}
-      document.querySelectorAll(".concern-tag").forEach(tag=>{tag.addEventListener("click",()=>{tag.classList.toggle("selected");const textarea=document.getElementById("userConcerns");const selected=Array.from(document.querySelectorAll(".concern-tag.selected")).map(t=>t.dataset.tag);const manual=textarea.value.split(",").map(s=>s.trim()).filter(s=>s&&!document.querySelector('.concern-tag[data-tag="'+s+'"]'));textarea.value=[...selected,...manual].join(", ");updateUserConcernsCount();trackFormStart();});});
+      initConcernTags();initConcernScroll();
+      // Restore form after tags are built, then highlight matching tags
+      restoreFormState();
+      const restoredConcerns=document.getElementById("userConcerns").value;
+      if(restoredConcerns){const tags=restoredConcerns.split(",").map(s=>s.trim());document.querySelectorAll("#concernTags .concern-tag").forEach(b=>{if(tags.includes(b.dataset.tag))b.classList.add("selected");});}
     });
 
     const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Mother In Law","Father In Law","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague","Pet"];
     const AGE_RANGES=["Under 1","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","20s","30s","40s","50s","60s","70+"];
     let members=[],generatedDuaText="",currentDuaId=null,currentEmailToken="";
     let selectedOccasion="ramadan";
-    let selectedLengthTier="detailed"; // Ramadan defaults to detailed
+    let selectedLengthTier="laylatul_qadr"; // Ramadan defaults to laylatul_qadr
     const CONCERN_TAGS=["Guidance","Health","Patience","Forgiveness","Strong iman","Success","Anxiety","Depression","Finances","Marriage","Finding spouse","School","Trauma","Protection"];
     const OCCASIONS=[{id:"ramadan",label:"Ramadan",icon:"🌙"},{id:"jumuah",label:"Jumu'ah",icon:"🕌"},{id:"general",label:"General",icon:"🤲"},{id:"illness",label:"Healing",icon:"💚"},{id:"travel",label:"Travel",icon:"✈️"},{id:"newborn",label:"New Baby",icon:"👶"},{id:"marriage",label:"Marriage",icon:"💍"},{id:"grief",label:"Grief",icon:"🕊️"},{id:"hajj",label:"Hajj",icon:"🕋"},{id:"gratitude",label:"Gratitude",icon:"🌿"}];
-    const OCCASION_DEFAULT_TIERS={ramadan:"detailed"};
+    const OCCASION_DEFAULT_TIERS={ramadan:"laylatul_qadr"};
 
     // Length toggle
     function selectLength(tier){
@@ -239,7 +260,7 @@
       trackFormStart();
     }
     function updateLengthDefault(){
-      const defaultTier=OCCASION_DEFAULT_TIERS[selectedOccasion]||"standard";
+      const defaultTier=OCCASION_DEFAULT_TIERS[selectedOccasion]||"post_salah";
       selectLength(defaultTier);
     }
 
@@ -252,10 +273,44 @@
       else if(month===5&&day<=15){banner.textContent="The first 10 days of Dhul Hijjah — among the most beloved days to Allah for good deeds.";banner.style.display="block";}
     })();
 
+    const COPPA_MIN_AGE=13;
     const uAge=document.getElementById("userAge");
-    AGE_RANGES.forEach(a=>{const o=document.createElement("option");o.value=a;o.textContent=a;uAge.appendChild(o);});
+    AGE_RANGES.filter(a=>{const n=parseInt(a);return isNaN(n)||n>=COPPA_MIN_AGE;}).forEach(a=>{const o=document.createElement("option");o.value=a;o.textContent=a;uAge.appendChild(o);});
     function emptyMember(){return{name:"",relationship:"",ageRange:"",gender:"",attributes:"",concerns:"",selectedTags:[]};}
     function esc(s){const d=document.createElement("div");d.textContent=s;return d.innerHTML;}
+
+    // Gender inference from relationship — ambiguous relationships require explicit gender
+    const GENDER_MAP={"Wife":"Female","Husband":"Male","Son":"Male","Daughter":"Female","Mother":"Female","Father":"Male","Brother":"Male","Sister":"Female","Grandfather":"Male","Grandmother":"Female","Mother In Law":"Female","Father In Law":"Male","Uncle":"Male","Aunt":"Female","Nephew":"Male","Niece":"Female"};
+    const AMBIGUOUS_RELATIONSHIPS=["Cousin","Friend","Teacher","Mentor","Neighbor","Colleague","Pet"];
+    function needsGenderField(rel){return !rel || AMBIGUOUS_RELATIONSHIPS.includes(rel);}
+    function inferGender(rel){return GENDER_MAP[rel]||"";}
+
+    // Age range filtering by relationship
+    const AGE_FILTERS={
+      "Mother":["20s","30s","40s","50s","60s","70+"],"Father":["20s","30s","40s","50s","60s","70+"],
+      "Grandfather":["50s","60s","70+"],"Grandmother":["50s","60s","70+"],
+      "Mother In Law":["20s","30s","40s","50s","60s","70+"],"Father In Law":["20s","30s","40s","50s","60s","70+"],
+      "Son":AGE_RANGES.filter(a=>{const n=parseInt(a);return (n>=0&&n<=20)||["20s","30s","40s","50s","60s","70+"].includes(a);}),
+      "Daughter":AGE_RANGES.filter(a=>{const n=parseInt(a);return (n>=0&&n<=20)||["20s","30s","40s","50s","60s","70+"].includes(a);}),
+      "Nephew":AGE_RANGES.filter(a=>{const n=parseInt(a);return (n>=0&&n<=20)||["20s","30s","40s","50s","60s","70+"].includes(a);}),
+      "Niece":AGE_RANGES.filter(a=>{const n=parseInt(a);return (n>=0&&n<=20)||["20s","30s","40s","50s","60s","70+"].includes(a);}),
+      "Wife":AGE_RANGES.filter(a=>{const n=parseInt(a);return (isNaN(n)&&a!=="Under 1")||(n>=18);}),
+      "Husband":AGE_RANGES.filter(a=>{const n=parseInt(a);return (isNaN(n)&&a!=="Under 1")||(n>=18);}),
+      "Teacher":AGE_RANGES.filter(a=>{const n=parseInt(a);return (n>=16)||["20s","30s","40s","50s","60s","70+"].includes(a);}),
+      "Mentor":AGE_RANGES.filter(a=>{const n=parseInt(a);return (n>=16)||["20s","30s","40s","50s","60s","70+"].includes(a);}),
+      "Colleague":AGE_RANGES.filter(a=>{const n=parseInt(a);return (n>=16)||["20s","30s","40s","50s","60s","70+"].includes(a);}),
+      "Pet":AGE_RANGES.filter(a=>{const n=parseInt(a);return !isNaN(n)&&n<=20;}),
+    };
+    function getAgeRangesForRelationship(rel){return AGE_FILTERS[rel]||AGE_RANGES;}
+    function onRelationshipChange(i,val){
+      members[i].relationship=val;
+      // Auto-set gender for gendered relationships
+      if(!needsGenderField(val)){members[i].gender=inferGender(val);}else{members[i].gender="";}
+      // Reset age if current selection is invalid for new relationship
+      const validAges=getAgeRangesForRelationship(val);
+      if(members[i].ageRange&&!validAges.includes(members[i].ageRange)){members[i].ageRange="";}
+      renderMembers();
+    }
 
     function buildMemberConcernTags(i,selectedTags){
       return CONCERN_TAGS.map(tag=>{
@@ -289,17 +344,24 @@
       members.forEach((m,i)=>{
         if(!m.selectedTags)m.selectedTags=[];
         const card=document.createElement("div");card.className="member-card fade-in";card.style.animationDelay=(i*.05)+"s";
-        card.innerHTML=`<button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button><div class="grid-2"><div><label>Name <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:13px;">Can be a nickname or \u{1F60A}</span></label><input type="text" placeholder="e.g. Sumaira" value="${esc(m.name)}" oninput="members[${i}].name=this.value"/></div><div><label>Relationship</label><select onchange="members[${i}].relationship=this.value"><option value="">Select...</option>${RELATIONSHIPS.map(r=>`<option value="${r}"${m.relationship===r?" selected":""}>${r}</option>`).join("")}</select></div></div><div class="grid-2"><div><label>Age</label><select onchange="members[${i}].ageRange=this.value"><option value="">Select...</option>${AGE_RANGES.map(a=>`<option value="${a}"${m.ageRange===a?" selected":""}>${a}</option>`).join("")}</select></div><div><label>Gender</label><select onchange="members[${i}].gender=this.value"><option value="">Select...</option><option value="Male"${m.gender==="Male"?" selected":""}>Male</option><option value="Female"${m.gender==="Female"?" selected":""}>Female</option></select></div></div><div class="field-group"><label>What to pray for</label><div class="concern-tags-wrap" id="memberTagsWrap${i}" style="max-height:44px;"><div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:6px;">${buildMemberConcernTags(i,m.selectedTags)}</div><div class="concern-fade" id="memberFade${i}"></div></div><span class="tag-toggle" onclick="toggleMemberTags(${i})" id="memberTagToggle${i}">Show more ▾</span><textarea id="memberConcernsText${i}" rows="2" maxlength="1000" placeholder="Add anything specific..." oninput="members[${i}].concerns=this.value; updateMemberConcernCount(${i}, this)" style="margin-top:8px;">${esc(m.concerns)}</textarea><div id="memberConcernsCount${i}" style="margin-top:4px;font-size:12px;color:var(--gold);">${(m.concerns||"").length} / 1000</div></div>`;
+        const ageOpts=getAgeRangesForRelationship(m.relationship);
+        const showGender=needsGenderField(m.relationship);
+        const genderCol=showGender?`<div><label>Gender</label><select onchange="members[${i}].gender=this.value"><option value="">Select...</option><option value="Male"${m.gender==="Male"?" selected":""}>Male</option><option value="Female"${m.gender==="Female"?" selected":""}>Female</option></select></div>`:"";
+        const gridCols=showGender?"1fr 1fr":"1fr";
+        const ageGenderRow=`<div class="grid-2" style="grid-template-columns:${gridCols};"><div><label>Age</label><select onchange="members[${i}].ageRange=this.value"><option value="">Select...</option>${ageOpts.map(a=>`<option value="${a}"${m.ageRange===a?" selected":""}>${a}</option>`).join("")}</select></div>${genderCol}</div>`;
+        card.innerHTML=`<button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button><div class="grid-2"><div><label>Name <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:13px;font-style:normal;">Can be a nickname or \u{1F60A}</span></label><input type="text" placeholder="e.g. Sumaira" value="${esc(m.name)}" oninput="members[${i}].name=this.value"/></div><div><label>Relationship</label><select onchange="onRelationshipChange(${i},this.value)"><option value="">Select...</option>${RELATIONSHIPS.map(r=>`<option value="${r}"${m.relationship===r?" selected":""}>${r}</option>`).join("")}</select></div></div>${ageGenderRow}<div class="field-group"><label>What to pray for</label><div class="concerns-outer" style="margin-bottom:6px;"><div id="memberConcernTags${i}" class="concerns-wrap"></div><span class="concerns-arrow-left" id="mArrowLeft${i}">‹</span><div class="concerns-fade-left" id="mFadeLeft${i}"></div><div class="concerns-fade" id="mFade${i}"></div><span class="concerns-arrow" id="mArrow${i}">›</span></div><textarea id="memberConcernsText${i}" rows="2" maxlength="1000" placeholder="Add anything specific..." oninput="members[${i}].concerns=this.value; updateMemberConcernCount(${i}, this)" style="margin-top:8px;">${esc(m.concerns)}</textarea><div id="memberConcernsCount${i}" style="margin-top:4px;font-size:12px;color:var(--gold);">${(m.concerns||"").length} / 1000</div></div>`;
         c.appendChild(card);
+        // Populate scrollable concern tags for this member
+        const mct=document.getElementById("memberConcernTags"+i);
+        CONCERN_TAGS.forEach(tag=>{const b=document.createElement("button");b.type="button";b.className="concern-tag"+(m.selectedTags.includes(tag)?" selected":"");b.dataset.tag=tag;b.dataset.member=String(i);b.textContent=tag;b.addEventListener("click",()=>{b.classList.toggle("selected");toggleMemberTag(i,tag,b);});mct.appendChild(b);});
+        // Init scroll fades/arrows
+        (function(idx){
+          const w=document.getElementById("memberConcernTags"+idx);const f=document.getElementById("mFade"+idx);const a=document.getElementById("mArrow"+idx);const fl=document.getElementById("mFadeLeft"+idx);const al=document.getElementById("mArrowLeft"+idx);
+          function chk(){const atEnd=w.scrollLeft+w.clientWidth>=w.scrollWidth-10;const atStart=w.scrollLeft<10;f.classList.toggle("hidden",atEnd);a.classList.toggle("hidden",atEnd);al.classList.toggle("visible",!atStart);}
+          w.addEventListener("scroll",chk);new ResizeObserver(chk).observe(w);setTimeout(chk,100);
+        })(i);
       });
       const addBtn=document.createElement("button");addBtn.className="add-btn";addBtn.onclick=function(){addMember();};addBtn.textContent="+ Add Another";c.appendChild(addBtn);
-    }
-    function toggleMemberTags(i){
-      const wrap=document.getElementById("memberTagsWrap"+i);
-      const fade=document.getElementById("memberFade"+i);
-      const btn=document.getElementById("memberTagToggle"+i);
-      if(wrap.classList.contains("expanded")){wrap.classList.remove("expanded");wrap.style.maxHeight="44px";fade.classList.remove("hidden");btn.textContent="Show more ▾";}
-      else{wrap.classList.add("expanded");wrap.style.maxHeight="400px";fade.classList.add("hidden");btn.textContent="Show less ▴";}
     }
     function addMember(){members.push(emptyMember());renderMembers();}
     function removeMember(i){members.splice(i,1);renderMembers();}
@@ -319,23 +381,25 @@
       const userName=document.getElementById("userName").value.trim();
       const userEmail=document.getElementById("userEmail").value.trim();
       const btn=document.getElementById("generateBtn");const loadEl=document.getElementById("loadingText");
-      if(!userEmail||!userEmail.includes("@")){showError("Please enter a valid email address.");return;}
+      const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;if(!userEmail||!emailRegex.test(userEmail)){showError("Please enter a valid email address (e.g. name@example.com).");return;}if(userEmail.length>254){showError("Email address is too long.");return;}
       const userInfo={name:userName,relationship:"Self",ageRange:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,attributes:"",concerns:document.getElementById("userConcerns").value.trim()};
       const allMembers=[userInfo,...members.filter(m=>m.name.trim())];
       const shouldSkipCache=btn.dataset.skipCache==="true";
       btn.dataset.skipCache="false";
       hideError();btn.disabled=true;
-      btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...";loadEl.style.display="block";
+      btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Connecting to our du'a service...";loadEl.style.display="block";
       generatedDuaText="";currentDuaId=null;currentEmailToken="";
-      const payload={userName,members:allMembers,occasion:selectedOccasion,lengthTier:selectedLengthTier,deliveryMode:"instant",userEmail,referred:isReferred,skipCache:shouldSkipCache};
+      const payload={userName,members:allMembers,occasion:selectedOccasion,lengthTier:selectedLengthTier,deliveryMode:"instant",userEmail,emailOptIn:true,referred:isReferred,skipCache:shouldSkipCache};
+      // SSE timeout: abort after 120s
+      const controller=new AbortController();const sseTimeout=setTimeout(()=>controller.abort(),120000);
       try{
-        const res=await fetch("/api/generate-dua-stream",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload)});
-        if(res.status===429){const d=await res.json();const msg=typeof d.detail==="string"?d.detail:Array.isArray(d.detail)?d.detail.map(e=>e.msg||e).join(", "):"Rate limit exceeded.";showError(msg);btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";return;}
+        const res=await fetch("/api/generate-dua-stream",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(payload),signal:controller.signal});
+        if(res.status===429){const d=await res.json();const retryAfter=res.headers.get("Retry-After");const waitMsg=retryAfter?` Please try again in ${retryAfter} seconds.`:"";const msg=(typeof d.detail==="string"?d.detail:"Rate limit exceeded.")+waitMsg;showError(msg);btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";clearTimeout(sseTimeout);return;}
         if(!res.ok){const d=await res.json().catch(()=>({}));const msg=typeof d.detail==="string"?d.detail:Array.isArray(d.detail)?d.detail.map(e=>e.msg||e).join(", "):JSON.stringify(d.detail||"Server error");throw new Error(msg);}
         // Show result section immediately so user sees du'a appearing
         document.getElementById("resultSection").style.display="block";
         document.getElementById("duaContent").innerHTML="";
-        loadEl.style.display="none";
+        loadEl.textContent="Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...";
         btn.innerHTML='<span class="spinner">✦</span> Writing...';
         setTimeout(()=>document.getElementById("resultSection").scrollIntoView({behavior:"smooth"}),100);
         // Read SSE stream
@@ -357,12 +421,14 @@
           }
         }
         generatedDuaText=fullText;
-        if(!fullText){throw new Error("Empty response from AI.");}
-        // Auto-download PDF after stream completes
-        setTimeout(()=>{exportPDF();},1500);
+        if(!fullText){throw new Error("Our du'a service returned an incomplete result. Please try again.");}
+        // PDF available via button — no auto-download
+        clearTimeout(sseTimeout);
       }catch(err){
-        if(err.message==="Failed to fetch"){showError("Cannot connect to the server. Make sure the backend is running at "+window.location.origin+" and try again.");}
-        else{showError("Failed to generate du'a: "+err.message);}
+        clearTimeout(sseTimeout);
+        if(err.name==="AbortError"){showError("Your du'a is taking longer than expected. Please try again — sometimes a shorter length helps.");}
+        else if(err.message==="Failed to fetch"){showError("Cannot connect to the server. Please check your internet connection and try again.");}
+        else{showError(err.message);}
       }
       finally{btn.disabled=false;btn.innerHTML="Generate My Du'a";loadEl.style.display="none";}
     }
@@ -370,20 +436,20 @@
     function renderDua(text){const c=document.getElementById("duaContent");c.innerHTML="";text.split("\n").forEach(line=>{if(line.startsWith("## ")){const h=document.createElement("h2");h.innerHTML=renderInline(line.slice(3));c.appendChild(h);}else if(line.startsWith("# ")){const h=document.createElement("h1");h.innerHTML=renderInline(line.slice(2));c.appendChild(h);}else if(line.trim()==="---"){const d=document.createElement("div");d.className="divider";d.innerHTML='<div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div>';c.appendChild(d);}else if(line.trim()===""){const s=document.createElement("div");s.style.height="12px";c.appendChild(s);}else{const p=document.createElement("p");p.innerHTML=renderInline(line);c.appendChild(p);}});}
     function renderInline(t){t=t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');t=t.replace(/\*\*\*(.+?)\*\*\*/g,'<strong style="color:var(--gold);font-style:italic">$1</strong>');t=t.replace(/\*\*(.+?)\*\*/g,'<strong style="color:var(--gold)">$1</strong>');t=t.replace(/\*(.+?)\*/g,'<em style="color:#b8a88a">$1</em>');return t;}
 
-    function exportPDF(){const btn=document.getElementById("pdfBtn");const btnLbl=btn.querySelector(".icon-lbl");btn.disabled=true;if(btnLbl)btnLbl.textContent="Wait...";const content=document.getElementById("duaContent");const userName=document.getElementById("userName").value.trim()||"Family";if(!content||!content.innerHTML.trim()){btn.disabled=false;if(btnLbl)btnLbl.textContent="PDF";alert("No du'a content found to export.");return;}const occasionTitle=OCCASIONS.find(o=>o.id===selectedOccasion);const pdfTitle=occasionTitle?occasionTitle.label:"Personal Du'a";const opt={margin:[0.55,0.65,0.55,0.65],filename:"dua-"+userName.toLowerCase().replace(/\s+/g,"-")+".pdf",image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff",scrollX:0,scrollY:0,logging:false},jsPDF:{unit:"in",format:"letter",orientation:"portrait"},pagebreak:{mode:["avoid-all","css","legacy"]}};const renderRoot=document.createElement("div");renderRoot.style.cssText=["position:fixed","top:0","left:0","width:816px","background:#ffffff","z-index:-9999","pointer-events:none","transform:translateX(-200vw)","margin:0","padding:0","overflow:visible"].join(";");const wrapper=document.createElement("div");wrapper.style.cssText=["color:#2c2419","font-family:'Cormorant Garamond',Georgia,serif","font-size:14px","line-height:1.8","background:#ffffff","width:6.8in","padding:0","margin:0 auto","overflow:visible","box-sizing:border-box"].join(";");const header=document.createElement("div");header.style.cssText="text-align:center;margin:0 0 24px 0;padding-bottom:16px;border-bottom:1px solid #d4c4a0;page-break-inside:avoid;break-inside:avoid;";header.innerHTML='<div style="text-align:center;margin-bottom:12px;"><svg width="170" height="32" viewBox="0 0 170 32" xmlns="http://www.w3.org/2000/svg"><text x="20" y="24" font-family="Amiri,Georgia,serif" font-size="22" fill="#8b6914">&#1583;&#1615;&#1593;&#1614;&#1575;&#1569;</text><text x="60" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="300" font-style="italic" fill="#2c2419" letter-spacing="0.5">My</text><text x="98" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="600" fill="#8b6914" letter-spacing="0.5">Dua</text></svg></div><div style="font-family:Amiri,serif;font-size:26px;color:#8b6914;margin-bottom:8px;text-align:center;">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1618;&#1605;&#1614;&#1606;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1616;&#1610;&#1605;&#1616;</div><div style="font-size:28px;color:#1a1208;font-weight:300;letter-spacing:.04em;font-family:Cormorant Garamond,serif;">A Du\'a for '+esc(pdfTitle)+'</div><div style="font-size:14px;color:#7a6b50;font-style:italic;margin-top:6px;font-family:Cormorant Garamond,serif;">A personalized supplication for '+esc(userName)+'</div>';wrapper.appendChild(header);const clone=content.cloneNode(true);clone.style.cssText="display:block;visibility:visible;opacity:1;padding:0;margin:0;background:#ffffff;color:#2c2419;overflow:visible;max-height:none;height:auto;";const kids=Array.from(clone.children);let foundBismillah=false;for(let i=0;i<Math.min(kids.length,6);i++){const txt=(kids[i].textContent||"").trim();if(!foundBismillah&&(txt.includes("بِسْمِ")||txt.includes("بسم"))){kids[i].remove();foundBismillah=true;continue;}if(foundBismillah&&(kids[i].classList.contains("divider")||txt===""||kids[i].style.height==="12px")){kids[i].remove();break;}}clone.querySelectorAll("*").forEach(el=>{if(el.tagName!=="BR"){el.style.visibility="visible";el.style.opacity="1";if(el.style.display==="none")el.style.display="";if(el.style.overflow==="hidden")el.style.overflow="visible";if(el.style.maxHeight&&el.style.maxHeight!=="none")el.style.maxHeight="none";}});clone.querySelectorAll("h1").forEach(h=>{h.style.cssText="color:#8b6914;margin:24px 0 10px 0;font-size:30px;line-height:1.25;text-align:center;font-family:Cormorant Garamond,Georgia,serif;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;";});clone.querySelectorAll("h2").forEach(h=>{h.style.cssText="color:#8b6914;margin:22px 0 10px 0;font-size:24px;line-height:1.3;font-family:Cormorant Garamond,Georgia,serif;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;";});clone.querySelectorAll("p").forEach(p=>{p.style.cssText="color:#2c2419;margin:6px 0;font-size:16px;line-height:1.8;white-space:pre-wrap;font-family:Cormorant Garamond,Georgia,serif;orphans:3;widows:3;page-break-inside:avoid;break-inside:avoid;";});clone.querySelectorAll("strong").forEach(s=>{s.style.color="#8b6914";});clone.querySelectorAll("em").forEach(e=>{e.style.color="#5a4520";});clone.querySelectorAll(".divider").forEach(d=>{d.style.cssText="text-align:center;margin:14px 0;color:#c9a96e;opacity:.5;font-size:14px;page-break-inside:avoid;break-inside:avoid;";d.innerHTML="✦";});wrapper.appendChild(clone);const footer=document.createElement("div");footer.style.cssText="text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #d4c4a0;page-break-inside:avoid;break-inside:avoid;";footer.innerHTML='<div style="font-family:Amiri,serif;font-size:18px;color:#8b6914;margin-bottom:8px;text-align:center;">&#1578;&#1614;&#1602;&#1614;&#1576;&#1617;&#1614;&#1604;&#1614; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1615; &#1605;&#1616;&#1606;&#1617;&#1614;&#1575; &#1608;&#1614;&#1605;&#1616;&#1606;&#1603;&#1615;&#1605;&#1618;</div><p style="font-size:12px;color:#7a6b50;font-style:italic;font-family:Cormorant Garamond,serif;margin:4px 0;">Please verify all Quranic verses and Hadith references with authentic Islamic sources.</p><div style="text-align:center;margin-top:12px;"><svg width="120" height="24" viewBox="0 0 170 32" xmlns="http://www.w3.org/2000/svg"><text x="20" y="24" font-family="Amiri,Georgia,serif" font-size="22" fill="#8b6914">&#1583;&#1615;&#1593;&#1614;&#1575;&#1569;</text><text x="60" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="300" font-style="italic" fill="#9a8d7a" letter-spacing="0.5">My</text><text x="98" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="600" fill="#8b6914" letter-spacing="0.5">Dua</text></svg></div><p style="font-size:10px;color:#9a8d7a;margin-top:4px;font-family:Cormorant Garamond,serif;">mydua.ai — support@mydua.ai</p>';wrapper.appendChild(footer);renderRoot.appendChild(wrapper);document.body.appendChild(renderRoot);setTimeout(()=>{html2pdf().set(opt).from(wrapper).save().then(()=>{document.body.removeChild(renderRoot);btn.disabled=false;if(btnLbl)btnLbl.textContent="PDF";fetch(API.trackPdf,{method:"POST"}).catch(()=>{});}).catch(err=>{console.error("PDF generation failed:",err);document.body.removeChild(renderRoot);btn.disabled=false;if(btnLbl)btnLbl.textContent="PDF";alert("PDF generation failed. Try printing instead.");});},700);}
+    function exportPDF(){const btn=document.getElementById("pdfBtn");const btnLbl=btn.querySelector(".icon-lbl");btn.disabled=true;if(btnLbl)btnLbl.textContent="Wait...";const content=document.getElementById("duaContent");const userName=document.getElementById("userName").value.trim()||"Family";if(!content||!content.innerHTML.trim()){btn.disabled=false;if(btnLbl)btnLbl.textContent="PDF";alert("No du'a content found to export.");return;}const occasionTitle=OCCASIONS.find(o=>o.id===selectedOccasion);const pdfTitle=occasionTitle?occasionTitle.label:"Personal Du'a";const opt={margin:[0.55,0.65,0.55,0.65],filename:"dua-"+userName.toLowerCase().replace(/\s+/g,"-")+".pdf",image:{type:"jpeg",quality:0.98},html2canvas:{scale:2,useCORS:true,backgroundColor:"#ffffff",scrollX:0,scrollY:0,logging:false},jsPDF:{unit:"in",format:"letter",orientation:"portrait"},pagebreak:{mode:["avoid-all","css","legacy"]}};const renderRoot=document.createElement("div");renderRoot.style.cssText=["position:fixed","top:0","left:0","width:816px","background:#ffffff","z-index:-9999","pointer-events:none","transform:translateX(-200vw)","margin:0","padding:0","overflow:visible"].join(";");const wrapper=document.createElement("div");wrapper.style.cssText=["color:#2c2419","font-family:'Cormorant Garamond',Georgia,serif","font-size:14px","line-height:1.8","background:#ffffff","width:6.8in","padding:0","margin:0 auto","overflow:visible","box-sizing:border-box"].join(";");const header=document.createElement("div");header.style.cssText="text-align:center;margin:0 0 24px 0;padding-bottom:16px;border-bottom:1px solid #d4c4a0;page-break-inside:avoid;break-inside:avoid;";header.innerHTML='<div style="text-align:center;margin-bottom:12px;"><svg width="170" height="32" viewBox="0 0 170 32" xmlns="http://www.w3.org/2000/svg"><text x="20" y="24" font-family="Amiri,Georgia,serif" font-size="22" fill="#8b6914">&#1583;&#1615;&#1593;&#1614;&#1575;&#1569;</text><text x="60" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="300" font-style="italic" fill="#2c2419" letter-spacing="0.5">My</text><text x="98" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="600" fill="#8b6914" letter-spacing="0.5">Dua</text></svg></div><div style="font-family:Amiri,serif;font-size:26px;color:#8b6914;margin-bottom:8px;text-align:center;">&#1576;&#1616;&#1587;&#1618;&#1605;&#1616; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1618;&#1605;&#1614;&#1606;&#1616; &#1575;&#1604;&#1585;&#1617;&#1614;&#1581;&#1616;&#1610;&#1605;&#1616;</div><div style="font-size:28px;color:#1a1208;font-weight:300;letter-spacing:.04em;font-family:Cormorant Garamond,serif;">A Du\'a for '+esc(pdfTitle)+'</div><div style="font-size:14px;color:#7a6b50;font-style:italic;margin-top:6px;font-family:Cormorant Garamond,serif;">A personalized supplication for '+esc(userName)+'</div>';wrapper.appendChild(header);const clone=content.cloneNode(true);clone.style.cssText="display:block;visibility:visible;opacity:1;padding:0;margin:0;background:#ffffff;color:#2c2419;overflow:visible;max-height:none;height:auto;";const kids=Array.from(clone.children);let foundBismillah=false;for(let i=0;i<Math.min(kids.length,6);i++){const txt=(kids[i].textContent||"").trim();if(!foundBismillah&&(txt.includes("بِسْمِ")||txt.includes("بسم"))){kids[i].remove();foundBismillah=true;continue;}if(foundBismillah&&(kids[i].classList.contains("divider")||txt===""||kids[i].style.height==="12px")){kids[i].remove();break;}}clone.querySelectorAll("*").forEach(el=>{if(el.tagName!=="BR"){el.style.visibility="visible";el.style.opacity="1";if(el.style.display==="none")el.style.display="";if(el.style.overflow==="hidden")el.style.overflow="visible";if(el.style.maxHeight&&el.style.maxHeight!=="none")el.style.maxHeight="none";}});clone.querySelectorAll("h1").forEach(h=>{h.style.cssText="color:#8b6914;margin:24px 0 10px 0;font-size:30px;line-height:1.25;text-align:center;font-family:Cormorant Garamond,Georgia,serif;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;";});clone.querySelectorAll("h2").forEach(h=>{h.style.cssText="color:#8b6914;margin:22px 0 10px 0;font-size:24px;line-height:1.3;font-family:Cormorant Garamond,Georgia,serif;page-break-inside:avoid;break-inside:avoid;page-break-after:avoid;";});clone.querySelectorAll("p").forEach(p=>{p.style.cssText="color:#2c2419;margin:6px 0;font-size:16px;line-height:1.8;white-space:pre-wrap;font-family:Cormorant Garamond,Georgia,serif;orphans:3;widows:3;page-break-inside:avoid;break-inside:avoid;";});clone.querySelectorAll("strong").forEach(s=>{s.style.color="#8b6914";});clone.querySelectorAll("em").forEach(e=>{e.style.color="#5a4520";});clone.querySelectorAll(".divider").forEach(d=>{d.style.cssText="text-align:center;margin:14px 0;color:#c9a96e;opacity:.5;font-size:14px;page-break-inside:avoid;break-inside:avoid;";d.innerHTML="✦";});wrapper.appendChild(clone);const footer=document.createElement("div");footer.style.cssText="text-align:center;margin-top:24px;padding-top:16px;border-top:1px solid #d4c4a0;page-break-inside:avoid;break-inside:avoid;";footer.innerHTML='<div style="font-family:Amiri,serif;font-size:18px;color:#8b6914;margin-bottom:8px;text-align:center;">&#1578;&#1614;&#1602;&#1614;&#1576;&#1617;&#1614;&#1604;&#1614; &#1575;&#1604;&#1604;&#1617;&#1614;&#1607;&#1615; &#1605;&#1616;&#1606;&#1617;&#1614;&#1575; &#1608;&#1614;&#1605;&#1616;&#1606;&#1603;&#1615;&#1605;&#1618;</div><p style="font-size:12px;color:#7a6b50;font-style:italic;font-family:Cormorant Garamond,serif;margin:4px 0;">Please verify all Quranic verses and Hadith references with authentic Islamic sources.</p><div style="text-align:center;margin-top:12px;"><svg width="120" height="24" viewBox="0 0 170 32" xmlns="http://www.w3.org/2000/svg"><text x="20" y="24" font-family="Amiri,Georgia,serif" font-size="22" fill="#8b6914">&#1583;&#1615;&#1593;&#1614;&#1575;&#1569;</text><text x="60" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="300" font-style="italic" fill="#9a8d7a" letter-spacing="0.5">My</text><text x="98" y="24" font-family="Cormorant Garamond,Georgia,serif" font-size="26" font-weight="600" fill="#8b6914" letter-spacing="0.5">Dua</text></svg></div><p style="font-size:10px;color:#9a8d7a;margin-top:4px;font-family:Cormorant Garamond,serif;">mydua.ai — support@mydua.ai</p>';wrapper.appendChild(footer);renderRoot.appendChild(wrapper);document.body.appendChild(renderRoot);setTimeout(()=>{html2pdf().set(opt).from(wrapper).save().then(()=>{document.body.removeChild(renderRoot);btn.disabled=false;if(btnLbl)btnLbl.textContent="PDF";if(hasTrackingConsent()){fetch(API.trackPdf,{method:"POST"}).catch(()=>{});}}).catch(err=>{console.error("PDF generation failed:",err);document.body.removeChild(renderRoot);btn.disabled=false;if(btnLbl)btnLbl.textContent="PDF";alert("PDF generation failed. Try printing instead.");});},700);}
 
     async function saveDua(){if(currentDuaId)return{id:currentDuaId,shareUrl:window.location.origin+"/shared/"+currentDuaId+"?ref=share",emailToken:currentEmailToken};const userName=document.getElementById("userName").value.trim();const res=await fetch(API.save,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({userName,dua:generatedDuaText,members})});if(!res.ok)throw new Error("Failed to save");const data=await res.json();currentDuaId=data.id;currentEmailToken=data.emailToken||"";return data;}
     async function shareDua(){const panel=document.getElementById("sharePanel");if(panel.style.display==="block"){panel.style.display="none";return;}document.getElementById("smsPanel").style.display="none";try{const data=await saveDua();document.getElementById("shareLinkInput").value=data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share";panel.style.display="block";}catch(e){alert("Failed to create share link.");}}
     function copyShareLink(){navigator.clipboard.writeText(document.getElementById("shareLinkInput").value).then(()=>{const e=document.getElementById("shareSuccess");e.textContent="Link copied!";e.style.display="block";setTimeout(()=>e.style.display="none",3000);});}
     function togglePanel(id){["emailPanel","sharePanel","smsPanel"].forEach(p=>{if(p!==id)document.getElementById(p).style.display="none";});const panel=document.getElementById(id);panel.style.display=panel.style.display==="block"?"none":"block";}
-    async function sendSMS(){try{const data=await saveDua();const shareUrl=(data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share");const msgBody=encodeURIComponent("Assalamu alaikum! Check out this beautiful du'a I crafted on MyDua.ai: "+shareUrl+"\n\nYou can create your own personalized du'a too: "+window.location.origin+"/?ref=share");fetch(API.trackSms,{method:"POST"}).catch(()=>{});window.location.href="sms:?body="+msgBody;}catch(e){alert("Please generate a du'a first.");}}
-    async function shareWhatsApp(){try{const data=await saveDua();const shareUrl=(data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share");const msg=encodeURIComponent("Assalamu alaikum! Check out this beautiful du'a I crafted on MyDua.ai:\n\n"+shareUrl+"\n\nYou can create your own personalized du'a too: "+window.location.origin+"/?ref=share");window.open("https://wa.me/?text="+msg,"_blank");}catch(e){alert("Please generate a du'a first.");}}
+    async function sendSMS(){try{const data=await saveDua();const shareUrl=(data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share");const msgBody=encodeURIComponent("Assalamu alaikum! Check out this beautiful du'a I crafted on MyDua.AI: "+shareUrl+"\n\nYou can create your own personalized du'a too: "+window.location.origin+"/?ref=share");if(hasTrackingConsent()){fetch(API.trackSms,{method:"POST"}).catch(()=>{});}window.location.href="sms:?body="+msgBody;}catch(e){alert("Please generate a du'a first.");}}
+    async function shareWhatsApp(){try{const data=await saveDua();const shareUrl=(data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share");const msg=encodeURIComponent("Assalamu alaikum! Check out this beautiful du'a I crafted on MyDua.AI:\n\n"+shareUrl+"\n\nYou can create your own personalized du'a too: "+window.location.origin+"/?ref=share");window.open("https://wa.me/?text="+msg,"_blank");}catch(e){alert("Please generate a du'a first.");}}
     async function shareFacebook(){try{const data=await saveDua();const shareUrl=encodeURIComponent(data.shareUrl||window.location.origin+"/shared/"+currentDuaId+"?ref=share");window.open("https://www.facebook.com/sharer/sharer.php?u="+shareUrl,"_blank");}catch(e){alert("Please generate a du'a first.");}}
     async function shareInstagram(){try{await saveDua();await navigator.clipboard.writeText(window.location.origin+"/shared/"+currentDuaId+"?ref=share");alert("Link copied! Paste it in your Instagram story or bio.");}catch(e){alert("Please generate a du'a first.");}}
     async function shareTikTok(){try{await saveDua();await navigator.clipboard.writeText(window.location.origin+"/shared/"+currentDuaId+"?ref=share");alert("Link copied! Paste it in your TikTok bio or comment.");}catch(e){alert("Please generate a du'a first.");}}
     async function sendEmail(){const emailInput=document.getElementById("emailInput");const btn=document.getElementById("emailSendBtn");const successEl=document.getElementById("emailSuccess");const errorEl=document.getElementById("emailError");const email=emailInput.value.trim();if(!email||!email.includes("@")){errorEl.textContent="Please enter a valid email.";errorEl.style.display="block";return;}btn.disabled=true;btn.textContent="Sending...";errorEl.style.display="none";successEl.style.display="none";try{const data=await saveDua();const res=await fetch(API.email,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({duaId:currentDuaId,email,recipientName:"",token:currentEmailToken})});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to send");}successEl.textContent="Du'a sent to "+email+"!";successEl.style.display="block";emailInput.value="";}catch(e){errorEl.textContent=e.message;errorEl.style.display="block";}finally{btn.disabled=false;btn.textContent="Send";}}
     function copyDua(){navigator.clipboard.writeText(generatedDuaText).then(()=>{const b=document.getElementById("copyBtn");const lbl=b.querySelector(".icon-lbl");if(lbl){lbl.textContent="Copied!";}setTimeout(()=>{if(lbl)lbl.textContent="Copy";},2500);});}
-    function printDua(){const c=document.getElementById("duaContent").innerHTML;const u=document.getElementById("userName").value.trim()||"Family";const oc=OCCASIONS.find(o=>o.id===selectedOccasion);const pt=oc?oc.label:"Personal Du'a";const w=window.open("","_blank");w.document.write('<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,700&family=Amiri:wght@400;700&display=swap" rel="stylesheet"/><style>body{font-family:"Cormorant Garamond",serif;max-width:700px;margin:40px auto;padding:20px;color:#2c2419;line-height:1.8;background:#fff;}h1{text-align:center;font-size:28px;color:#8b6914;margin:30px 0 15px;}h2{font-size:22px;color:#8b6914;margin:28px 0 12px;}p{font-size:16px;margin:4px 0;color:#2c2419;}strong{color:#8b6914;}em{color:#5a4520;}.divider{text-align:center;margin:20px 0;color:#c9a96e;opacity:.5;}.footer{text-align:center;font-size:12px;color:#7a6b50;margin-top:30px;padding-top:20px;border-top:1px solid #d4c4a0;}</style></head><body><div style="text-align:center;margin-bottom:30px"><div style="font-family:Amiri,serif;font-size:24px;color:#8b6914;text-align:center">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><div style="font-size:26px;margin:8px 0;color:#1a1208;font-weight:300">A Du\'a for '+esc(pt)+'</div><div style="font-size:14px;color:#7a6b50;font-style:italic">A personalized supplication for '+esc(u)+'</div></div>'+c+'<div class="footer">Generated at mydua.ai — support@mydua.ai</div><script>window.print();<\/script></body></html>');w.document.close();}
+    function printDua(){const c=document.getElementById("duaContent").innerHTML;const u=document.getElementById("userName").value.trim()||"Family";const oc=OCCASIONS.find(o=>o.id===selectedOccasion);const pt=oc?oc.label:"Personal Du'a";const w=window.open("","_blank");w.document.write('<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,700&family=Amiri:wght@400;700&display=swap" rel="stylesheet"/><style>body{font-family:"Cormorant Garamond",serif;max-width:700px;margin:40px auto;padding:20px;color:#2c2419;line-height:1.8;background:#fff;}h1{text-align:center;font-size:28px;color:#8b6914;margin:30px 0 15px;}h2{font-size:22px;color:#8b6914;margin:28px 0 12px;}p{font-size:16px;margin:4px 0;color:#2c2419;}strong{color:#8b6914;}em{color:#5a4520;}.divider{text-align:center;margin:20px 0;color:#c9a96e;opacity:.5;}.footer{text-align:center;font-size:12px;color:#7a6b50;margin-top:30px;padding-top:20px;border-top:1px solid #d4c4a0;}</style></head><body><div style="text-align:center;margin-bottom:30px"><div style="font-family:Amiri,serif;font-size:24px;color:#8b6914;text-align:center">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><div style="font-size:26px;margin:8px 0;color:#1a1208;font-weight:300">A Du\'a for '+esc(pt)+'</div><div style="font-size:14px;color:#7a6b50;font-style:italic">A personalized supplication for '+esc(u)+'</div></div>'+c+'<div class="footer">Generated at MyDua.AI — support@mydua.ai</div><script>window.print();<\/script></body></html>');w.document.close();}
     function startOver(){document.getElementById("resultSection").style.display="none";["emailPanel","sharePanel","smsPanel"].forEach(p=>document.getElementById(p).style.display="none");generatedDuaText="";currentDuaId=null;currentEmailToken="";window.scrollTo({top:0,behavior:"smooth"});}
     function showError(msg){const e=document.getElementById("errorMsg");e.textContent=msg;e.style.display="block";}
     function hideError(){document.getElementById("errorMsg").style.display="none";}
@@ -392,6 +458,17 @@
     function selectAmount(amt){selectedSupportAmount=amt;document.querySelectorAll(".support-amt").forEach(b=>{if(b.dataset.amt===amt){b.style.borderColor="var(--gold)";b.style.background="rgba(201,169,110,0.12)";}else{b.style.borderColor="rgba(201,169,110,0.25)";b.style.background="rgba(255,255,255,0.03)";}});document.getElementById("customAmountWrap").style.display=amt==="custom"?"block":"none";}
     async function handleSupport(){const btn=document.getElementById("supportBtn");btn.disabled=true;btn.textContent="Redirecting to Stripe...";const body={amount:selectedSupportAmount};if(selectedSupportAmount==="custom"){const val=parseInt(document.getElementById("customAmountInput").value);if(!val||val<1){alert("Please enter an amount of at least $1.");btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";return;}body.customAmount=val;}try{const res=await fetch("/api/create-support-session",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(body)});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to create payment session");}const data=await res.json();window.location.href=data.url;}catch(e){alert("Payment error: "+e.message);btn.disabled=false;btn.textContent="Support — Jazak\u2019Allah Khair";}}
 
+    // Offline detection
+    window.addEventListener("offline",()=>{showError("You appear to be offline. Please check your internet connection.");document.getElementById("generateBtn").disabled=true;});
+    window.addEventListener("online",()=>{hideError();document.getElementById("generateBtn").disabled=false;});
+
+    // Form auto-save to sessionStorage
+    function saveFormState(){try{const state={email:document.getElementById("userEmail").value,age:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,concerns:document.getElementById("userConcerns").value,occasion:selectedOccasion,tier:selectedLengthTier,members:members};sessionStorage.setItem("mydua_form",JSON.stringify(state));}catch(e){}}
+    function restoreFormState(){try{const raw=sessionStorage.getItem("mydua_form");if(!raw)return;const state=JSON.parse(raw);if(state.email)document.getElementById("userEmail").value=state.email;if(state.age)document.getElementById("userAge").value=state.age;if(state.gender)document.getElementById("userGender").value=state.gender;if(state.concerns){document.getElementById("userConcerns").value=state.concerns;updateUserConcernsCount();}if(state.occasion){selectedOccasion=state.occasion;document.getElementById("occasionSelect").value=state.occasion;}if(state.tier)selectLength(state.tier);if(state.members&&state.members.length){members=state.members;renderMembers();}}catch(e){}}
+    setInterval(saveFormState,5000);
+
+    // Referral tracking
+    const isReferred=(new URLSearchParams(window.location.search)).get("ref")==="share";
   </script>
 </body>
 </html>
