@@ -2265,6 +2265,12 @@ async def generate_dua_stream(req: GenerateDuaRequest, request: Request):
 
             return StreamingResponse(cached_stream(), media_type="text/event-stream",
                                      headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
+    # Fail fast if API key is not configured (don't make user wait 120s)
+    if AI_PROVIDER == "anthropic" and not ANTHROPIC_API_KEY:
+        raise HTTPException(500, "Du'a service is not configured. Please contact support@mydua.ai.")
+    elif AI_PROVIDER != "anthropic" and not OPENAI_API_KEY:
+        raise HTTPException(500, "Du'a service is not configured. Please contact support@mydua.ai.")
+
     prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier)
     is_solo = (len(valid_members) == 1 and valid_members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
     max_tokens = get_max_tokens(len(valid_members), is_solo=is_solo, tier=tier)
