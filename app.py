@@ -1,7 +1,7 @@
 """
-MyDua.AI — Backend API (v1.5.3 Production)
+MyDua.AI — Backend API (v1.5.4 Production)
 ==========================================
-v1.5.3 Changes (Anti-Truncation, Admin Dashboard & Email Opt-in):
+v1.5.4 Changes (Anti-Truncation, Admin Dashboard & Email Opt-in):
   - Token budgets bumped ~50% across all tiers to eliminate truncation (1.5× max word target + formatting headroom)
   - Admin dashboard at /admin/stats — password-protected visual analytics page
   - Post-generation email capture — email no longer required upfront; opt-in prompt shown after du'a
@@ -1397,7 +1397,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("MyDua.AI v1.5.3 — Production")
+    logger.info("MyDua.AI v1.5.4 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -1434,7 +1434,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.5.3",
+    version="1.5.4",
     lifespan=lifespan,
 )
 
@@ -2230,7 +2230,7 @@ async def send_dua_email(to_email: str, recipient_name: str, dua_text: str, shar
 async def health_check():
     checks = {
         "status": "ok",
-        "version": "1.5.3",
+        "version": "1.5.4",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable
@@ -2731,7 +2731,7 @@ body{{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0b08;color:#e8dc
 .stat-lbl{{font-size:13px;color:#8a7d6b;text-transform:uppercase;letter-spacing:.05em;}}
 .footer{{text-align:center;margin-top:32px;font-size:12px;color:#5a5040;}}
 </style></head><body>
-<div class="header"><h1>MyDua.AI Dashboard</h1><p>v1.5.3 — Real-time analytics</p></div>
+<div class="header"><h1>MyDua.AI Dashboard</h1><p>v1.5.4 — Real-time analytics</p></div>
 <div class="grid">{cards}</div>
 <div class="footer">Refresh page for latest data. Data resets on server restart (SQLite in-memory counters).</div>
 </body></html>""")
