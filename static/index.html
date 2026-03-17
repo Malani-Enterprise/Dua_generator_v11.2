@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en" dir="ltr">
 <head>
+  <!-- Google tag (gtag.js) -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-EEB8KEP0VP"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-EEB8KEP0VP');
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MyDua.AI — Personalized Du'as for Every Occasion</title>
@@ -33,8 +41,9 @@
     .add-member-merged{display:flex;align-items:center;gap:12px;padding:14px 18px;border:1px dashed rgba(201,169,110,0.25);border-radius:14px;cursor:pointer;transition:all .2s;margin-bottom:16px;}.add-member-merged:hover{border-color:rgba(201,169,110,0.5);background:rgba(201,169,110,0.04);}.add-member-plus{font-size:28px;font-weight:300;color:var(--gold);opacity:.5;line-height:1;}.add-member-cta{font-size:15px;font-weight:600;color:var(--gold);font-family:'Cormorant Garamond',serif;}.add-member-sub{font-size:12px;color:var(--text-muted);font-style:italic;margin-top:2px;}.empty-state{text-align:center;padding:40px 20px;border:1px dashed var(--gold-dim);border-radius:16px;margin-bottom:16px;}.empty-state p{font-size:16px;color:var(--text-muted);font-style:italic;margin-bottom:4px;}.empty-state .small{font-size:13px;color:var(--text-dim);}
     .concern-tag{display:inline-flex;align-items:center;padding:6px 14px;border-radius:16px;border:1px solid rgba(201,169,110,0.25);background:transparent;color:var(--text-muted);font-family:'Cormorant Garamond',serif;font-size:13px;cursor:pointer;transition:all .2s;user-select:none;outline:none;white-space:nowrap;flex-shrink:0;}.concern-tag:hover{border-color:rgba(201,169,110,0.5);color:var(--gold);}.concern-tag.selected{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.1);font-weight:600;}
     .concerns-outer{position:relative;}.concerns-wrap{display:flex;flex-wrap:nowrap;gap:8px;overflow-x:auto;overflow-y:hidden;padding-bottom:4px;-webkit-overflow-scrolling:touch;scrollbar-width:none;}.concerns-wrap::-webkit-scrollbar{display:none;}.concerns-fade{position:absolute;top:0;right:0;bottom:4px;width:60px;background:linear-gradient(to right,transparent 0%,var(--card-solid) 80%);pointer-events:none;transition:opacity .3s;z-index:2;}.concerns-fade-left{position:absolute;top:0;left:0;bottom:4px;width:60px;background:linear-gradient(to left,transparent 0%,var(--card-solid) 80%);pointer-events:none;z-index:2;}.concerns-fade.hidden{opacity:0;}.concerns-arrow{position:absolute;top:50%;right:4px;transform:translateY(-60%);color:var(--gold);font-size:42px;opacity:.6;pointer-events:none;z-index:3;transition:opacity .3s;animation:nudge 2s ease-in-out infinite;}.concerns-arrow.hidden{opacity:0;}.concerns-arrow-left{position:absolute;top:50%;left:4px;transform:translateY(-60%);color:var(--gold);font-size:42px;opacity:0;pointer-events:none;z-index:3;transition:opacity .3s;animation:nudge-left 2s ease-in-out infinite;}.concerns-arrow-left.visible{opacity:.6;}@keyframes nudge{0%,100%{transform:translateY(-60%) translateX(0);}50%{transform:translateY(-60%) translateX(3px);}}@keyframes nudge-left{0%,100%{transform:translateY(-60%) translateX(0);}50%{transform:translateY(-60%) translateX(-3px);}}
+    [dir="rtl"] .concerns-fade{right:auto;left:0;background:linear-gradient(to left,transparent 0%,var(--card-solid) 80%);}[dir="rtl"] .concerns-fade-left{left:auto;right:0;background:linear-gradient(to right,transparent 0%,var(--card-solid) 80%);}[dir="rtl"] .concerns-arrow{right:auto;left:4px;}[dir="rtl"] .concerns-arrow-left{left:auto;right:4px;}[dir="rtl"] select{background-position:left 14px center;padding-left:36px;padding-right:16px;}
     .icon-tile{display:flex;flex-direction:column;align-items:center;gap:3px;padding:8px 4px;border-radius:8px;border:1px solid rgba(201,169,110,0.2);background:rgba(255,255,255,0.02);color:var(--gold);font-family:'Cormorant Garamond',serif;cursor:pointer;transition:all .2s;}.icon-tile:hover{border-color:rgba(201,169,110,0.4);background:rgba(201,169,110,0.06);}.icon-lbl{font-size:11px;color:#b8a88a;}.tile-wa{border-color:rgba(37,211,102,0.25);}.tile-wa:hover{background:rgba(37,211,102,0.08);}.tile-fb{border-color:rgba(66,103,178,0.25);}.tile-fb:hover{background:rgba(66,103,178,0.08);}.tile-ig{border-color:rgba(225,48,108,0.25);}.tile-ig:hover{background:rgba(225,48,108,0.08);}.tile-tk{border-color:rgba(201,169,110,0.2);}.concern-tags-wrap{position:relative;overflow:hidden;transition:max-height .5s ease;max-height:44px;}.concern-tags-wrap.expanded{max-height:400px;}.concern-fade{position:absolute;bottom:0;left:0;right:0;height:26px;background:linear-gradient(to bottom,transparent,var(--card-bg,rgba(10,22,40,1)));pointer-events:none;opacity:1;transition:opacity .5s ease .1s;}.concern-fade.hidden{opacity:0;transition:opacity .4s ease 0s;}.tag-toggle{font-size:12px;color:var(--gold);cursor:pointer;margin-top:4px;opacity:.7;display:inline-block;}.tag-toggle:hover{opacity:1;}
-    .generate-btn{width:100%;padding:18px;margin-top:16px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 50%,var(--gold) 100%);background-size:200% auto;color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:center;transition:all .4s;box-shadow:0 4px 24px rgba(201,169,110,.2);}.generate-btn:hover{background-position:right center;}.generate-btn:disabled{background:linear-gradient(135deg,#2a1f0e,#3d2c12);color:var(--gold);cursor:wait;box-shadow:none;}.loading-text{text-align:center;margin-top:0;font-size:15px;color:var(--text-muted);font-style:italic;animation:pulse 2s ease-in-out infinite;}.lang-selector{display:flex;justify-content:center;gap:8px;margin-top:0;margin-bottom:20px;flex-wrap:wrap;}.lang-btn{padding:7px 16px;border-radius:20px;border:1px solid rgba(201,169,110,0.3);background:rgba(201,169,110,0.05);color:var(--text-muted);font-family:'Cormorant Garamond',serif;font-size:14px;cursor:pointer;transition:all .3s;letter-spacing:.02em;}.lang-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.1);}.lang-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.15);font-weight:600;}.progress-wrap{display:none;margin-top:20px;padding:24px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;backdrop-filter:blur(10px);}.progress-bar-outer{width:100%;height:8px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;margin:12px 0;}.progress-bar-inner{height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,var(--gold),#d4b87a);transition:width 0.6s ease;}.progress-stage{text-align:center;font-size:15px;color:var(--text-secondary);font-style:italic;margin-bottom:8px;animation:pulse 2s ease-in-out infinite;}.progress-pct{text-align:center;font-size:13px;color:var(--text-muted);margin-top:4px;}.progress-time{text-align:center;font-size:12px;color:var(--text-dim);margin-top:6px;}.spinner{display:inline-block;animation:gentleSpin 2s linear infinite;}.error-msg{padding:12px 16px;border-radius:10px;margin-top:16px;background:var(--error-bg);border:1px solid var(--error-border);color:var(--error);font-size:15px;display:none;}.success-msg{padding:12px 16px;border-radius:10px;margin-top:12px;background:var(--success-bg);border:1px solid rgba(100,200,100,.2);color:var(--success);font-size:15px;display:none;}
+    .generate-btn{width:100%;padding:18px;margin-top:16px;border-radius:14px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 50%,var(--gold) 100%);background-size:200% auto;color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;text-align:center;transition:all .4s;box-shadow:0 4px 24px rgba(201,169,110,.2);}.generate-btn:hover{background-position:right center;}.generate-btn:disabled{background:linear-gradient(135deg,#2a1f0e,#3d2c12);color:var(--gold);cursor:wait;box-shadow:none;}.loading-text{text-align:center;margin-top:0;font-size:15px;color:var(--text-muted);font-style:italic;animation:pulse 2s ease-in-out infinite;}.lang-selector{display:flex;justify-content:center;gap:8px;margin-top:-8px;margin-bottom:20px;flex-wrap:wrap;}.lang-btn{padding:7px 16px;border-radius:20px;border:1px solid rgba(201,169,110,0.3);background:rgba(201,169,110,0.05);color:var(--text-muted);font-family:'Cormorant Garamond',serif;font-size:14px;cursor:pointer;transition:all .3s;letter-spacing:.02em;}.lang-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.1);}.lang-btn.active{border-color:var(--gold);color:var(--gold);background:rgba(201,169,110,0.15);font-weight:600;}.progress-wrap{display:none;margin-top:20px;padding:24px;background:var(--card-bg);border:1px solid var(--card-border);border-radius:16px;backdrop-filter:blur(10px);}.progress-bar-outer{width:100%;height:8px;border-radius:4px;background:rgba(255,255,255,0.06);overflow:hidden;margin:12px 0;}.progress-bar-inner{height:100%;width:0%;border-radius:4px;background:linear-gradient(90deg,var(--gold),#d4b87a);transition:width 0.6s ease;}.progress-stage{text-align:center;font-size:15px;color:var(--text-secondary);font-style:italic;margin-bottom:8px;animation:pulse 2s ease-in-out infinite;}.progress-pct{text-align:center;font-size:13px;color:var(--text-muted);margin-top:4px;}.progress-time{text-align:center;font-size:12px;color:var(--text-dim);margin-top:6px;}.spinner{display:inline-block;animation:gentleSpin 2s linear infinite;}.error-msg{padding:12px 16px;border-radius:10px;margin-top:16px;background:var(--error-bg);border:1px solid var(--error-border);color:var(--error);font-size:15px;display:none;}.success-msg{padding:12px 16px;border-radius:10px;margin-top:12px;background:var(--success-bg);border:1px solid rgba(100,200,100,.2);color:var(--success);font-size:15px;display:none;}
     .section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;}.section-title{font-size:24px;font-weight:600;color:var(--gold);}.member-count{font-size:14px;color:var(--text-muted);}.result-wrap{width:100%;max-width:720px;margin-top:60px;}.result-card{background:var(--card-bg);border-radius:20px;border:1px solid rgba(201,169,110,.15);padding:40px 36px;backdrop-filter:blur(10px);box-shadow:0 8px 40px rgba(0,0,0,.2);}.result-actions{display:flex;justify-content:flex-end;gap:10px;margin-bottom:20px;flex-wrap:wrap;}.action-btn{padding:8px 20px;border-radius:8px;border:1px solid rgba(201,169,110,.3);background:rgba(255,255,255,.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:14px;font-weight:600;cursor:pointer;transition:all .3s;letter-spacing:.05em;}.action-btn:hover{background:rgba(201,169,110,.08);border-color:var(--input-focus-border);}.action-btn.copied{background:var(--success-bg);color:var(--success);}.action-btn:disabled{opacity:.5;cursor:wait;}
     .dua-content{overflow:visible;max-height:none;}.dua-content h1{font-size:32px;font-weight:700;color:var(--gold);margin-top:40px;margin-bottom:20px;line-height:1.3;text-align:center;}.dua-content h2{font-size:26px;font-weight:700;color:var(--gold);margin-top:36px;margin-bottom:16px;line-height:1.3;}.dua-content p{font-size:18px;line-height:1.8;color:var(--text-secondary);margin:6px 0;white-space:pre-wrap;}.dua-content strong{color:var(--gold);}.dua-content em{color:#b8a88a;font-style:italic;}
     .panel{background:var(--card-bg);border:1px solid var(--card-border);border-radius:14px;padding:20px 24px;margin-top:16px;animation:slideDown .3s ease-out;overflow:hidden;}.panel-title{font-size:16px;font-weight:600;color:var(--gold);margin-bottom:12px;text-transform:uppercase;letter-spacing:.05em;}.panel-row{display:flex;gap:10px;align-items:end;}.panel-row input{flex:1;}.panel-btn{padding:12px 24px;border-radius:10px;border:none;cursor:pointer;background:var(--gold);color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:15px;font-weight:700;letter-spacing:.04em;transition:all .3s;white-space:nowrap;}.panel-btn:hover{opacity:.9;}.panel-btn:disabled{opacity:.5;cursor:wait;}.share-link-box{display:flex;align-items:center;gap:10px;margin-top:12px;padding:10px 14px;border-radius:8px;background:rgba(255,255,255,.04);border:1px solid rgba(201,169,110,.15);}.share-link-box input{flex:1;border:none;background:transparent;color:var(--text-primary);font-size:14px;outline:none;padding:0;}.share-link-box button{padding:6px 16px;font-size:13px;}
@@ -78,34 +87,25 @@
         <button class="lang-btn" data-lang="ar" onclick="setLang('ar')">العربية</button>
       </div>
       <div class="about-you-card">
-        <div style="text-align:center;margin:0 0 16px;padding:10px 14px;border-radius:10px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.1);">
-          <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin:0;"><span style="color:var(--gold);">🔒</span> <strong style="color:var(--gold);">Your du'a is private.</strong> Your family's details and concerns are used only to generate your du'a and are never shared publicly. Du'as are only visible to you unless you choose to share them.</p>
+        <input type="hidden" id="userEmail" value="" />
+        <div>
+          <label for="occasionSelect" id="occasionLabel">Occasion <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Weaves the right verses & Hadith</span></label>
+          <select id="occasionSelect" onchange="selectedOccasion=this.value;updateLengthDefault();trackFormStart();">
+            <option value="ramadan">🌙  Ramadan</option>
+            <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
+            <option value="general" disabled>🤲  General — Coming Soon</option>
+            <option value="illness" disabled>💚  Healing — Coming Soon</option>
+            <option value="exams" disabled>📖  Exams — Coming Soon</option>
+            <option value="travel" disabled>✈️  Travel — Coming Soon</option>
+            <option value="newborn" disabled>👶  New Baby — Coming Soon</option>
+            <option value="marriage" disabled>💍  Marriage — Coming Soon</option>
+            <option value="grief" disabled>🕊️  Grief — Coming Soon</option>
+            <option value="hajj" disabled>🕋  Hajj — Coming Soon</option>
+            <option value="gratitude" disabled>🌿  Gratitude — Coming Soon</option>
+          </select>
         </div>
-        <div class="grid-2">
-          <div>
-            <label for="userEmail" id="emailLabel">Your Email <span style="color:#c9a96e;">*</span> <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Only used to send your du'a</span></label>
-            <input type="email" id="userEmail" placeholder="name@example.com" required />
-          </div>
-          <div>
-            <label for="occasionSelect" id="occasionLabel">Occasion <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Weaves the right verses & Hadith</span></label>
-            <select id="occasionSelect" onchange="selectedOccasion=this.value;updateLengthDefault();trackFormStart();">
-              <option value="ramadan">🌙  Ramadan</option>
-              <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
-              <option value="general" disabled>🤲  General — Coming Soon</option>
-              <option value="illness" disabled>💚  Healing — Coming Soon</option>
-              <option value="exams" disabled>📖  Exams — Coming Soon</option>
-              <option value="travel" disabled>✈️  Travel — Coming Soon</option>
-              <option value="newborn" disabled>👶  New Baby — Coming Soon</option>
-              <option value="marriage" disabled>💍  Marriage — Coming Soon</option>
-              <option value="grief" disabled>🕊️  Grief — Coming Soon</option>
-              <option value="hajj" disabled>🕋  Hajj — Coming Soon</option>
-              <option value="gratitude" disabled>🌿  Gratitude — Coming Soon</option>
-            </select>
-          </div>
-        </div>
-        <p style="margin-top:-8px;margin-bottom:16px;font-size:12px;color:var(--text-dim);line-height:1.4;">By providing your email, you agree to receive your du'a and occasional updates. You can <a href="/unsubscribe" style="color:var(--gold);">unsubscribe</a> anytime.</p>
         <input type="hidden" id="userName" value="" />
-        <div class="grid-2">
+        <div class="grid-2" style="margin-top:20px;">
           <div><label for="userAge" id="ageLabel">Age</label><select id="userAge"><option value="">Select...</option></select></div>
           <div><label for="userGender" id="genderLabel">Gender</label><select id="userGender"><option value="">Select...</option><option value="Male">Male</option><option value="Female">Female</option></select></div>
         </div>
@@ -118,15 +118,15 @@
             <div class="concerns-fade" id="concernsFade"></div>
             <span class="concerns-arrow" id="concernsArrow">›</span>
           </div>
-          <div style="display:flex;justify-content:flex-end;margin-top:4px;">
-            <span id="userConcernsCount" style="font-size:12px;color:var(--gold);">0 / 1000</span>
-          </div>
           <textarea id="userConcerns" rows="2" maxlength="1000" placeholder="Add anything specific you'd like included..." style="margin-top:8px;"></textarea>
         </div>
       </div>
 
       <div>
         <div id="membersContainer"></div>
+        <div style="text-align:center;margin:0 0 12px;padding:8px 14px;border-radius:10px;background:rgba(201,169,110,0.04);border:1px solid rgba(201,169,110,0.1);">
+          <p style="font-size:13px;color:var(--text-muted);line-height:1.5;margin:0;" id="privacyNotice"><span style="color:var(--gold);">🔒</span> <strong style="color:var(--gold);">Your du'a is private.</strong> Names and concerns are used only to generate your du'a and are never stored or shared publicly.</p>
+        </div>
         <div id="addMemberMerged" class="add-member-merged" onclick="addMember()">
           <span class="add-member-plus">+</span>
           <div>
@@ -159,19 +159,19 @@
 
     <div id="supportSection" class="form-wrap fade-in" style="margin-top:48px">
       <div style="background:var(--card-bg);border:1px solid var(--card-border);border-radius:20px;padding:32px 28px;text-align:center;backdrop-filter:blur(10px);">
-        <div style="font-size:22px;font-weight:600;color:var(--gold);margin-bottom:8px">Support Us</div>
-        <p style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:440px;margin:0 auto 20px;font-style:italic">This service is free for the ummah. Your support helps us keep it running and reach more Muslim families around the world.</p>
+        <div id="supportTitleEl" style="font-size:22px;font-weight:600;color:var(--gold);margin-bottom:8px">Support Us</div>
+        <p id="supportTextEl" style="font-size:15px;color:var(--text-muted);line-height:1.6;max-width:440px;margin:0 auto 20px;font-style:italic">This service is free for the ummah. Your support helps us keep it running and reach more Muslim families around the world.</p>
         <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:16px" id="supportAmounts">
           <button onclick="selectAmount('5')" class="support-amt" data-amt="5" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$5</button>
           <button onclick="selectAmount('10')" class="support-amt selected" data-amt="10" style="padding:10px 22px;border-radius:10px;border:1px solid var(--gold);background:rgba(201,169,110,0.12);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$10</button>
           <button onclick="selectAmount('25')" class="support-amt" data-amt="25" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$25</button>
           <button onclick="selectAmount('50')" class="support-amt" data-amt="50" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">$50</button>
-          <button onclick="selectAmount('custom')" class="support-amt" data-amt="custom" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">Other</button>
+          <button onclick="selectAmount('custom')" class="support-amt" data-amt="custom" id="supportOtherBtn" style="padding:10px 22px;border-radius:10px;border:1px solid rgba(201,169,110,0.25);background:rgba(255,255,255,0.03);color:var(--gold);font-family:'Cormorant Garamond',serif;font-size:16px;font-weight:600;cursor:pointer;transition:all 0.3s;">Other</button>
         </div>
         <div id="customAmountWrap" style="display:none;margin-bottom:16px;max-width:200px;margin-left:auto;margin-right:auto;"><input type="number" id="customAmountInput" min="1" placeholder="Enter amount ($)" style="text-align:center;" /></div>
         <button id="supportBtn" onclick="handleSupport()" style="padding:14px 40px;border-radius:12px;border:none;cursor:pointer;background:linear-gradient(135deg,var(--gold) 0%,#a8873f 100%);color:var(--bg-deep);font-family:'Cormorant Garamond',serif;font-size:17px;font-weight:700;letter-spacing:0.06em;transition:all 0.3s;box-shadow:0 3px 16px rgba(201,169,110,0.2);">Support — Jazak'Allah Khair</button>
-        <p style="font-size:12px;color:var(--text-dim);margin-top:12px">Secure payment via Stripe. No account required.</p>
-        <p style="font-size:11px;color:var(--text-dim);margin-top:6px;opacity:0.7;">Donations are voluntary and non-refundable. MyDua.AI is not a registered charity — donations are <strong>not tax-deductible</strong>.</p>
+        <p id="supportSecureEl" style="font-size:12px;color:var(--text-dim);margin-top:12px">Secure payment via Stripe. No account required.</p>
+        <p id="supportDisclaimerEl" style="font-size:11px;color:var(--text-dim);margin-top:6px;opacity:0.7;">Donations are voluntary and non-refundable. MyDua.AI is not a registered charity — donations are <strong>not tax-deductible</strong>.</p>
       </div>
     </div>
 
@@ -179,40 +179,52 @@
       <div class="divider"><div class="divider-line divider-line-l"></div><span class="divider-star">✦</span><div class="divider-line divider-line-r"></div></div>
       <div class="result-card">
         <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:12px;">
-          <button class="icon-tile" id="copyBtn" onclick="copyDua()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span class="icon-lbl">Copy</span></button>
-          <button class="icon-tile" id="pdfBtn" onclick="exportPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg><span class="icon-lbl">PDF</span></button>
-          <button class="icon-tile" onclick="togglePanel('emailPanel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="icon-lbl">Email</span></button>
-          <button class="icon-tile" onclick="printDua()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span class="icon-lbl">Print</span></button>
+          <button class="icon-tile" id="copyBtn" onclick="copyDua()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg><span class="icon-lbl" id="copyLbl">Copy</span></button>
+          <button class="icon-tile" id="pdfBtn" onclick="exportPDF()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="12" y1="18" x2="12" y2="12"/><polyline points="9 15 12 12 15 15"/></svg><span class="icon-lbl" id="pdfLbl">PDF</span></button>
+          <button class="icon-tile" onclick="togglePanel('emailPanel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="icon-lbl" id="emailLbl">Email</span></button>
+          <button class="icon-tile" onclick="printDua()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg><span class="icon-lbl" id="printLbl">Print</span></button>
         </div>
         <div style="margin-bottom:12px;">
-          <p style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Share</p>
+          <p id="shareSectionLbl" style="font-size:11px;color:var(--text-dim);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px;">Share</p>
           <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;">
-            <button class="icon-tile" onclick="shareDua()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span class="icon-lbl">Link</span></button>
+            <button class="icon-tile" onclick="shareDua()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg><span class="icon-lbl" id="linkLbl">Link</span></button>
             <button class="icon-tile tile-wa" onclick="shareWhatsApp()"><svg viewBox="0 0 24 24" fill="none" stroke="#25d366" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg><span class="icon-lbl">WhatsApp</span></button>
             <button class="icon-tile" onclick="sendSMS()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg><span class="icon-lbl">iMessage</span></button>
             <button class="icon-tile" onclick="togglePanel('emailPanel')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg><span class="icon-lbl">Email</span></button>
             <button class="icon-tile tile-fb" onclick="shareFacebook()"><svg viewBox="0 0 24 24" fill="none" stroke="#4267b2" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M18 2h-3a5 5 0 00-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 011-1h3z"/></svg><span class="icon-lbl">Facebook</span></button>
             <button class="icon-tile tile-ig" onclick="shareInstagram()"><svg viewBox="0 0 24 24" fill="none" stroke="#e1306c" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.5" cy="6.5" r="1"/></svg><span class="icon-lbl">Instagram</span></button>
             <button class="icon-tile tile-tk" onclick="shareTikTok()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M9 12a4 4 0 104 4V4a5 5 0 005 5"/></svg><span class="icon-lbl">TikTok</span></button>
-            <button class="icon-tile" onclick="editAndRegenerate()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="icon-lbl">Edit</span></button>
-            <button class="icon-tile" onclick="startOver()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg><span class="icon-lbl">Start over</span></button>
+            <button class="icon-tile" onclick="editAndRegenerate()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><path d="M11 4H4a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 013 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span class="icon-lbl" id="editLbl">Edit</span></button>
+            <button class="icon-tile" onclick="startOver()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" style="width:16px;height:16px;"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 102.13-9.36L1 10"/></svg><span class="icon-lbl" id="startOverLbl">Start over</span></button>
           </div>
         </div>
-        <div class="panel" id="emailPanel" style="display:none"><div class="panel-title">Email this Du'a</div><div class="panel-row"><div style="flex:1"><label for="emailInput">Recipient Email</label><input type="email" id="emailInput" placeholder="name@example.com" /></div><button class="panel-btn" id="emailSendBtn" onclick="sendEmail()">Send</button></div><div id="emailSuccess" class="success-msg"></div><div id="emailError" class="error-msg"></div></div>
-        <div class="panel" id="smsPanel" style="display:none"><div class="panel-title">Send via SMS / iMessage</div><p style="font-size:14px;color:var(--text-muted);margin-bottom:12px;">Opens your default messaging app with a link to the du'a.</p><div class="panel-row"><button class="panel-btn" onclick="sendSMS()">Open Messages</button></div></div>
-        <div class="panel" id="sharePanel" style="display:none"><div class="panel-title">Share this Du'a</div><p style="font-size:14px;color:var(--text-muted);margin-bottom:12px">Anyone with this link can view the du'a.</p><div class="share-link-box"><input type="text" id="shareLinkInput" readonly /><button class="action-btn" onclick="copyShareLink()">Copy</button></div><div id="shareSuccess" class="success-msg"></div></div>
-        <div style="padding:8px 14px;margin-bottom:12px;border-radius:8px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.12);font-size:12px;color:var(--text-dim);line-height:1.5;"><strong style="color:var(--gold);">AI-Generated Content:</strong> This du'a was composed by artificial intelligence trained on Islamic sources. Please verify all Quranic verses and Hadith references with authentic scholarly sources before relying on them.</div>
+        <div class="panel" id="emailPanel" style="display:none"><div class="panel-title" id="emailPanelTitle">Email this Du'a</div><div class="panel-row"><div style="flex:1"><label for="emailInput" id="emailPanelLabel">Recipient Email</label><input type="email" id="emailInput" placeholder="name@example.com" /></div><button class="panel-btn" id="emailSendBtn" onclick="sendEmail()">Send</button></div><div id="emailSuccess" class="success-msg"></div><div id="emailError" class="error-msg"></div></div>
+        <div class="panel" id="smsPanel" style="display:none"><div class="panel-title" id="smsPanelTitle">Send via SMS / iMessage</div><p id="smsPanelText" style="font-size:14px;color:var(--text-muted);margin-bottom:12px;">Opens your default messaging app with a link to the du'a.</p><div class="panel-row"><button class="panel-btn" id="smsPanelBtn" onclick="sendSMS()">Open Messages</button></div></div>
+        <div class="panel" id="sharePanel" style="display:none"><div class="panel-title" id="sharePanelTitle">Share this Du'a</div><p id="sharePanelText" style="font-size:14px;color:var(--text-muted);margin-bottom:12px">Anyone with this link can view the du'a.</p><div class="share-link-box"><input type="text" id="shareLinkInput" readonly /><button class="action-btn" id="sharePanelCopy" onclick="copyShareLink()">Copy</button></div><div id="shareSuccess" class="success-msg"></div></div>
+        <div id="aiDisclaimer" style="padding:8px 14px;margin-bottom:12px;border-radius:8px;background:rgba(201,169,110,0.06);border:1px solid rgba(201,169,110,0.12);font-size:12px;color:var(--text-dim);line-height:1.5;"></div>
         <div class="dua-content" id="duaContent"></div>
       </div>
-      <div class="closing-note">May Allah accept your du'a and answer it in the best of ways.<br/><span class="closing-arabic">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</span></div>
+      <!-- Post-generation email capture (shown only when no email was provided) -->
+      <div id="postGenEmail" style="display:none;margin-top:20px;padding:24px;background:var(--card-bg);border:1px solid rgba(201,169,110,0.2);border-radius:16px;backdrop-filter:blur(10px);text-align:center;">
+        <div id="postGenTitleEl" style="font-size:18px;font-weight:600;color:var(--gold);margin-bottom:6px;font-family:'Cormorant Garamond',serif;">Love your du'a?</div>
+        <p id="postGenTextEl" style="font-size:14px;color:var(--text-muted);margin-bottom:14px;">Enter your email to receive a beautifully formatted copy.</p>
+        <div style="display:flex;gap:8px;max-width:400px;margin:0 auto;">
+          <input type="email" id="postGenEmailInput" placeholder="name@example.com" style="flex:1;" />
+          <button class="generate-btn" id="postGenSendBtn" style="width:auto;padding:12px 24px;margin-top:0;font-size:16px;" onclick="submitPostGenEmail()">Send</button>
+        </div>
+        <p id="postGenDisclaimerEl" style="font-size:12px;color:var(--text-dim);line-height:1.4;margin-top:10px;">By providing your email, you agree to receive your du'a and occasional updates. You can <a href="/unsubscribe" style="color:var(--gold);">unsubscribe</a> anytime.</p>
+        <div id="postGenEmailSuccess" class="success-msg" style="margin-top:10px;"></div>
+        <div id="postGenEmailError" class="error-msg" style="margin-top:10px;"></div>
+      </div>
+      <div class="closing-note" id="closingNoteEl">May Allah accept your du'a and answer it in the best of ways.<br/><span class="closing-arabic">تَقَبَّلَ اللَّهُ مِنَّا وَمِنكُمْ</span></div>
     </div>
 
-    <div class="footer">
+    <div class="footer" id="footerEl">
       <span class="divider-star" style="opacity:.3">✦</span><br/>
-      This tool generates du'as using AI. Please verify all Quranic verses<br/>and Hadith references with authentic Islamic sources.<br/><br/>
-      <span style="color:var(--gold);font-size:12px;">🔒 Your du'a is private and never shared without your permission.</span><br/><br/>
-      Questions or feedback? <a href="mailto:support@mydua.ai">support@mydua.ai</a><br/>
-      <a href="/privacy">Privacy Policy</a> · <a href="/terms">Terms of Service</a>
+      <span id="footerAiNoteEl">This tool generates du'as using AI. Please verify all Quranic verses and Hadith references with authentic Islamic sources.</span><br/><br/>
+      <span style="color:var(--gold);font-size:12px;" id="footerPrivacyEl">🔒 Your du'a is private and never shared without your permission.</span><br/><br/>
+      <span id="footerContactEl">Questions or feedback?</span> <a href="mailto:support@mydua.ai">support@mydua.ai</a><br/>
+      <a href="/privacy" id="footerPPEl">Privacy Policy</a> · <a href="/terms" id="footerTOSEl">Terms of Service</a>
     </div>
   </div>
 
@@ -225,8 +237,6 @@
         subtitle: "Personalized Du\u2018as for Every Occasion",
         occasionLabel: "Occasion",
         occasionHint: "Weaves the right verses & Hadith",
-        emailLabel: "Your Email",
-        emailHint: "Only used to send your du\u2018a",
         ageLabel: "Age",
         genderLabel: "Gender",
         genderMale: "Male",
@@ -246,6 +256,62 @@
         occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"Ramadan"},{id:"jumuah",icon:"\ud83d\udd4c",label:"Jumu\u2018ah"},{id:"general",icon:"\ud83e\udd32",label:"General"},{id:"illness",icon:"\ud83d\udc9a",label:"Healing"},{id:"exams",icon:"\ud83d\udcd6",label:"Exams"},{id:"travel",icon:"\u2708\ufe0f",label:"Travel"},{id:"newborn",icon:"\ud83d\udc76",label:"New Baby"},{id:"marriage",icon:"\ud83d\udc8d",label:"Marriage"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"Grief"},{id:"hajj",icon:"\ud83d\udd4b",label:"Hajj"},{id:"gratitude",icon:"\ud83c\udf3f",label:"Gratitude"}],
         concerns: ["Guidance","Health","Patience","Forgiveness","Strong iman","Success","Anxiety","Depression","Finances","Marriage","Finding spouse","School","Trauma","Protection"],
         relationships: ["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Mother In Law","Father In Law","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague","Pet"],
+        // Member card labels
+        nameLabel: "Name",
+        nameHint: "Can be a nickname or \u{1F60A}",
+        namePlaceholder: "e.g. Sumaira",
+        relationshipLabel: "Relationship",
+        memberConcernsLabel: "What to pray for",
+        memberConcernsPlaceholder: "Add anything specific...",
+        addAnother: "+ Add Another",
+        comingSoon: "Coming Soon",
+        // Privacy notice
+        privacyTitle: "Your du\u2018a is private.",
+        privacyText: "Names and concerns are used only to generate your du\u2018a and are never stored or shared publicly.",
+        // Support section
+        supportTitle: "Support Us",
+        supportText: "This service is free for the ummah. Your support helps us keep it running and reach more Muslim families around the world.",
+        supportBtn: "Support \u2014 Jazak\u2019Allah Khair",
+        supportOther: "Other",
+        supportSecure: "Secure payment via Stripe. No account required.",
+        supportDisclaimer: "Donations are voluntary and non-refundable. MyDua.AI is not a registered charity \u2014 donations are not tax-deductible.",
+        // Post-gen email
+        postGenTitle: "Love your du\u2018a?",
+        postGenText: "Enter your email to receive a beautifully formatted copy.",
+        postGenSend: "Send",
+        postGenDisclaimer: "By providing your email, you agree to receive your du\u2018a and occasional updates.",
+        // Result section
+        resultCopy: "Copy", resultPdf: "PDF", resultEmail: "Email", resultPrint: "Print",
+        resultShare: "Share", resultLink: "Link", resultEdit: "Edit", resultStartOver: "Start over",
+        resultAiDisclaimer: "This du\u2018a was composed by artificial intelligence trained on Islamic sources. Please verify all Quranic verses and Hadith references with authentic scholarly sources before relying on them.",
+        resultEmailTitle: "Email this Du\u2018a", resultEmailLabel: "Recipient Email", resultEmailSend: "Send",
+        resultSmsTitle: "Send via SMS / iMessage", resultSmsText: "Opens your default messaging app with a link to the du\u2018a.", resultSmsBtn: "Open Messages",
+        resultShareTitle: "Share this Du\u2018a", resultShareText: "Anyone with this link can view the du\u2018a.", resultShareCopy: "Copy",
+        // Closing & footer
+        closingNote: "May Allah accept your du\u2018a and answer it in the best of ways.",
+        footerAiNote: "This tool generates du\u2018as using AI. Please verify all Quranic verses and Hadith references with authentic Islamic sources.",
+        footerPrivacy: "Your du\u2018a is private and never shared without your permission.",
+        footerContact: "Questions or feedback?",
+        footerPP: "Privacy Policy", footerTOS: "Terms of Service",
+        // Seasonal banners
+        bannerRamadan: "The blessed month of Ramadan \u2014 make du\u2018a for your family during these precious nights.",
+        bannerLast10: "The last 10 nights of Ramadan \u2014 seek Laylatul Qadr with heartfelt du\u2018a.",
+        bannerLQNight: "Seek Laylatul Qadr tonight \u2014 worship in this night is better than a thousand months.",
+        bannerEidFitr: "Eid al-Fitr Mubarak! May Allah accept your fasting, prayers, and du\u2018a.",
+        bannerArafah: "The Day of Arafah \u2014 the Prophet \uFDFA said du\u2018a on this day is the best of du\u2018a.",
+        bannerEidAdha: "Eid al-Adha Mubarak! May Allah accept your sacrifice and your du\u2018a.",
+        bannerTashreeq: "The days of Tashreeq \u2014 days of eating, drinking, and remembering Allah.",
+        bannerDhulHijjah: "The first 10 days of Dhul Hijjah \u2014 among the most beloved days to Allah for good deeds.",
+        bannerNewYear: "Islamic New Year Mubarak! Begin this new year with du\u2018a for guidance and blessings.",
+        bannerTasua: "The day of Tasu\u2018a \u2014 the Prophet \uFDFA encouraged fasting today alongside Ashura.",
+        bannerAshura: "The Day of Ashura \u2014 a day of fasting and reflection. Make du\u2018a with sincerity.",
+        bannerMawlid: "The birth of the Prophet Muhammad \uFDFA \u2014 send blessings upon him and make du\u2018a for your ummah.",
+        bannerIsra: "The Night of Isra & Mi\u2018raj \u2014 a night of spiritual elevation. Turn to Allah in du\u2018a.",
+        bannerRajab: "The sacred month of Rajab has begun \u2014 increase your du\u2018a and worship in this blessed month.",
+        bannerMidShaban: "The middle of Sha\u2018ban \u2014 a night when du\u2018as are raised to Allah. Ask with hope.",
+        bannerShabanStart: "Sha\u2018ban has begun \u2014 the Prophet \uFDFA fasted most of this month. Prepare your heart for Ramadan.",
+        bannerWhiteDays: "The White Days \u2014 the Prophet \uFDFA encouraged fasting on the 13th, 14th, and 15th. Pair your fast with du\u2018a.",
+        bannerJumuah: "It\u2019s Jumu\u2018ah \u2014 the Prophet \uFDFA said there is an hour on Friday when du\u2018a is accepted.",
         font: "'Cormorant Garamond', serif"
       },
       es: {
@@ -253,8 +319,6 @@
         subtitle: "Du\u2018as Personalizados para Cada Ocasi\u00f3n",
         occasionLabel: "Ocasi\u00f3n",
         occasionHint: "Teje los vers\u00edculos y hadith correctos",
-        emailLabel: "Tu Correo Electr\u00f3nico",
-        emailHint: "Solo se usa para enviar tu du\u2018a",
         ageLabel: "Rango de Edad",
         genderLabel: "G\u00e9nero",
         genderMale: "Masculino",
@@ -274,6 +338,43 @@
         occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"Ramad\u00e1n"},{id:"jumuah",icon:"\ud83d\udd4c",label:"Jumu\u2018ah"},{id:"general",icon:"\ud83e\udd32",label:"General"},{id:"illness",icon:"\ud83d\udc9a",label:"Sanaci\u00f3n"},{id:"exams",icon:"\ud83d\udcd6",label:"Ex\u00e1menes"},{id:"travel",icon:"\u2708\ufe0f",label:"Viaje"},{id:"newborn",icon:"\ud83d\udc76",label:"Beb\u00e9 Reci\u00e9n Nacido"},{id:"marriage",icon:"\ud83d\udc8d",label:"Matrimonio"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"Duelo"},{id:"hajj",icon:"\ud83d\udd4b",label:"Hajj"},{id:"gratitude",icon:"\ud83c\udf3f",label:"Gratitud"}],
         concerns: ["Gu\u00eda","Salud","Paciencia","Perd\u00f3n","Iman fuerte","\u00c9xito","Ansiedad","Depresi\u00f3n","Finanzas","Matrimonio","Encontrar pareja","Escuela","Trauma","Protecci\u00f3n"],
         relationships: ["Esposa","Esposo","Hijo","Hija","Madre","Padre","Hermano","Hermana","Abuelo","Abuela","Suegra","Suegro","T\u00edo","T\u00eda","Sobrino","Sobrina","Primo/a","Amigo/a","Maestro/a","Mentor/a","Vecino/a","Colega","Mascota"],
+        nameLabel: "Nombre", nameHint: "Puede ser un apodo o \u{1F60A}", namePlaceholder: "ej. Sumaira",
+        relationshipLabel: "Relaci\u00f3n", memberConcernsLabel: "Por qu\u00e9 orar", memberConcernsPlaceholder: "A\u00f1ade algo espec\u00edfico...",
+        addAnother: "+ A\u00f1adir Otro", comingSoon: "Pr\u00f3ximamente",
+        privacyTitle: "Tu du\u2018a es privada.", privacyText: "Los nombres y preocupaciones se usan solo para generar tu du\u2018a y nunca se almacenan ni comparten p\u00fablicamente.",
+        supportTitle: "Ap\u00f3yanos", supportText: "Este servicio es gratuito para la ummah. Tu apoyo nos ayuda a mantenerlo y llegar a m\u00e1s familias musulmanas en todo el mundo.",
+        supportBtn: "Apoyar \u2014 Jazak\u2019Allah Khair", supportOther: "Otro", supportSecure: "Pago seguro v\u00eda Stripe. Sin cuenta requerida.",
+        supportDisclaimer: "Las donaciones son voluntarias y no reembolsables. MyDua.AI no es una organizaci\u00f3n ben\u00e9fica registrada \u2014 las donaciones no son deducibles de impuestos.",
+        postGenTitle: "\u00bfTe gust\u00f3 tu du\u2018a?", postGenText: "Ingresa tu correo para recibir una copia con formato.", postGenSend: "Enviar",
+        postGenDisclaimer: "Al proporcionar tu correo, aceptas recibir tu du\u2018a y actualizaciones ocasionales.",
+        resultCopy: "Copiar", resultPdf: "PDF", resultEmail: "Correo", resultPrint: "Imprimir",
+        resultShare: "Compartir", resultLink: "Enlace", resultEdit: "Editar", resultStartOver: "Empezar de nuevo",
+        resultAiDisclaimer: "Esta du\u2018a fue compuesta por inteligencia artificial. Por favor verifica todas las aleyas del Cor\u00e1n y referencias de hadith con fuentes isl\u00e1micas aut\u00e9nticas.",
+        resultEmailTitle: "Enviar du\u2018a por correo", resultEmailLabel: "Correo del destinatario", resultEmailSend: "Enviar",
+        resultSmsTitle: "Enviar por SMS / iMessage", resultSmsText: "Abre tu app de mensajes con un enlace a la du\u2018a.", resultSmsBtn: "Abrir Mensajes",
+        resultShareTitle: "Compartir esta du\u2018a", resultShareText: "Cualquiera con este enlace puede ver la du\u2018a.", resultShareCopy: "Copiar",
+        closingNote: "Que Allah acepte tu du\u2018a y la responda de la mejor manera.",
+        footerAiNote: "Esta herramienta genera du\u2018as usando IA. Por favor verifica todas las aleyas del Cor\u00e1n y referencias de hadith con fuentes isl\u00e1micas aut\u00e9nticas.",
+        footerPrivacy: "Tu du\u2018a es privada y nunca se comparte sin tu permiso.",
+        footerContact: "\u00bfPreguntas o comentarios?", footerPP: "Pol\u00edtica de Privacidad", footerTOS: "T\u00e9rminos de Servicio",
+        bannerRamadan: "El bendito mes de Ramad\u00e1n \u2014 haz du\u2018a por tu familia en estas noches preciosas.",
+        bannerLast10: "Las \u00faltimas 10 noches de Ramad\u00e1n \u2014 busca Laylatul Qadr con du\u2018a sincera.",
+        bannerLQNight: "Busca Laylatul Qadr esta noche \u2014 la adoraci\u00f3n en esta noche es mejor que mil meses.",
+        bannerEidFitr: "\u00a1Eid al-Fitr Mubarak! Que Allah acepte tu ayuno, oraciones y du\u2018a.",
+        bannerArafah: "El D\u00eda de Arafah \u2014 el Profeta \uFDFA dijo que la du\u2018a en este d\u00eda es la mejor.",
+        bannerEidAdha: "\u00a1Eid al-Adha Mubarak! Que Allah acepte tu sacrificio y tu du\u2018a.",
+        bannerTashreeq: "Los d\u00edas de Tashreeq \u2014 d\u00edas de comer, beber y recordar a Allah.",
+        bannerDhulHijjah: "Los primeros 10 d\u00edas de Dhul Hijjah \u2014 entre los d\u00edas m\u00e1s amados por Allah.",
+        bannerNewYear: "\u00a1Feliz A\u00f1o Nuevo Isl\u00e1mico! Comienza este nuevo a\u00f1o con du\u2018a por gu\u00eda y bendiciones.",
+        bannerTasua: "El d\u00eda de Tasu\u2018a \u2014 el Profeta \uFDFA alent\u00f3 a ayunar hoy junto con Ashura.",
+        bannerAshura: "El D\u00eda de Ashura \u2014 un d\u00eda de ayuno y reflexi\u00f3n. Haz du\u2018a con sinceridad.",
+        bannerMawlid: "El nacimiento del Profeta Muhammad \uFDFA \u2014 env\u00eda bendiciones sobre \u00e9l y haz du\u2018a por tu ummah.",
+        bannerIsra: "La Noche del Isra y Mi\u2018raj \u2014 una noche de elevaci\u00f3n espiritual. Vuelve a Allah en du\u2018a.",
+        bannerRajab: "El mes sagrado de Rajab ha comenzado \u2014 aumenta tu du\u2018a y adoraci\u00f3n.",
+        bannerMidShaban: "La mitad de Sha\u2018ban \u2014 una noche cuando las du\u2018as se elevan a Allah. Pide con esperanza.",
+        bannerShabanStart: "Sha\u2018ban ha comenzado \u2014 el Profeta \uFDFA ayun\u00f3 la mayor\u00eda de este mes. Prepara tu coraz\u00f3n para Ramad\u00e1n.",
+        bannerWhiteDays: "Los D\u00edas Blancos \u2014 el Profeta \uFDFA alent\u00f3 a ayunar los d\u00edas 13, 14 y 15.",
+        bannerJumuah: "Es Jumu\u2018ah \u2014 el Profeta \uFDFA dijo que hay una hora el viernes cuando la du\u2018a es aceptada.",
         font: "'Cormorant Garamond', serif"
       },
       ur: {
@@ -281,8 +382,6 @@
         subtitle: "\u06c1\u0631 \u0645\u0648\u0642\u0639 \u06a9\u06d2 \u0644\u06cc\u06d2 \u0627\u0646\u0641\u0631\u0627\u062f\u06cc \u062f\u0639\u0627\u0626\u06cc\u06ba",
         occasionLabel: "\u0645\u0648\u0642\u0639",
         occasionHint: "\u0635\u062d\u06cc\u062d \u0622\u06cc\u0627\u062a \u0648 \u0627\u062d\u0627\u062f\u06cc\u062b \u0634\u0627\u0645\u0644 \u06a9\u0631\u06d2",
-        emailLabel: "\u0622\u067e \u06a9\u0627 \u0627\u06cc \u0645\u06cc\u0644",
-        emailHint: "\u0635\u0631\u0641 \u0622\u067e \u06a9\u06cc \u062f\u0639\u0627 \u0628\u06be\u06cc\u062c\u0646\u06d2 \u06a9\u06d2 \u0644\u06cc\u06d2",
         ageLabel: "\u0639\u0645\u0631",
         genderLabel: "\u0635\u0646\u0641",
         genderMale: "\u0645\u0631\u062f",
@@ -302,6 +401,43 @@
         occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"\u0631\u0645\u0636\u0627\u0646"},{id:"jumuah",icon:"\ud83d\udd4c",label:"\u062c\u0645\u0639\u06c1"},{id:"general",icon:"\ud83e\udd32",label:"\u0639\u0627\u0645"},{id:"illness",icon:"\ud83d\udc9a",label:"\u0634\u0641\u0627"},{id:"exams",icon:"\ud83d\udcd6",label:"\u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a"},{id:"travel",icon:"\u2708\ufe0f",label:"\u0633\u0641\u0631"},{id:"newborn",icon:"\ud83d\udc76",label:"\u0646\u06cc\u0627 \u0628\u0686\u06c1"},{id:"marriage",icon:"\ud83d\udc8d",label:"\u0634\u0627\u062f\u06cc"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"\u063a\u0645"},{id:"hajj",icon:"\ud83d\udd4b",label:"\u062d\u062c"},{id:"gratitude",icon:"\ud83c\udf3f",label:"\u0634\u06a9\u0631"}],
         concerns: ["\u06c1\u062f\u0627\u06cc\u062a","\u0635\u062d\u062a","\u0635\u0628\u0631","\u0645\u063a\u0641\u0631\u062a","\u0645\u0636\u0628\u0648\u0637 \u0627\u06cc\u0645\u0627\u0646","\u06a9\u0627\u0645\u06cc\u0627\u0628\u06cc","\u067e\u0631\u06cc\u0634\u0627\u0646\u06cc","\u0630\u06c1\u0646\u06cc \u062f\u0628\u0627\u0624","\u0645\u0627\u0644\u06cc","\u0634\u0627\u062f\u06cc","\u0631\u0634\u062a\u06c1","\u062a\u0639\u0644\u06cc\u0645","\u0635\u062f\u0645\u06c1","\u062d\u0641\u0627\u0638\u062a"],
         relationships: ["\u0628\u06cc\u0648\u06cc","\u0634\u0648\u06c1\u0631","\u0628\u06cc\u0679\u0627","\u0628\u06cc\u0679\u06cc","\u0627\u0645\u06cc","\u0627\u0628\u0648","\u0628\u06be\u0627\u0626\u06cc","\u0628\u06c1\u0646","\u062f\u0627\u062f\u0627","\u062f\u0627\u062f\u06cc","\u0633\u0627\u0633","\u0633\u0633\u0631","\u0686\u0627\u0686\u0627/\u0645\u0627\u0645\u0648\u06ba","\u062e\u0627\u0644\u06c1/\u067e\u06be\u0648\u067e\u06be\u06cc","\u0628\u06be\u062a\u06cc\u062c\u0627","\u0628\u06be\u062a\u06cc\u062c\u06cc","\u06a9\u0632\u0646","\u062f\u0648\u0633\u062a","\u0627\u0633\u062a\u0627\u062f","\u0631\u06c1\u0646\u0645\u0627","\u067e\u0691\u0648\u0633\u06cc","\u0633\u0627\u062a\u06be\u06cc","\u067e\u0627\u0644\u062a\u0648 \u062c\u0627\u0646\u0648\u0631"],
+        nameLabel: "\u0646\u0627\u0645", nameHint: "\u0639\u0631\u0641\u06cc\u062a \u06cc\u0627 \u{1F60A}", namePlaceholder: "\u0645\u062b\u0644\u0627\u064b \u0633\u0645\u06cc\u0631\u06c1",
+        relationshipLabel: "\u0631\u0634\u062a\u06c1", memberConcernsLabel: "\u06a9\u0633 \u0686\u06cc\u0632 \u06a9\u06d2 \u0644\u06cc\u06d2 \u062f\u0639\u0627", memberConcernsPlaceholder: "\u06a9\u0686\u06be \u062e\u0627\u0635 \u0634\u0627\u0645\u0644 \u06a9\u0631\u06cc\u06ba...",
+        addAnother: "+ \u0645\u0632\u06cc\u062f \u0634\u0627\u0645\u0644 \u06a9\u0631\u06cc\u06ba", comingSoon: "\u062c\u0644\u062f \u0622 \u0631\u06c1\u0627 \u06c1\u06d2",
+        privacyTitle: "\u0622\u067e \u06a9\u06cc \u062f\u0639\u0627 \u0646\u062c\u06cc \u06c1\u06d2\u06d4", privacyText: "\u0646\u0627\u0645 \u0627\u0648\u0631 \u062e\u062f\u0634\u0627\u062a \u0635\u0631\u0641 \u062f\u0639\u0627 \u0628\u0646\u0627\u0646\u06d2 \u06a9\u06d2 \u0644\u06cc\u06d2 \u0627\u0633\u062a\u0639\u0645\u0627\u0644 \u06c1\u0648\u062a\u06d2 \u06c1\u06cc\u06ba \u0627\u0648\u0631 \u06a9\u0628\u06be\u06cc \u0630\u062e\u06cc\u0631\u06c1 \u06cc\u0627 \u0634\u06cc\u0626\u0631 \u0646\u06c1\u06cc\u06ba \u06a9\u06cc\u06d2 \u062c\u0627\u062a\u06d2\u06d4",
+        supportTitle: "\u06c1\u0645\u0627\u0631\u06cc \u0645\u062f\u062f \u06a9\u0631\u06cc\u06ba", supportText: "\u06cc\u06c1 \u062e\u062f\u0645\u062a \u0627\u0645\u062a \u06a9\u06d2 \u0644\u06cc\u06d2 \u0645\u0641\u062a \u06c1\u06d2\u06d4 \u0622\u067e \u06a9\u06cc \u0645\u062f\u062f \u0627\u0633\u06d2 \u062c\u0627\u0631\u06cc \u0631\u06a9\u06be\u0646\u06d2 \u0645\u06cc\u06ba \u0645\u062f\u062f \u06a9\u0631\u062a\u06cc \u06c1\u06d2\u06d4",
+        supportBtn: "\u0645\u062f\u062f \u06a9\u0631\u06cc\u06ba \u2014 \u062c\u0632\u0627\u06a9 \u0627\u0644\u0644\u06c1 \u062e\u06cc\u0631", supportOther: "\u062f\u06cc\u06af\u0631", supportSecure: "Stripe \u06a9\u06d2 \u0630\u0631\u06cc\u0639\u06d2 \u0645\u062d\u0641\u0648\u0638 \u0627\u062f\u0627\u0626\u06cc\u06af\u06cc\u06d4",
+        supportDisclaimer: "\u0639\u0637\u06cc\u0627\u062a \u0631\u0636\u0627\u06a9\u0627\u0631\u0627\u0646\u06c1 \u06c1\u06cc\u06ba \u0627\u0648\u0631 \u0648\u0627\u067e\u0633 \u0646\u06c1\u06cc\u06ba \u06c1\u0648\u0646\u06af\u06d2\u06d4",
+        postGenTitle: "\u0622\u067e \u06a9\u06cc \u062f\u0639\u0627 \u067e\u0633\u0646\u062f \u0622\u0626\u06cc\u061f", postGenText: "\u0627\u06cc\u06a9 \u062e\u0648\u0628\u0635\u0648\u0631\u062a \u06a9\u0627\u067e\u06cc \u062d\u0627\u0635\u0644 \u06a9\u0631\u0646\u06d2 \u06a9\u06d2 \u0644\u06cc\u06d2 \u0627\u067e\u0646\u0627 \u0627\u06cc \u0645\u06cc\u0644 \u062f\u0631\u062c \u06a9\u0631\u06cc\u06ba\u06d4", postGenSend: "\u0628\u06be\u06cc\u062c\u06cc\u06ba",
+        postGenDisclaimer: "\u0627\u06cc \u0645\u06cc\u0644 \u0641\u0631\u0627\u06c1\u0645 \u06a9\u0631\u06a9\u06d2 \u0622\u067e \u0627\u067e\u0646\u06cc \u062f\u0639\u0627 \u0627\u0648\u0631 \u06a9\u0628\u06be\u06cc \u06a9\u0628\u06be\u0627\u0631 \u0627\u067e\u0688\u06cc\u0679\u0633 \u062d\u0627\u0635\u0644 \u06a9\u0631\u0646\u06d2 \u067e\u0631 \u0631\u0627\u0636\u06cc \u06c1\u06cc\u06ba\u06d4",
+        resultCopy: "\u06a9\u0627\u067e\u06cc", resultPdf: "PDF", resultEmail: "\u0627\u06cc \u0645\u06cc\u0644", resultPrint: "\u067e\u0631\u0646\u0679",
+        resultShare: "\u0634\u06cc\u0626\u0631", resultLink: "\u0644\u0646\u06a9", resultEdit: "\u062a\u0631\u0645\u06cc\u0645", resultStartOver: "\u062f\u0648\u0628\u0627\u0631\u06c1 \u0634\u0631\u0648\u0639",
+        resultAiDisclaimer: "\u06cc\u06c1 \u062f\u0639\u0627 \u0645\u0635\u0646\u0648\u0639\u06cc \u0630\u06c1\u0627\u0646\u062a \u0633\u06d2 \u062a\u06cc\u0627\u0631 \u06a9\u06cc \u06af\u0626\u06cc \u06c1\u06d2\u06d4 \u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u062a\u0645\u0627\u0645 \u0642\u0631\u0622\u0646\u06cc \u0622\u06cc\u0627\u062a \u0627\u0648\u0631 \u0627\u062d\u0627\u062f\u06cc\u062b \u06a9\u06cc \u062a\u0635\u062f\u06cc\u0642 \u06a9\u0631\u06cc\u06ba\u06d4",
+        resultEmailTitle: "\u062f\u0639\u0627 \u0627\u06cc \u0645\u06cc\u0644 \u06a9\u0631\u06cc\u06ba", resultEmailLabel: "\u0648\u0635\u0648\u0644 \u06a9\u0646\u0646\u062f\u06c1 \u06a9\u0627 \u0627\u06cc \u0645\u06cc\u0644", resultEmailSend: "\u0628\u06be\u06cc\u062c\u06cc\u06ba",
+        resultSmsTitle: "SMS \u06a9\u06d2 \u0630\u0631\u06cc\u0639\u06d2 \u0628\u06be\u06cc\u062c\u06cc\u06ba", resultSmsText: "\u062f\u0639\u0627 \u06a9\u06d2 \u0644\u0646\u06a9 \u06a9\u06d2 \u0633\u0627\u062a\u06be \u0622\u067e \u06a9\u06cc \u067e\u06cc\u063a\u0627\u0645 \u0627\u06cc\u067e \u06a9\u06be\u0644\u06d2\u06af\u06cc\u06d4", resultSmsBtn: "\u067e\u06cc\u063a\u0627\u0645\u0627\u062a \u06a9\u06be\u0648\u0644\u06cc\u06ba",
+        resultShareTitle: "\u06cc\u06c1 \u062f\u0639\u0627 \u0634\u06cc\u0626\u0631 \u06a9\u0631\u06cc\u06ba", resultShareText: "\u0627\u0633 \u0644\u0646\u06a9 \u0633\u06d2 \u06a9\u0648\u0626\u06cc \u0628\u06be\u06cc \u062f\u0639\u0627 \u062f\u06cc\u06a9\u06be \u0633\u06a9\u062a\u0627 \u06c1\u06d2\u06d4", resultShareCopy: "\u06a9\u0627\u067e\u06cc",
+        closingNote: "\u0627\u0644\u0644\u06c1 \u0622\u067e \u06a9\u06cc \u062f\u0639\u0627 \u0642\u0628\u0648\u0644 \u0641\u0631\u0645\u0627\u0626\u06d2 \u0627\u0648\u0631 \u0628\u06c1\u062a\u0631\u06cc\u0646 \u0637\u0631\u06cc\u0642\u06d2 \u0633\u06d2 \u0627\u0633\u06d2 \u067e\u0648\u0631\u0627 \u06a9\u0631\u06d2\u06d4",
+        footerAiNote: "\u06cc\u06c1 \u0679\u0648\u0644 AI \u0633\u06d2 \u062f\u0639\u0627\u0626\u06cc\u06ba \u062a\u06cc\u0627\u0631 \u06a9\u0631\u062a\u0627 \u06c1\u06d2\u06d4 \u0628\u0631\u0627\u06c1 \u06a9\u0631\u0645 \u062a\u0645\u0627\u0645 \u0642\u0631\u0622\u0646\u06cc \u0622\u06cc\u0627\u062a \u0627\u0648\u0631 \u0627\u062d\u0627\u062f\u06cc\u062b \u06a9\u06cc \u062a\u0635\u062f\u06cc\u0642 \u06a9\u0631\u06cc\u06ba\u06d4",
+        footerPrivacy: "\u0622\u067e \u06a9\u06cc \u062f\u0639\u0627 \u0646\u062c\u06cc \u06c1\u06d2 \u0627\u0648\u0631 \u0622\u067e \u06a9\u06cc \u0627\u062c\u0627\u0632\u062a \u06a9\u06d2 \u0628\u063a\u06cc\u0631 \u06a9\u0628\u06be\u06cc \u0634\u06cc\u0626\u0631 \u0646\u06c1\u06cc\u06ba \u06a9\u06cc \u062c\u0627\u062a\u06cc\u06d4",
+        footerContact: "\u0633\u0648\u0627\u0644\u0627\u062a \u06cc\u0627 \u062a\u0627\u062b\u0631\u0627\u062a\u061f", footerPP: "\u0631\u0627\u0632\u062f\u0627\u0631\u06cc \u067e\u0627\u0644\u06cc\u0633\u06cc", footerTOS: "\u0634\u0631\u0627\u0626\u0637 \u0648 \u0636\u0648\u0627\u0628\u0637",
+        bannerRamadan: "\u0631\u0645\u0636\u0627\u0646 \u0627\u0644\u0645\u0628\u0627\u0631\u06a9 \u2014 \u0627\u0646 \u0642\u06cc\u0645\u062a\u06cc \u0631\u0627\u062a\u0648\u06ba \u0645\u06cc\u06ba \u0627\u067e\u0646\u06d2 \u062e\u0627\u0646\u062f\u0627\u0646 \u06a9\u06d2 \u0644\u06cc\u06d2 \u062f\u0639\u0627 \u06a9\u0631\u06cc\u06ba\u06d4",
+        bannerLast10: "\u0631\u0645\u0636\u0627\u0646 \u06a9\u06cc \u0622\u062e\u0631\u06cc \u06f1\u06f0 \u0631\u0627\u062a\u06cc\u06ba \u2014 \u062f\u0644 \u0633\u06d2 \u062f\u0639\u0627 \u06a9\u06d2 \u0633\u0627\u062a\u06be \u0644\u06cc\u0644\u06c3 \u0627\u0644\u0642\u062f\u0631 \u062a\u0644\u0627\u0634 \u06a9\u0631\u06cc\u06ba\u06d4",
+        bannerLQNight: "\u0622\u062c \u0631\u0627\u062a \u0644\u06cc\u0644\u06c3 \u0627\u0644\u0642\u062f\u0631 \u062a\u0644\u0627\u0634 \u06a9\u0631\u06cc\u06ba \u2014 \u0627\u0633 \u0631\u0627\u062a \u06a9\u06cc \u0639\u0628\u0627\u062f\u062a \u06c1\u0632\u0627\u0631 \u0645\u06c1\u06cc\u0646\u0648\u06ba \u0633\u06d2 \u0628\u06c1\u062a\u0631 \u06c1\u06d2\u06d4",
+        bannerEidFitr: "\u0639\u06cc\u062f \u0627\u0644\u0641\u0637\u0631 \u0645\u0628\u0627\u0631\u06a9! \u0627\u0644\u0644\u06c1 \u0622\u067e \u06a9\u06d2 \u0631\u0648\u0632\u06d2\u060c \u0646\u0645\u0627\u0632\u06cc\u06ba \u0627\u0648\u0631 \u062f\u0639\u0627\u0626\u06cc\u06ba \u0642\u0628\u0648\u0644 \u0641\u0631\u0645\u0627\u0626\u06d2\u06d4",
+        bannerArafah: "\u06cc\u0648\u0645 \u0639\u0631\u0641\u06c1 \u2014 \u0646\u0628\u06cc \u06a9\u0631\u06cc\u0645 \uFDFA \u0646\u06d2 \u0641\u0631\u0645\u0627\u06cc\u0627 \u0627\u0633 \u062f\u0646 \u06a9\u06cc \u062f\u0639\u0627 \u0633\u0628 \u0633\u06d2 \u0628\u06c1\u062a\u0631\u06cc\u0646 \u06c1\u06d2\u06d4",
+        bannerEidAdha: "\u0639\u06cc\u062f \u0627\u0644\u0627\u0636\u062d\u06cc \u0645\u0628\u0627\u0631\u06a9! \u0627\u0644\u0644\u06c1 \u0622\u067e \u06a9\u06cc \u0642\u0631\u0628\u0627\u0646\u06cc \u0627\u0648\u0631 \u062f\u0639\u0627 \u0642\u0628\u0648\u0644 \u0641\u0631\u0645\u0627\u0626\u06d2\u06d4",
+        bannerTashreeq: "\u0627\u06cc\u0627\u0645 \u062a\u0634\u0631\u06cc\u0642 \u2014 \u06a9\u06be\u0627\u0646\u06d2 \u067e\u06cc\u0646\u06d2 \u0627\u0648\u0631 \u0627\u0644\u0644\u06c1 \u06a9\u0648 \u06cc\u0627\u062f \u06a9\u0631\u0646\u06d2 \u06a9\u06d2 \u062f\u0646\u06d4",
+        bannerDhulHijjah: "\u0630\u0648\u0627\u0644\u062d\u062c\u06c1 \u06a9\u06d2 \u067e\u06c1\u0644\u06d2 \u06f1\u06f0 \u062f\u0646 \u2014 \u0627\u0644\u0644\u06c1 \u06a9\u06d2 \u0646\u0632\u062f\u06cc\u06a9 \u0633\u0628 \u0633\u06d2 \u067e\u06cc\u0627\u0631\u06d2 \u062f\u0646\u0648\u06ba \u0645\u06cc\u06ba \u0633\u06d2\u06d4",
+        bannerNewYear: "\u0627\u0633\u0644\u0627\u0645\u06cc \u0646\u06cc\u0627 \u0633\u0627\u0644 \u0645\u0628\u0627\u0631\u06a9! \u06c1\u062f\u0627\u06cc\u062a \u0627\u0648\u0631 \u0628\u0631\u06a9\u062a \u06a9\u06cc \u062f\u0639\u0627 \u06a9\u06d2 \u0633\u0627\u062a\u06be \u0646\u06cc\u0627 \u0633\u0627\u0644 \u0634\u0631\u0648\u0639 \u06a9\u0631\u06cc\u06ba\u06d4",
+        bannerTasua: "\u06cc\u0648\u0645 \u062a\u0627\u0633\u0648\u0639\u0627 \u2014 \u0646\u0628\u06cc \u06a9\u0631\u06cc\u0645 \uFDFA \u0646\u06d2 \u0622\u062c \u0639\u0627\u0634\u0648\u0631\u06c1 \u06a9\u06d2 \u0633\u0627\u062a\u06be \u0631\u0648\u0632\u06c1 \u0631\u06a9\u06be\u0646\u06d2 \u06a9\u06cc \u062a\u0631\u063a\u06cc\u0628 \u062f\u06cc\u06d4",
+        bannerAshura: "\u06cc\u0648\u0645 \u0639\u0627\u0634\u0648\u0631\u06c1 \u2014 \u0631\u0648\u0632\u06c1 \u0627\u0648\u0631 \u063a\u0648\u0631 \u0648 \u0641\u06a9\u0631 \u06a9\u0627 \u062f\u0646\u06d4 \u062e\u0644\u0648\u0635 \u0633\u06d2 \u062f\u0639\u0627 \u06a9\u0631\u06cc\u06ba\u06d4",
+        bannerMawlid: "\u0645\u06cc\u0644\u0627\u062f \u0627\u0644\u0646\u0628\u06cc \uFDFA \u2014 \u0622\u067e \u067e\u0631 \u062f\u0631\u0648\u062f \u0628\u06be\u06cc\u062c\u06cc\u06ba \u0627\u0648\u0631 \u0627\u0645\u062a \u06a9\u06d2 \u0644\u06cc\u06d2 \u062f\u0639\u0627 \u06a9\u0631\u06cc\u06ba\u06d4",
+        bannerIsra: "\u0634\u0628 \u0627\u0633\u0631\u0627\u0621 \u0648 \u0645\u0639\u0631\u0627\u062c \u2014 \u0631\u0648\u062d\u0627\u0646\u06cc \u0628\u0644\u0646\u062f\u06cc \u06a9\u06cc \u0631\u0627\u062a\u06d4 \u0627\u0644\u0644\u06c1 \u0633\u06d2 \u062f\u0639\u0627 \u06a9\u0631\u06cc\u06ba\u06d4",
+        bannerRajab: "\u0631\u062c\u0628 \u0627\u0644\u0645\u0631\u062c\u0628 \u0634\u0631\u0648\u0639 \u06c1\u0648 \u06af\u06cc\u0627 \u2014 \u0627\u0633 \u0645\u0628\u0627\u0631\u06a9 \u0645\u06c1\u06cc\u0646\u06d2 \u0645\u06cc\u06ba \u062f\u0639\u0627 \u0627\u0648\u0631 \u0639\u0628\u0627\u062f\u062a \u0628\u0691\u06be\u0627\u0626\u06cc\u06ba\u06d4",
+        bannerMidShaban: "\u0634\u0628 \u0628\u0631\u0627\u062a \u2014 \u0622\u062c \u0631\u0627\u062a \u062f\u0639\u0627\u0626\u06cc\u06ba \u0627\u0644\u0644\u06c1 \u06a9\u06d2 \u062d\u0636\u0648\u0631 \u067e\u06cc\u0634 \u06a9\u06cc \u062c\u0627\u062a\u06cc \u06c1\u06cc\u06ba\u06d4 \u0627\u0645\u06cc\u062f \u0633\u06d2 \u0645\u0627\u0646\u06af\u06cc\u06ba\u06d4",
+        bannerShabanStart: "\u0634\u0639\u0628\u0627\u0646 \u0634\u0631\u0648\u0639 \u06c1\u0648 \u06af\u06cc\u0627 \u2014 \u0646\u0628\u06cc \u06a9\u0631\u06cc\u0645 \uFDFA \u0627\u0633 \u0645\u06c1\u06cc\u0646\u06d2 \u0632\u06cc\u0627\u062f\u06c1 \u0631\u0648\u0632\u06d2 \u0631\u06a9\u06be\u062a\u06d2 \u062a\u06be\u06d2\u06d4 \u0631\u0645\u0636\u0627\u0646 \u06a9\u06d2 \u0644\u06cc\u06d2 \u062f\u0644 \u062a\u06cc\u0627\u0631 \u06a9\u0631\u06cc\u06ba\u06d4",
+        bannerWhiteDays: "\u0627\u06cc\u0627\u0645 \u0628\u06cc\u0636 \u2014 \u0646\u0628\u06cc \u06a9\u0631\u06cc\u0645 \uFDFA \u0646\u06d2 \u06f1\u06f3\u060c \u06f1\u06f4\u060c \u06f1\u06f5 \u062a\u0627\u0631\u06cc\u062e \u06a9\u0648 \u0631\u0648\u0632\u06c1 \u0631\u06a9\u06be\u0646\u06d2 \u06a9\u06cc \u062a\u0631\u063a\u06cc\u0628 \u062f\u06cc\u06d4",
+        bannerJumuah: "\u062c\u0645\u0639\u06c1 \u0645\u0628\u0627\u0631\u06a9 \u2014 \u0646\u0628\u06cc \u06a9\u0631\u06cc\u0645 \uFDFA \u0646\u06d2 \u0641\u0631\u0645\u0627\u06cc\u0627 \u062c\u0645\u0639\u06c1 \u0645\u06cc\u06ba \u0627\u06cc\u06a9 \u0633\u0627\u0639\u062a \u06c1\u06d2 \u062c\u0628 \u062f\u0639\u0627 \u0642\u0628\u0648\u0644 \u06c1\u0648\u062a\u06cc \u06c1\u06d2\u06d4",
         font: "'Noto Nastaliq Urdu', 'Amiri', serif"
       },
       ar: {
@@ -309,8 +445,6 @@
         subtitle: "\u0623\u062f\u0639\u064a\u0629 \u0645\u062e\u0635\u0635\u0629 \u0644\u0643\u0644 \u0645\u0646\u0627\u0633\u0628\u0629",
         occasionLabel: "\u0627\u0644\u0645\u0646\u0627\u0633\u0628\u0629",
         occasionHint: "\u064a\u0646\u0633\u062c \u0627\u0644\u0622\u064a\u0627\u062a \u0648\u0627\u0644\u0623\u062d\u0627\u062f\u064a\u062b",
-        emailLabel: "\u0628\u0631\u064a\u062f\u0643 \u0627\u0644\u0625\u0644\u0643\u062a\u0631\u0648\u0646\u064a",
-        emailHint: "\u064a\u064f\u0633\u062a\u062e\u062f\u0645 \u0641\u0642\u0637 \u0644\u0625\u0631\u0633\u0627\u0644 \u062f\u0639\u0627\u0626\u0643",
         ageLabel: "\u0627\u0644\u0639\u0645\u0631",
         genderLabel: "\u0627\u0644\u062c\u0646\u0633",
         genderMale: "\u0630\u0643\u0631",
@@ -330,6 +464,43 @@
         occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"\u0631\u0645\u0636\u0627\u0646"},{id:"jumuah",icon:"\ud83d\udd4c",label:"\u0627\u0644\u062c\u0645\u0639\u0629"},{id:"general",icon:"\ud83e\udd32",label:"\u0639\u0627\u0645"},{id:"illness",icon:"\ud83d\udc9a",label:"\u0627\u0644\u0634\u0641\u0627\u0621"},{id:"exams",icon:"\ud83d\udcd6",label:"\u0627\u0644\u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a"},{id:"travel",icon:"\u2708\ufe0f",label:"\u0627\u0644\u0633\u0641\u0631"},{id:"newborn",icon:"\ud83d\udc76",label:"\u0645\u0648\u0644\u0648\u062f \u062c\u062f\u064a\u062f"},{id:"marriage",icon:"\ud83d\udc8d",label:"\u0627\u0644\u0632\u0648\u0627\u062c"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"\u0627\u0644\u062d\u0632\u0646"},{id:"hajj",icon:"\ud83d\udd4b",label:"\u0627\u0644\u062d\u062c"},{id:"gratitude",icon:"\ud83c\udf3f",label:"\u0627\u0644\u0634\u0643\u0631"}],
         concerns: ["\u0627\u0644\u0647\u062f\u0627\u064a\u0629","\u0627\u0644\u0635\u062d\u0629","\u0627\u0644\u0635\u0628\u0631","\u0627\u0644\u0645\u063a\u0641\u0631\u0629","\u0642\u0648\u0629 \u0627\u0644\u0625\u064a\u0645\u0627\u0646","\u0627\u0644\u0646\u062c\u0627\u062d","\u0627\u0644\u0642\u0644\u0642","\u0627\u0644\u0627\u0643\u062a\u0626\u0627\u0628","\u0627\u0644\u0645\u0627\u0644\u064a\u0629","\u0627\u0644\u0632\u0648\u0627\u062c","\u0625\u064a\u062c\u0627\u062f \u0634\u0631\u064a\u0643","\u0627\u0644\u062f\u0631\u0627\u0633\u0629","\u0627\u0644\u0635\u062f\u0645\u0629","\u0627\u0644\u062d\u0645\u0627\u064a\u0629"],
         relationships: ["\u0632\u0648\u062c\u0629","\u0632\u0648\u062c","\u0627\u0628\u0646","\u0627\u0628\u0646\u0629","\u0623\u0645","\u0623\u0628","\u0623\u062e","\u0623\u062e\u062a","\u062c\u062f","\u062c\u062f\u0629","\u062d\u0645\u0627\u0629","\u062d\u0645\u0648","\u0639\u0645/\u062e\u0627\u0644","\u0639\u0645\u0629/\u062e\u0627\u0644\u0629","\u0627\u0628\u0646 \u0627\u0644\u0623\u062e/\u0627\u0644\u0623\u062e\u062a","\u0627\u0628\u0646\u0629 \u0627\u0644\u0623\u062e/\u0627\u0644\u0623\u062e\u062a","\u0627\u0628\u0646 \u0627\u0644\u0639\u0645","\u0635\u062f\u064a\u0642/\u0629","\u0645\u0639\u0644\u0645/\u0629","\u0645\u0631\u0634\u062f/\u0629","\u062c\u0627\u0631/\u0629","\u0632\u0645\u064a\u0644/\u0629","\u062d\u064a\u0648\u0627\u0646 \u0623\u0644\u064a\u0641"],
+        nameLabel: "الاسم", nameHint: "يمكن أن يكون لقبًا أو 😊", namePlaceholder: "مثلاً سميرة",
+        relationshipLabel: "صلة القرابة", memberConcernsLabel: "ما الذي تدعو له", memberConcernsPlaceholder: "أضف أي شيء محدد...",
+        addAnother: "+ إضافة شخص آخر", comingSoon: "قريبًا",
+        privacyTitle: "دعاؤك خاص.", privacyText: "الأسماء والمخاوف تُستخدم فقط لإنشاء دعائك ولا يتم تخزينها أو مشاركتها أبدًا.",
+        supportTitle: "ادعمنا", supportText: "هذه الخدمة مجانية للأمة. دعمكم يساعدنا على الاستمرار.",
+        supportBtn: "ادعمنا — جزاك الله خيرًا", supportOther: "مبلغ آخر", supportSecure: "دفع آمن عبر Stripe.",
+        supportDisclaimer: "التبرعات طوعية وغير قابلة للاسترداد.",
+        postGenTitle: "أعجبك دعاؤك؟", postGenText: "أدخل بريدك الإلكتروني لتصلك نسخة منسقة بشكل جميل.", postGenSend: "إرسال",
+        postGenDisclaimer: "بتقديم بريدك الإلكتروني، توافق على استلام دعائك وتحديثات من حين لآخر.",
+        resultCopy: "نسخ", resultPdf: "PDF", resultEmail: "بريد إلكتروني", resultPrint: "طباعة",
+        resultShare: "مشاركة", resultLink: "رابط", resultEdit: "تعديل", resultStartOver: "ابدأ من جديد",
+        resultAiDisclaimer: "هذا الدعاء تم إنشاؤه بالذكاء الاصطناعي. يرجى التحقق من جميع الآيات القرآنية والأحاديث من مصادر إسلامية موثوقة.",
+        resultEmailTitle: "أرسل الدعاء بالبريد", resultEmailLabel: "بريد المستلم", resultEmailSend: "إرسال",
+        resultSmsTitle: "إرسال عبر SMS", resultSmsText: "يفتح تطبيق الرسائل مع رابط الدعاء.", resultSmsBtn: "فتح الرسائل",
+        resultShareTitle: "شارك هذا الدعاء", resultShareText: "أي شخص لديه هذا الرابط يمكنه مشاهدة الدعاء.", resultShareCopy: "نسخ",
+        closingNote: "تقبل الله دعاءك واستجابه بأفضل ما يكون.",
+        footerAiNote: "هذه الأداة تنشئ الأدعية باستخدام الذكاء الاصطناعي. يرجى التحقق من جميع الآيات القرآنية والأحاديث من مصادر إسلامية موثوقة.",
+        footerPrivacy: "دعاؤك خاص ولا يُشارك أبدًا دون إذنك.",
+        footerContact: "أسئلة أو ملاحظات؟", footerPP: "سياسة الخصوصية", footerTOS: "شروط الخدمة",
+        bannerRamadan: "شهر رمضان المبارك — ادعُ لعائلتك في هذه الليالي الثمينة.",
+        bannerLast10: "العشر الأواخر من رمضان — ابحث عن ليلة القدر بدعاء من القلب.",
+        bannerLQNight: "ابحث عن ليلة القدر الليلة — العبادة فيها خير من ألف شهر.",
+        bannerEidFitr: "عيد الفطر مبارك! تقبل الله صيامكم وصلاتكم ودعاءكم.",
+        bannerArafah: "يوم عرفة — قال النبي ﷺ إن أفضل الدعاء دعاء يوم عرفة.",
+        bannerEidAdha: "عيد الأضحى مبارك! تقبل الله أضحيتكم ودعاءكم.",
+        bannerTashreeq: "أيام التشريق — أيام أكل وشرب وذكر لله.",
+        bannerDhulHijjah: "العشر الأوائل من ذي الحجة — من أحب الأيام إلى الله للعمل الصالح.",
+        bannerNewYear: "رأس السنة الهجرية مبارك! ابدأ عامك الجديد بالدعاء للهداية والبركة.",
+        bannerTasua: "يوم تاسوعاء — شجّع النبي ﷺ على صيام اليوم مع عاشوراء.",
+        bannerAshura: "يوم عاشوراء — يوم صيام وتأمل. ادعُ بإخلاص.",
+        bannerMawlid: "مولد النبي محمد ﷺ — صلوا عليه وادعوا لأمتكم.",
+        bannerIsra: "ليلة الإسراء والمعراج — ليلة رفعة روحانية. توجه إلى الله بالدعاء.",
+        bannerRajab: "بدأ شهر رجب المبارك — أكثر من الدعاء والعبادة في هذا الشهر المبارك.",
+        bannerMidShaban: "ليلة النصف من شعبان — ليلة تُرفع فيها الأدعية إلى الله. اسأل بأمل.",
+        bannerShabanStart: "بدأ شعبان — كان النبي ﷺ يصوم معظم هذا الشهر. جهّز قلبك لرمضان.",
+        bannerWhiteDays: "الأيام البيض — شجّع النبي ﷺ على صيام الثالث عشر والرابع عشر والخامس عشر.",
+        bannerJumuah: "يوم الجمعة — قال النبي ﷺ إن في الجمعة ساعة يُستجاب فيها الدعاء.",
         font: "'Amiri', serif"
       }
     };
@@ -346,9 +517,7 @@
       document.querySelector('.title').innerHTML = d.tagline;
       document.querySelector('.subtitle').textContent = d.subtitle;
       // Form labels
-      var el = document.getElementById('emailLabel');
-      if(el) el.innerHTML = d.emailLabel + ' <span style="color:#c9a96e;">*</span> <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">' + d.emailHint + '</span>';
-      el = document.getElementById('occasionLabel');
+      var el = document.getElementById('occasionLabel');
       if(el) el.innerHTML = d.occasionLabel + ' <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">' + d.occasionHint + '</span>';
       el = document.getElementById('ageLabel');
       if(el) el.textContent = d.ageLabel;
@@ -375,7 +544,7 @@
           var opt = document.createElement('option');
           opt.value = o.id;
           if(o.id === 'ramadan') { opt.textContent = o.icon + '  ' + o.label; }
-          else { opt.textContent = o.icon + '  ' + o.label + '  (coming soon)'; opt.disabled = true; }
+          else { opt.textContent = o.icon + '  ' + o.label + ' — ' + (d.comingSoon||'Coming Soon'); opt.disabled = true; }
           occ.appendChild(opt);
         });
       }
@@ -402,6 +571,54 @@
       RELATIONSHIPS.length = 0;
       d.relationships.forEach(function(r){ RELATIONSHIPS.push(r); });
       if(members.length > 0) renderMembers();
+      // Privacy notice
+      el=document.getElementById('privacyNotice');
+      if(el) el.innerHTML='<span style="color:var(--gold);">\uD83D\uDD12</span> <strong style="color:var(--gold);">'+d.privacyTitle+'</strong> '+d.privacyText;
+      // Support section
+      el=document.getElementById('supportTitleEl');if(el) el.textContent=d.supportTitle;
+      el=document.getElementById('supportTextEl');if(el) el.textContent=d.supportText;
+      el=document.getElementById('supportBtn');if(el) el.textContent=d.supportBtn;
+      el=document.getElementById('supportOtherBtn');if(el) el.textContent=d.supportOther;
+      el=document.getElementById('supportSecureEl');if(el) el.textContent=d.supportSecure;
+      el=document.getElementById('supportDisclaimerEl');if(el) el.textContent=d.supportDisclaimer;
+      // Result action buttons
+      el=document.getElementById('copyLbl');if(el) el.textContent=d.resultCopy;
+      el=document.getElementById('pdfLbl');if(el) el.textContent=d.resultPdf;
+      el=document.getElementById('emailLbl');if(el) el.textContent=d.resultEmail;
+      el=document.getElementById('printLbl');if(el) el.textContent=d.resultPrint;
+      el=document.getElementById('shareSectionLbl');if(el) el.textContent=d.resultShare;
+      el=document.getElementById('linkLbl');if(el) el.textContent=d.resultLink;
+      el=document.getElementById('editLbl');if(el) el.textContent=d.resultEdit;
+      el=document.getElementById('startOverLbl');if(el) el.textContent=d.resultStartOver;
+      // AI disclaimer
+      el=document.getElementById('aiDisclaimer');
+      if(el) el.innerHTML='<strong style="color:var(--gold);">AI:</strong> '+d.resultAiDisclaimer;
+      // Panels
+      el=document.getElementById('emailPanelTitle');if(el) el.textContent=d.resultEmailTitle;
+      el=document.getElementById('emailPanelLabel');if(el) el.textContent=d.resultEmailLabel;
+      el=document.getElementById('emailSendBtn');if(el&&!el.disabled) el.textContent=d.resultEmailSend;
+      el=document.getElementById('smsPanelTitle');if(el) el.textContent=d.resultSmsTitle;
+      el=document.getElementById('smsPanelText');if(el) el.textContent=d.resultSmsText;
+      el=document.getElementById('smsPanelBtn');if(el) el.textContent=d.resultSmsBtn;
+      el=document.getElementById('sharePanelTitle');if(el) el.textContent=d.resultShareTitle;
+      el=document.getElementById('sharePanelText');if(el) el.textContent=d.resultShareText;
+      el=document.getElementById('sharePanelCopy');if(el) el.textContent=d.resultShareCopy;
+      // Post-generation email
+      el=document.getElementById('postGenTitleEl');if(el) el.textContent=d.postGenTitle;
+      el=document.getElementById('postGenTextEl');if(el) el.textContent=d.postGenText;
+      el=document.getElementById('postGenSendBtn');if(el&&!el.disabled) el.textContent=d.postGenSend;
+      el=document.getElementById('postGenDisclaimerEl');if(el) el.innerHTML=d.postGenDisclaimer+' <a href="/unsubscribe" style="color:var(--gold);">unsubscribe</a>';
+      // Closing note
+      el=document.getElementById('closingNoteEl');
+      if(el) el.innerHTML=d.closingNote+'<br/><span class="closing-arabic">\u062A\u064E\u0642\u064E\u0628\u0651\u064E\u0644\u064E \u0627\u0644\u0644\u0651\u064E\u0647\u064F \u0645\u0650\u0646\u0651\u064E\u0627 \u0648\u064E\u0645\u0650\u0646\u0643\u064F\u0645\u0652</span>';
+      // Footer
+      el=document.getElementById('footerAiNoteEl');if(el) el.textContent=d.footerAiNote;
+      el=document.getElementById('footerPrivacyEl');if(el) el.innerHTML='\uD83D\uDD12 '+d.footerPrivacy;
+      el=document.getElementById('footerContactEl');if(el) el.textContent=d.footerContact;
+      el=document.getElementById('footerPPEl');if(el) el.textContent=d.footerPP;
+      el=document.getElementById('footerTOSEl');if(el) el.textContent=d.footerTOS;
+      // Seasonal banner — re-run with locale
+      updateSeasonalBanner();
     }
 
     // ===== PROGRESS BAR =====
@@ -430,21 +647,49 @@
       progressStartTime = Date.now();
       var stageIdx = 0;
       var currentPct = 0;
-      var tierTimes = {quick:10,post_salah:20,sujood:45,laylatul_qadr:180};
+      // Estimated generation times per tier (seconds) — used as the "expected" midpoint
+      var tierTimes = {quick:10,post_salah:25,sujood:50,laylatul_qadr:180};
       var expectedSec = tierTimes[selectedLengthTier] || 60;
+      // Overflow messages that cycle when we exceed the expected time
+      var overflowMsgs = [
+        "Still crafting your du\u2018a — Allah\u2019s words are worth the wait...",
+        "Weaving in additional Quranic references...",
+        "Adding final spiritual touches...",
+        "Your du\u2018a is being perfected — almost there...",
+        "Finalizing every prayer with care..."
+      ];
+      var overflowIdx = 0;
       progressInterval = setInterval(function() {
         var elapsed = (Date.now() - progressStartTime) / 1000;
-        var naturalPct = Math.min(92, (elapsed / expectedSec) * 92);
-        if(stageIdx < PROGRESS_STAGES.length - 1 && naturalPct >= PROGRESS_STAGES[stageIdx + 1].pct) {
+        // Asymptotic curve: approaches 95% but NEVER reaches it
+        // Formula: pct = 95 * (1 - e^(-elapsed/halfLife)) where halfLife = expectedSec * 0.6
+        // This means at expectedSec, we're at ~81%. At 2x expectedSec, ~92%. Never freezes.
+        var halfLife = expectedSec * 0.6;
+        var asymPct = 95 * (1 - Math.exp(-elapsed / halfLife));
+        // Stage messages: advance through stages based on percentage
+        if(stageIdx < PROGRESS_STAGES.length - 1 && asymPct >= PROGRESS_STAGES[stageIdx + 1].pct) {
           stageIdx++;
           stage.textContent = PROGRESS_STAGES[stageIdx].msg;
         }
-        currentPct = Math.max(currentPct, naturalPct);
-        bar.style.width = currentPct.toFixed(0) + '%';
-        pct.textContent = currentPct.toFixed(0) + '%';
+        // Once past the last defined stage AND past expected time, cycle overflow messages
+        if(elapsed > expectedSec && stageIdx >= PROGRESS_STAGES.length - 1) {
+          // Change overflow message every 15 seconds
+          var overflowElapsed = elapsed - expectedSec;
+          var newIdx = Math.floor(overflowElapsed / 15) % overflowMsgs.length;
+          if(newIdx !== overflowIdx) { overflowIdx = newIdx; stage.textContent = overflowMsgs[overflowIdx]; }
+        }
+        currentPct = Math.max(currentPct, asymPct);
+        bar.style.width = currentPct.toFixed(1) + '%';
+        pct.textContent = Math.floor(currentPct) + '%';
+        // Time estimate: show remaining if within expected, otherwise show reassuring message
         var remaining = Math.max(0, Math.round(expectedSec - elapsed));
-        if(remaining > 0) timeEl.textContent = 'About ' + remaining + ' seconds remaining';
-        else timeEl.textContent = 'Almost there...';
+        if(remaining > 5) {
+          timeEl.textContent = 'About ' + remaining + ' seconds remaining';
+        } else if(elapsed < expectedSec * 2) {
+          timeEl.textContent = 'Almost there — just a few more moments...';
+        } else {
+          timeEl.textContent = 'Longer du\u2018as take more time — yours is being crafted with care';
+        }
       }, 500);
     }
     function endProgress() {
@@ -486,10 +731,14 @@
     }
     function initConcernScroll(){
       const cWrap=document.getElementById("concernTags");const cFade=document.getElementById("concernsFade");const cArrow=document.getElementById("concernsArrow");const cFadeLeft=document.getElementById("concernsFadeLeft");const cArrowLeft=document.getElementById("concernsArrowLeft");
-      function checkScroll(){const atEnd=cWrap.scrollLeft+cWrap.clientWidth>=cWrap.scrollWidth-10;const atStart=cWrap.scrollLeft<10;cFade.classList.toggle("hidden",atEnd);cArrow.classList.toggle("hidden",atEnd);cArrowLeft.classList.toggle("visible",!atStart);}
+      function checkScroll(){
+        var sl=Math.abs(cWrap.scrollLeft);var atEnd=sl+cWrap.clientWidth>=cWrap.scrollWidth-10;var atStart=sl<10;
+        cFade.classList.toggle("hidden",atEnd);cArrow.classList.toggle("hidden",atEnd);
+        cFadeLeft.classList.toggle("visible",!atStart);cArrowLeft.classList.toggle("visible",!atStart);
+      }
       cWrap.addEventListener("scroll",checkScroll);new ResizeObserver(checkScroll).observe(cWrap);setTimeout(checkScroll,100);
     }
-    document.addEventListener("DOMContentLoaded",()=>{["userEmail","userConcerns"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("focus",trackFormStart,{once:true});}});const userConcernsEl=document.getElementById("userConcerns");if(userConcernsEl){userConcernsEl.addEventListener("input",updateUserConcernsCount);updateUserConcernsCount();}
+    document.addEventListener("DOMContentLoaded",()=>{["userConcerns"].forEach(id=>{const el=document.getElementById(id);if(el){el.addEventListener("focus",trackFormStart,{once:true});}});const userConcernsEl=document.getElementById("userConcerns");if(userConcernsEl){userConcernsEl.addEventListener("input",updateUserConcernsCount);updateUserConcernsCount();}
       initConcernTags();initConcernScroll();
       // Restore form after tags are built, then highlight matching tags
       restoreFormState();
@@ -523,14 +772,46 @@
       selectLength(defaultTier);
     }
 
-    (function showSeasonalBanner(){
+    function updateSeasonalBanner(){
       const banner=document.getElementById("seasonalBanner");
+      const d=LOCALE_DATA[currentLang];
       const now=new Date();
-      const month=now.getMonth();const day=now.getDate();const dow=now.getDay();
-      if(dow===5){banner.textContent="It's Jumu'ah — the Prophet ﷺ said there is an hour on Friday when du'a is accepted.";banner.style.display="block";}
-      else if((month===2&&day>=10)||(month===3&&day<=25)){banner.textContent="The blessed month of Ramadan — make du'a for your family during these precious nights.";banner.style.display="block";}
-      else if(month===5&&day<=15){banner.textContent="The first 10 days of Dhul Hijjah — among the most beloved days to Allah for good deeds.";banner.style.display="block";}
-    })();
+      const dow=now.getDay();
+      var hijriMonth=0,hijriDay=0;
+      try{
+        var parts=new Intl.DateTimeFormat('en-u-ca-islamic-civil',{day:'numeric',month:'numeric',year:'numeric'}).formatToParts(now);
+        parts.forEach(function(p){if(p.type==='month')hijriMonth=parseInt(p.value);if(p.type==='day')hijriDay=parseInt(p.value);});
+      }catch(e){}
+      var key="";
+      if(hijriMonth===9){
+        if(hijriDay===21||hijriDay===23||hijriDay===25||hijriDay===27||hijriDay===29){key="bannerLQNight";}
+        else if(hijriDay>=21){key="bannerLast10";}
+        else{key="bannerRamadan";}
+      } else if(hijriMonth===10&&hijriDay<=3){key="bannerEidFitr";}
+      else if(hijriMonth===12){
+        if(hijriDay===9) key="bannerArafah";
+        else if(hijriDay===10) key="bannerEidAdha";
+        else if(hijriDay>=11&&hijriDay<=13) key="bannerTashreeq";
+        else if(hijriDay<=8) key="bannerDhulHijjah";
+      } else if(hijriMonth===1){
+        if(hijriDay===1) key="bannerNewYear";
+        else if(hijriDay===9) key="bannerTasua";
+        else if(hijriDay===10) key="bannerAshura";
+      } else if(hijriMonth===3&&hijriDay===12){key="bannerMawlid";}
+      else if(hijriMonth===7){
+        if(hijriDay===27) key="bannerIsra";
+        else if(hijriDay===1) key="bannerRajab";
+      } else if(hijriMonth===8){
+        if(hijriDay===15) key="bannerMidShaban";
+        else if(hijriDay===1) key="bannerShabanStart";
+      } else if(hijriDay===13||hijriDay===14||hijriDay===15){key="bannerWhiteDays";}
+      else if(dow===5){key="bannerJumuah";}
+      if(key&&d[key]){banner.textContent=d[key];banner.style.display="block";}
+      else{banner.style.display="none";}
+    }
+    updateSeasonalBanner();
+    // Set AI disclaimer on initial load
+    (function(){var el=document.getElementById('aiDisclaimer');var d=LOCALE_DATA[currentLang];if(el&&d) el.innerHTML='<strong style="color:var(--gold);">AI:</strong> '+d.resultAiDisclaimer;})();
 
     const COPPA_MIN_AGE=13;
     const uAge=document.getElementById("userAge");
@@ -598,6 +879,7 @@
     function renderMembers(){
       const c=document.getElementById("membersContainer");c.innerHTML="";
       const merged=document.getElementById("addMemberMerged");
+      const d=LOCALE_DATA[currentLang];
       if(!members.length){merged.style.display="flex";return;}
       merged.style.display="none";
       members.forEach((m,i)=>{
@@ -605,10 +887,10 @@
         const card=document.createElement("div");card.className="member-card fade-in";card.style.animationDelay=(i*.05)+"s";
         const ageOpts=getAgeRangesForRelationship(m.relationship);
         const showGender=needsGenderField(m.relationship);
-        const genderCol=showGender?`<div><label>Gender</label><select onchange="members[${i}].gender=this.value"><option value="">Select...</option><option value="Male"${m.gender==="Male"?" selected":""}>Male</option><option value="Female"${m.gender==="Female"?" selected":""}>Female</option></select></div>`:"";
+        const genderCol=showGender?`<div><label>${esc(d.genderLabel)}</label><select onchange="members[${i}].gender=this.value"><option value="">${esc(d.selectPlaceholder)}</option><option value="Male"${m.gender==="Male"?" selected":""}>${esc(d.genderMale)}</option><option value="Female"${m.gender==="Female"?" selected":""}>${esc(d.genderFemale)}</option></select></div>`:"";
         const gridCols=showGender?"1fr 1fr":"1fr";
-        const ageGenderRow=`<div class="grid-2" style="grid-template-columns:${gridCols};"><div><label>Age</label><select onchange="members[${i}].ageRange=this.value"><option value="">Select...</option>${ageOpts.map(a=>`<option value="${a}"${m.ageRange===a?" selected":""}>${a}</option>`).join("")}</select></div>${genderCol}</div>`;
-        card.innerHTML=`<button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button><div class="grid-2"><div><label>Name <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:13px;font-style:normal;">Can be a nickname or \u{1F60A}</span></label><input type="text" placeholder="e.g. Sumaira" value="${esc(m.name)}" oninput="members[${i}].name=this.value"/></div><div><label>Relationship</label><select onchange="onRelationshipChange(${i},this.value)"><option value="">Select...</option>${RELATIONSHIPS.map(r=>`<option value="${r}"${m.relationship===r?" selected":""}>${r}</option>`).join("")}</select></div></div>${ageGenderRow}<div class="field-group"><label>What to pray for</label><div class="concerns-outer" style="margin-bottom:6px;"><div id="memberConcernTags${i}" class="concerns-wrap"></div><span class="concerns-arrow-left" id="mArrowLeft${i}">‹</span><div class="concerns-fade-left" id="mFadeLeft${i}"></div><div class="concerns-fade" id="mFade${i}"></div><span class="concerns-arrow" id="mArrow${i}">›</span></div><textarea id="memberConcernsText${i}" rows="2" maxlength="1000" placeholder="Add anything specific..." oninput="members[${i}].concerns=this.value; updateMemberConcernCount(${i}, this)" style="margin-top:8px;">${esc(m.concerns)}</textarea><div id="memberConcernsCount${i}" style="margin-top:4px;font-size:12px;color:var(--gold);">${(m.concerns||"").length} / 1000</div></div>`;
+        const ageGenderRow=`<div class="grid-2" style="grid-template-columns:${gridCols};"><div><label>${esc(d.ageLabel)}</label><select onchange="members[${i}].ageRange=this.value"><option value="">${esc(d.selectPlaceholder)}</option>${ageOpts.map(a=>`<option value="${a}"${m.ageRange===a?" selected":""}>${a}</option>`).join("")}</select></div>${genderCol}</div>`;
+        card.innerHTML=`<button class="remove-btn" onclick="removeMember(${i})" title="Remove">&times;</button><div class="grid-2"><div><label>${esc(d.nameLabel)} <span style="font-weight:400;text-transform:none;letter-spacing:0;color:var(--text-muted);font-size:13px;font-style:normal;">${esc(d.nameHint)}</span></label><input type="text" placeholder="${esc(d.namePlaceholder)}" value="${esc(m.name)}" oninput="members[${i}].name=this.value"/></div><div><label>${esc(d.relationshipLabel)}</label><select onchange="onRelationshipChange(${i},this.value)"><option value="">${esc(d.selectPlaceholder)}</option>${RELATIONSHIPS.map(r=>`<option value="${r}"${m.relationship===r?" selected":""}>${r}</option>`).join("")}</select></div></div>${ageGenderRow}<div class="field-group"><label>${esc(d.memberConcernsLabel)}</label><div class="concerns-outer" style="margin-bottom:6px;"><div id="memberConcernTags${i}" class="concerns-wrap"></div><span class="concerns-arrow-left" id="mArrowLeft${i}">\u2039</span><div class="concerns-fade-left" id="mFadeLeft${i}"></div><div class="concerns-fade" id="mFade${i}"></div><span class="concerns-arrow" id="mArrow${i}">\u203a</span></div><textarea id="memberConcernsText${i}" rows="2" maxlength="1000" placeholder="${esc(d.memberConcernsPlaceholder)}" oninput="members[${i}].concerns=this.value" style="margin-top:8px;">${esc(m.concerns)}</textarea></div>`;
         c.appendChild(card);
         // Populate scrollable concern tags for this member
         const mct=document.getElementById("memberConcernTags"+i);
@@ -616,11 +898,11 @@
         // Init scroll fades/arrows
         (function(idx){
           const w=document.getElementById("memberConcernTags"+idx);const f=document.getElementById("mFade"+idx);const a=document.getElementById("mArrow"+idx);const fl=document.getElementById("mFadeLeft"+idx);const al=document.getElementById("mArrowLeft"+idx);
-          function chk(){const atEnd=w.scrollLeft+w.clientWidth>=w.scrollWidth-10;const atStart=w.scrollLeft<10;f.classList.toggle("hidden",atEnd);a.classList.toggle("hidden",atEnd);al.classList.toggle("visible",!atStart);}
+          function chk(){var sl=Math.abs(w.scrollLeft);var atEnd=sl+w.clientWidth>=w.scrollWidth-10;var atStart=sl<10;f.classList.toggle("hidden",atEnd);a.classList.toggle("hidden",atEnd);al.classList.toggle("visible",!atStart);}
           w.addEventListener("scroll",chk);new ResizeObserver(chk).observe(w);setTimeout(chk,100);
         })(i);
       });
-      const addBtn=document.createElement("button");addBtn.className="add-btn";addBtn.onclick=function(){addMember();};addBtn.textContent="+ Add Another";c.appendChild(addBtn);
+      const addBtn=document.createElement("button");addBtn.className="add-btn";addBtn.onclick=function(){addMember();};addBtn.textContent=d.addAnother;c.appendChild(addBtn);
     }
     function addMember(){members.push(emptyMember());renderMembers();}
     function removeMember(i){members.splice(i,1);renderMembers();}
@@ -638,9 +920,8 @@
 
     async function generateDua(){
       const userName=document.getElementById("userName").value.trim();
-      const userEmail=document.getElementById("userEmail").value.trim();
+      const userEmail="";
       const btn=document.getElementById("generateBtn");const loadEl=document.getElementById("loadingText");
-      const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;if(!userEmail||!emailRegex.test(userEmail)){showError("Please enter a valid email address (e.g. name@example.com).");return;}if(userEmail.length>254){showError("Email address is too long.");return;}
       const userInfo={name:userName,relationship:"Self",ageRange:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,attributes:"",concerns:document.getElementById("userConcerns").value.trim()};
       const allMembers=[userInfo,...members.filter(m=>m.name.trim())];
       const shouldSkipCache=btn.dataset.skipCache==="true";
@@ -648,7 +929,7 @@
       hideError();btn.disabled=true;
       btn.innerHTML='<span class="spinner">✦</span> Crafting Your Du\'a...';loadEl.textContent="Connecting to our du'a service...";loadEl.style.display="block";startProgress();
       generatedDuaText="";currentDuaId=null;currentEmailToken="";
-      const payload={userName,members:allMembers,occasion:selectedOccasion,lengthTier:selectedLengthTier,deliveryMode:"instant",userEmail,emailOptIn:true,referred:isReferred,skipCache:shouldSkipCache};
+      const payload={userName,members:allMembers,occasion:selectedOccasion,lengthTier:selectedLengthTier,language:currentLang,deliveryMode:"instant",userEmail,emailOptIn:true,referred:isReferred,skipCache:shouldSkipCache};
       // SSE timeout: scales with tier (longer du'as need more generation time)
       var tierTimeouts={quick:60000,post_salah:120000,sujood:180000,laylatul_qadr:360000};
       var sseTimeoutMs=tierTimeouts[selectedLengthTier]||120000;
@@ -683,6 +964,9 @@
         }
         generatedDuaText=fullText;
         if(!fullText){throw new Error("Our du'a service returned an incomplete result. Please try again.");}
+        // Show post-generation email capture
+        var postGenDiv=document.getElementById("postGenEmail");
+        if(postGenDiv){postGenDiv.style.display="block";}
         // PDF available via button — no auto-download
         clearTimeout(sseTimeout);
       }catch(err){
@@ -709,9 +993,11 @@
     async function shareInstagram(){try{await saveDua();await navigator.clipboard.writeText(window.location.origin+"/shared/"+currentDuaId+"?ref=share");alert("Link copied! Paste it in your Instagram story or bio.");}catch(e){alert("Please generate a du'a first.");}}
     async function shareTikTok(){try{await saveDua();await navigator.clipboard.writeText(window.location.origin+"/shared/"+currentDuaId+"?ref=share");alert("Link copied! Paste it in your TikTok bio or comment.");}catch(e){alert("Please generate a du'a first.");}}
     async function sendEmail(){const emailInput=document.getElementById("emailInput");const btn=document.getElementById("emailSendBtn");const successEl=document.getElementById("emailSuccess");const errorEl=document.getElementById("emailError");const email=emailInput.value.trim();if(!email||!email.includes("@")){errorEl.textContent="Please enter a valid email.";errorEl.style.display="block";return;}btn.disabled=true;btn.textContent="Sending...";errorEl.style.display="none";successEl.style.display="none";try{const data=await saveDua();const res=await fetch(API.email,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({duaId:currentDuaId,email,recipientName:"",token:currentEmailToken})});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to send");}successEl.textContent="Du'a sent to "+email+"!";successEl.style.display="block";emailInput.value="";}catch(e){errorEl.textContent=e.message;errorEl.style.display="block";}finally{btn.disabled=false;btn.textContent="Send";}}
+    async function submitPostGenEmail(){const input=document.getElementById("postGenEmailInput");const successEl=document.getElementById("postGenEmailSuccess");const errorEl=document.getElementById("postGenEmailError");const btn=input.nextElementSibling;const email=input.value.trim();const emailRegex=/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;if(!email||!emailRegex.test(email)){errorEl.textContent="Please enter a valid email address.";errorEl.style.display="block";successEl.style.display="none";return;}if(email.length>254){errorEl.textContent="Email address is too long.";errorEl.style.display="block";successEl.style.display="none";return;}btn.disabled=true;btn.textContent="Sending...";errorEl.style.display="none";successEl.style.display="none";try{const data=await saveDua();const res=await fetch(API.email,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({duaId:currentDuaId,email,recipientName:"",token:currentEmailToken})});if(!res.ok){const d=await res.json().catch(()=>({}));throw new Error(d.detail||"Failed to send email");}successEl.textContent="Du'a sent to "+email+"! Check your inbox.";successEl.style.display="block";input.value="";/* Also subscribe to mailing list */fetch("/api/email-subscribe",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({email})}).catch(()=>{});}catch(e){errorEl.textContent=e.message;errorEl.style.display="block";}finally{btn.disabled=false;btn.textContent="Send";}}
+
     function copyDua(){navigator.clipboard.writeText(generatedDuaText).then(()=>{const b=document.getElementById("copyBtn");const lbl=b.querySelector(".icon-lbl");if(lbl){lbl.textContent="Copied!";}setTimeout(()=>{if(lbl)lbl.textContent="Copy";},2500);});}
     function printDua(){const c=document.getElementById("duaContent").innerHTML;const u=document.getElementById("userName").value.trim()||"Family";const oc=OCCASIONS.find(o=>o.id===selectedOccasion);const pt=oc?oc.label:"Personal Du'a";const w=window.open("","_blank");w.document.write('<!DOCTYPE html><html><head><link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,400;1,700&family=Amiri:wght@400;700&display=swap" rel="stylesheet"/><style>body{font-family:"Cormorant Garamond",serif;max-width:700px;margin:40px auto;padding:20px;color:#2c2419;line-height:1.8;background:#fff;}h1{text-align:center;font-size:28px;color:#8b6914;margin:30px 0 15px;}h2{font-size:22px;color:#8b6914;margin:28px 0 12px;}p{font-size:16px;margin:4px 0;color:#2c2419;}strong{color:#8b6914;}em{color:#5a4520;}.divider{text-align:center;margin:20px 0;color:#c9a96e;opacity:.5;}.footer{text-align:center;font-size:12px;color:#7a6b50;margin-top:30px;padding-top:20px;border-top:1px solid #d4c4a0;}</style></head><body><div style="text-align:center;margin-bottom:30px"><div style="font-family:Amiri,serif;font-size:24px;color:#8b6914;text-align:center">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</div><div style="font-size:26px;margin:8px 0;color:#1a1208;font-weight:300">A Du\'a for '+esc(pt)+'</div><div style="font-size:14px;color:#7a6b50;font-style:italic">A personalized supplication for '+esc(u)+'</div></div>'+c+'<div class="footer">Generated at MyDua.AI — support@mydua.ai</div><script>window.print();<\/script></body></html>');w.document.close();}
-    function startOver(){document.getElementById("resultSection").style.display="none";["emailPanel","sharePanel","smsPanel"].forEach(p=>document.getElementById(p).style.display="none");generatedDuaText="";currentDuaId=null;currentEmailToken="";window.scrollTo({top:0,behavior:"smooth"});}
+    function startOver(){document.getElementById("resultSection").style.display="none";["emailPanel","sharePanel","smsPanel"].forEach(p=>document.getElementById(p).style.display="none");var pgDiv=document.getElementById("postGenEmail");if(pgDiv){pgDiv.style.display="none";document.getElementById("postGenEmailInput").value="";document.getElementById("postGenEmailSuccess").style.display="none";document.getElementById("postGenEmailError").style.display="none";}generatedDuaText="";currentDuaId=null;currentEmailToken="";window.scrollTo({top:0,behavior:"smooth"});}
     function showError(msg){const e=document.getElementById("errorMsg");e.textContent=msg;e.style.display="block";}
     function hideError(){document.getElementById("errorMsg").style.display="none";}
 
@@ -724,8 +1010,8 @@
     window.addEventListener("online",()=>{hideError();document.getElementById("generateBtn").disabled=false;});
 
     // Form auto-save to sessionStorage
-    function saveFormState(){try{const state={email:document.getElementById("userEmail").value,age:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,concerns:document.getElementById("userConcerns").value,occasion:selectedOccasion,tier:selectedLengthTier,members:members};sessionStorage.setItem("mydua_form",JSON.stringify(state));}catch(e){}}
-    function restoreFormState(){try{const raw=sessionStorage.getItem("mydua_form");if(!raw)return;const state=JSON.parse(raw);if(state.email)document.getElementById("userEmail").value=state.email;if(state.age)document.getElementById("userAge").value=state.age;if(state.gender)document.getElementById("userGender").value=state.gender;if(state.concerns){document.getElementById("userConcerns").value=state.concerns;updateUserConcernsCount();}if(state.occasion){selectedOccasion=state.occasion;document.getElementById("occasionSelect").value=state.occasion;}if(state.tier)selectLength(state.tier);if(state.members&&state.members.length){members=state.members;renderMembers();}}catch(e){}}
+    function saveFormState(){try{const state={age:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,concerns:document.getElementById("userConcerns").value,occasion:selectedOccasion,tier:selectedLengthTier,members:members};sessionStorage.setItem("mydua_form",JSON.stringify(state));}catch(e){}}
+    function restoreFormState(){try{const raw=sessionStorage.getItem("mydua_form");if(!raw)return;const state=JSON.parse(raw);if(state.age)document.getElementById("userAge").value=state.age;if(state.gender)document.getElementById("userGender").value=state.gender;if(state.concerns){document.getElementById("userConcerns").value=state.concerns;updateUserConcernsCount();}if(state.occasion){selectedOccasion=state.occasion;document.getElementById("occasionSelect").value=state.occasion;}if(state.tier)selectLength(state.tier);if(state.members&&state.members.length){members=state.members;renderMembers();}}catch(e){}}
     setInterval(saveFormState,5000);
 
     // Referral tracking

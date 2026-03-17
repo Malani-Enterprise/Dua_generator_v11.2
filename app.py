@@ -1,6 +1,14 @@
 """
-MyDua.AI — Backend API (v1.5.2 Production)
+MyDua.AI — Backend API (v1.5.3 Production)
 ==========================================
+v1.5.3 Changes (Anti-Truncation, Admin Dashboard & Email Opt-in):
+  - Token budgets bumped ~50% across all tiers to eliminate truncation (1.5× max word target + formatting headroom)
+  - Admin dashboard at /admin/stats — password-protected visual analytics page
+  - Post-generation email capture — email no longer required upfront; opt-in prompt shown after du'a
+  - submitPostGenEmail() JS handler with validation, email send, and mailing list subscribe
+  - Arabic & Spanish language passthrough verified end-to-end (same pipeline as Urdu fix)
+  - ADMIN_PASSWORD env var for dashboard access
+
 v1.5.2 Changes (Tier Calibration & Dynamic Concern Strategy):
   - Du'a tiers recalibrated to match reading-time targets (Quick: 15-30s, Post Salah: 3-5min, Sujood: 8-10min, LQ: ~30min)
   - Superseding concern-density rule: word count drives strategy (theme-only → grouped → brief → moderate → deep → expansion)
@@ -151,6 +159,7 @@ SECRET_KEY = os.getenv("SECRET_KEY", "change-me-in-production")
 APP_ENV = os.getenv("APP_ENV", "development")
 TRUSTED_PROXY_DEPTH = int(os.getenv("TRUSTED_PROXY_DEPTH", "1"))  # Fix #4: how many proxy hops to trust
 ANALYTICS_KEY = os.getenv("ANALYTICS_KEY", "")  # Required to access /api/analytics
+ADMIN_PASSWORD = os.getenv("ADMIN_PASSWORD", "")  # Required to access /admin/stats dashboard
 CAN_SPAM_ADDRESS = os.getenv("CAN_SPAM_ADDRESS", "MyDua.AI, PO Box 000, City, State ZIP")  # CAN-SPAM physical address
 
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "")
@@ -346,7 +355,7 @@ class Database:
         conn.commit()
         conn.close()
 
-    def make_cache_key(self, user_name: str, members: list, occasion: str = "general", tier: str = "post_salah") -> str:
+    def make_cache_key(self, user_name: str, members: list, occasion: str = "general", tier: str = "post_salah", language: str = "en") -> str:
         normalized = []
         for m in sorted(members, key=lambda x: x.get("relationship", "")):
             normalized.append({
@@ -356,7 +365,7 @@ class Database:
                 "gender": str(m.get("gender", "")).strip().lower(),
                 "concerns": str(m.get("concerns", "")).strip().lower()[:100],
             })
-        raw = json.dumps({"members": normalized, "occasion": occasion, "tier": tier}, sort_keys=True)
+        raw = json.dumps({"members": normalized, "occasion": occasion, "tier": tier, "language": language}, sort_keys=True)
         return hashlib.sha256(raw.encode()).hexdigest()[:16]
 
     # ── Jobs ──
@@ -1139,35 +1148,35 @@ def get_length_instruction(member_count: int, is_solo: bool = False, tier: str =
 
 
 def get_max_tokens(member_count: int, is_solo: bool = False, tier: str = "post_salah") -> int:
-    """Token budget per tier, calibrated to reading-time targets (~1.3 tokens/word).
+    """Token budget per tier — generous headroom (~1.5× max word target) to prevent truncation.
     Quick: 15-30s (40-200 words) | Post Salah: 3-5 min (450-1000 words)
     Sujood: 8-10 min (1200-2200 words) | Laylatul Qadr: ~30 min (4500-8000 words)
     """
     tier = tier if tier in LENGTH_TIERS else "post_salah"
     if tier == "quick":
-        if is_solo: return 200          # ~75 words max
-        elif member_count <= 2: return 250  # ~100 words
-        elif member_count <= 4: return 300  # ~130 words
-        elif member_count <= 6: return 350  # ~160 words
-        else: return 400                # ~200 words
+        if is_solo: return 300          # 75 words × 1.5 + formatting headroom
+        elif member_count <= 2: return 350  # 100 words × 1.5 + headroom
+        elif member_count <= 4: return 400  # 130 words × 1.5 + headroom
+        elif member_count <= 6: return 500  # 160 words × 1.5 + headroom
+        else: return 600                # 200 words × 1.5 + headroom
     elif tier == "laylatul_qadr":
-        if is_solo: return 7000         # ~5000 words
-        elif member_count <= 2: return 7500  # ~5500 words
-        elif member_count <= 4: return 8500  # ~6000 words
-        elif member_count <= 6: return 10000 # ~7000 words
-        else: return 11000              # ~8000 words
+        if is_solo: return 10000        # 5000 words × 1.5 + headroom
+        elif member_count <= 2: return 11000  # 5500 words × 1.5 + headroom
+        elif member_count <= 4: return 12000  # 6000 words × 1.5 + headroom
+        elif member_count <= 6: return 14000  # 7000 words × 1.5 + headroom
+        else: return 16000              # 8000 words × 1.5 + headroom
     elif tier == "sujood":
-        if is_solo: return 2200         # ~1500 words
-        elif member_count <= 2: return 2400  # ~1600 words
-        elif member_count <= 4: return 2800  # ~1800 words
-        elif member_count <= 6: return 3200  # ~2000 words
-        else: return 3500               # ~2200 words
+        if is_solo: return 3000         # 1500 words × 1.5 + headroom
+        elif member_count <= 2: return 3200  # 1600 words × 1.5 + headroom
+        elif member_count <= 4: return 3600  # 1800 words × 1.5 + headroom
+        elif member_count <= 6: return 4000  # 2000 words × 1.5 + headroom
+        else: return 4500               # 2200 words × 1.5 + headroom
     else:  # post_salah (default)
-        if is_solo: return 900          # ~600 words
-        elif member_count <= 2: return 1100  # ~700 words
-        elif member_count <= 4: return 1200  # ~800 words
-        elif member_count <= 6: return 1400  # ~900 words
-        else: return 1500               # ~1000 words
+        if is_solo: return 1200         # 600 words × 1.5 + headroom
+        elif member_count <= 2: return 1400  # 700 words × 1.5 + headroom
+        elif member_count <= 4: return 1600  # 800 words × 1.5 + headroom
+        elif member_count <= 6: return 1800  # 900 words × 1.5 + headroom
+        else: return 2000               # 1000 words × 1.5 + headroom
 
 
 # ══════════════════════════════════════════════════
@@ -1209,6 +1218,7 @@ class GenerateDuaRequest(BaseModel):
     members: list[FamilyMember]
     occasion: str = "general"
     lengthTier: str = ""  # "quick", "post_salah", "sujood", "laylatul_qadr" — empty means use occasion default
+    language: str = "en"  # "en", "es", "ur", "ar" — language for generated du'a
     skipCache: bool = False
     deliveryMode: str = "instant"
     userEmail: Optional[str] = None  # Fix #7: Validated field instead of header
@@ -1387,7 +1397,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("MyDua.AI v1.5.2 — Production")
+    logger.info("MyDua.AI v1.5.3 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -1424,7 +1434,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.5.2",
+    version="1.5.3",
     lifespan=lifespan,
 )
 
@@ -1579,7 +1589,7 @@ def _describe_member_naturally(m: FamilyMember, all_members: list[FamilyMember])
 
 
 def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "general",
-                 tier: str = "post_salah") -> str:
+                 tier: str = "post_salah", language: str = "en") -> str:
     member_count = len(members)
 
     # If name is blank, use second-person address
@@ -1596,6 +1606,28 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
     length_instruction = get_length_instruction(member_count, is_solo=is_solo, tier=tier)
     occasion_label = OCCASION_LABELS.get(occasion, OCCASION_LABELS["general"])
 
+    # ── Language instruction ──
+    LANG_INSTRUCTIONS = {
+        "en": "",  # Default — no extra instruction needed
+        "es": (
+            "LANGUAGE: Write the ENTIRE du'a in Spanish (Español). "
+            "Keep Arabic phrases (Bismillah, Ameen, Names of Allah, Quranic verses in Arabic script) as-is, "
+            "but all surrounding text, section headers, prayers, and prose must be in Spanish.\n\n"
+        ),
+        "ur": (
+            "LANGUAGE: Write the ENTIRE du'a in Urdu (اردو). "
+            "Use Urdu script throughout. Keep Arabic phrases (Bismillah, Ameen, Names of Allah, Quranic verses in Arabic script) as-is, "
+            "but all surrounding text, section headers, prayers, and prose must be in Urdu. "
+            "Use natural Urdu Islamic vocabulary (e.g. دعا, رحمت, مغفرت, ہدایت). Write right-to-left.\n\n"
+        ),
+        "ar": (
+            "LANGUAGE: Write the ENTIRE du'a in Arabic (العربية). "
+            "Use Modern Standard Arabic throughout. Quranic verses should be in their original Arabic. "
+            "All section headers, prayers, prose, and personal supplications must be in Arabic.\n\n"
+        ),
+    }
+    lang_instruction = LANG_INSTRUCTIONS.get(language, "")
+
     if is_solo:
         # ── Solo user prompt: personal du'a, no family member sections ──
         m = members[0]
@@ -1604,6 +1636,8 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
         else:
             prompt = "Please write a deeply personal du'a. The person has not provided their name, so write in second person — address them as 'you' and 'your' throughout, as if guiding them in conversation with Allah.\n\n"
         prompt += f"OCCASION: This du'a is for {occasion_label}.\n\n"
+        if lang_instruction:
+            prompt += lang_instruction
         prompt += f"LENGTH INSTRUCTION: {length_instruction}\n\n"
 
         prompt += "IMPORTANT STRUCTURE RULE: This du'a is for ONE person only. "
@@ -1635,6 +1669,8 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
         else:
             prompt = "Please write a personalized du'a for this person and their family. The person has not provided their name, so address them in second person ('you', 'your').\n\n"
         prompt += f"OCCASION: This du'a is for {occasion_label}.\n\n"
+        if lang_instruction:
+            prompt += lang_instruction
         prompt += f"LENGTH INSTRUCTION: {length_instruction}\n\n"
 
         prompt += "<user_data>\n"
@@ -1677,38 +1713,42 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
         wpc = content_words / total_concerns  # words per concern
 
         # ── Strategy spectrum based on words-per-concern ──
+        # CORE PRINCIPLE: The user's chosen length tier sets a HARD word ceiling.
+        # If the number of concerns would push the du'a past that ceiling,
+        # we gradually blend concerns into themes rather than overshoot.
         if wpc < 8:
             prompt += (
-                f"CONCERN STRATEGY (SUPERSEDING RULE — this overrides all other concern guidance): "
-                f"There are {total_concerns} concerns but only ~{int(content_words)} content words available. "
+                f"CONCERN STRATEGY (HARD WORD CEILING — this overrides all other concern guidance): "
+                f"There are {total_concerns} concerns but the user chose a length tier that allows only ~{int(content_words)} content words. "
+                f"The word count is a HARD maximum that must NOT be exceeded. "
                 f"You MUST distill ALL concerns into 1-2 overarching spiritual themes "
                 f"(e.g. 'health & healing', 'guidance & provision', 'protection & mercy'). "
                 f"Do NOT attempt to address individual concerns — weave themes into a single heartfelt supplication. "
-                f"The word count is a hard constraint.\n\n"
+                f"It is better to theme concerns beautifully than to rush through them and overshoot the word count.\n\n"
             )
         elif wpc < 20:
             prompt += (
-                f"CONCERN STRATEGY (SUPERSEDING RULE — this overrides all other concern guidance): "
-                f"There are {total_concerns} concerns across ~{int(content_words)} content words. "
+                f"CONCERN STRATEGY (HARD WORD CEILING — this overrides all other concern guidance): "
+                f"There are {total_concerns} concerns but the user's length tier allows only ~{int(content_words)} content words. "
+                f"The word count is a HARD maximum that must NOT be exceeded. "
                 f"Group each person's concerns into 1-2 key themes rather than addressing each individually. "
-                f"Prioritize spiritual depth over exhaustive coverage. "
-                f"The word count is a hard constraint.\n\n"
+                f"Prioritize spiritual depth over exhaustive coverage — theme gracefully rather than overshoot.\n\n"
             )
         elif wpc < 40:
             prompt += (
-                f"CONCERN STRATEGY: {total_concerns} concerns with adequate space. "
+                f"CONCERN STRATEGY: {total_concerns} concerns with adequate space (~{int(content_words)} content words). "
                 f"Address each concern briefly and individually in 1-2 sentences. "
-                f"Stay within the word count — be concise but personal.\n\n"
+                f"Stay within the word count — the user's chosen length tier is the hard ceiling. Be concise but personal.\n\n"
             )
         elif wpc < 80:
             prompt += (
-                f"CONCERN STRATEGY: {total_concerns} concerns with good space available. "
+                f"CONCERN STRATEGY: {total_concerns} concerns with good space available (~{int(content_words)} content words). "
                 f"Address each concern individually with moderate depth — a few sentences each, "
-                f"weaving in spiritual context and references where natural.\n\n"
+                f"weaving in spiritual context and references where natural. Stay within the word count.\n\n"
             )
         elif wpc < 150:
             prompt += (
-                f"CONCERN STRATEGY: {total_concerns} concerns with generous space. "
+                f"CONCERN STRATEGY: {total_concerns} concerns with generous space (~{int(content_words)} content words). "
                 f"Explore each concern with full spiritual depth — multiple sentences, "
                 f"Quranic/Hadith references, and emotional resonance for each.\n\n"
             )
@@ -1817,6 +1857,7 @@ async def call_anthropic_stream(prompt: str, max_tokens: int = 8000):
             ) as response:
                 response.raise_for_status()
                 event_type = None
+                stop_reason = None
                 async for line in response.aiter_lines():
                     if line.startswith("event: "):
                         event_type = line[7:].strip()
@@ -1828,7 +1869,17 @@ async def call_anthropic_stream(prompt: str, max_tokens: int = 8000):
                                 yield delta["text"]
                         except (json.JSONDecodeError, KeyError):
                             pass
+                    elif line.startswith("data: ") and event_type == "message_delta":
+                        try:
+                            data = json.loads(line[6:])
+                            stop_reason = data.get("delta", {}).get("stop_reason")
+                        except (json.JSONDecodeError, KeyError):
+                            pass
                     elif line.startswith("data: ") and event_type == "message_stop":
+                        if stop_reason == "max_tokens":
+                            logger.warning(f"Stream truncated: hit max_tokens ({max_tokens})")
+                            # Auto-close with ameen so du'a doesn't end abruptly
+                            yield "\n\nآمِين يَا رَبَّ الْعَالَمِين"
                         return
                 return  # Stream ended normally
         except (httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as e:
@@ -2179,7 +2230,7 @@ async def send_dua_email(to_email: str, recipient_name: str, dua_text: str, shar
 async def health_check():
     checks = {
         "status": "ok",
-        "version": "1.5.2",
+        "version": "1.5.3",
         "timestamp": datetime.now(timezone.utc).isoformat(),
     }
     # Verify database is reachable
@@ -2233,7 +2284,7 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
 
     # Check cache
     if not req.skipCache:
-        cache_key = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier)
+        cache_key = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier, req.language)
         cached = db.cache_get(cache_key)
         if cached:
             db.track("duas_generated")
@@ -2251,7 +2302,7 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
                 background_tasks.add_task(auto_email_cached)
             return {"dua": cached, "cached": True}
 
-    prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier)
+    prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier, language=req.language)
 
     # Detect solo user for token/length optimization
     is_solo = (len(valid_members) == 1 and valid_members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
@@ -2298,7 +2349,7 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
         return {"jobId": job_id, "status": "processing", "cached": False}
 
     # Instant mode
-    cache_key = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier)
+    cache_key = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier, req.language)
     db.cache_put(cache_key, dua_text)
     db.track("duas_generated")
     if req.userEmail and req.emailOptIn:
@@ -2343,7 +2394,7 @@ async def generate_dua_stream(req: GenerateDuaRequest, request: Request):
 
     # Check cache — if cached, send full text as single SSE event
     if not req.skipCache:
-        cache_key = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier)
+        cache_key = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier, req.language)
         cached = db.cache_get(cache_key)
         if cached:
             db.track("duas_generated")
@@ -2372,7 +2423,7 @@ async def generate_dua_stream(req: GenerateDuaRequest, request: Request):
     elif AI_PROVIDER != "anthropic" and not OPENAI_API_KEY:
         raise HTTPException(500, "Du'a service is not configured. Please contact support@mydua.ai.")
 
-    prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier)
+    prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier, language=req.language)
     is_solo = (len(valid_members) == 1 and valid_members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
     max_tokens = get_max_tokens(len(valid_members), is_solo=is_solo, tier=tier)
 
@@ -2389,7 +2440,7 @@ async def generate_dua_stream(req: GenerateDuaRequest, request: Request):
             # Post-stream: cache, track, auto-email (fire-and-forget)
             complete_text = "".join(full_text)
             if complete_text:
-                ck = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier)
+                ck = db.make_cache_key(req.userName, [m.model_dump() for m in valid_members], req.occasion, tier, req.language)
                 db.cache_put(ck, complete_text)
                 db.track("duas_generated")
                 if req.userEmail and req.emailOptIn:
@@ -2612,6 +2663,78 @@ async def get_analytics(request: Request):
     stats["share_conversion_rate"] = round((rg / rv) * 100, 1) if rv > 0 else 0
 
     return stats
+
+
+@app.get("/admin/stats", response_class=HTMLResponse)
+async def admin_dashboard(request: Request):
+    """Password-protected admin analytics dashboard."""
+    # Auth via query param ?pw= or ANALYTICS_KEY as fallback
+    pw = request.query_params.get("pw", "")
+    if not ADMIN_PASSWORD or not hmac.compare_digest(pw, ADMIN_PASSWORD):
+        return HTMLResponse(
+            content="""<!DOCTYPE html><html><head><title>Admin Login — MyDua.AI</title>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0b08;color:#e8dcc8;display:flex;justify-content:center;align-items:center;min-height:100vh;}
+.card{background:#1a1510;border:1px solid rgba(201,169,110,.2);border-radius:16px;padding:40px;max-width:400px;width:90%;text-align:center;}
+h1{font-size:22px;color:#c9a96e;margin-bottom:8px;}p{font-size:14px;color:#8a7d6b;margin-bottom:24px;}
+input{width:100%;padding:14px;background:#0d0b08;border:1px solid rgba(201,169,110,.3);border-radius:8px;color:#e8dcc8;font-size:16px;margin-bottom:16px;}
+button{width:100%;padding:14px;background:linear-gradient(135deg,#c9a96e,#8b6914);border:none;border-radius:8px;color:#fff;font-size:16px;cursor:pointer;font-weight:600;}
+button:hover{opacity:.9;}</style></head><body><div class="card"><h1>MyDua.AI Admin</h1><p>Enter your admin password to view analytics.</p>
+<form method="GET" action="/admin/stats"><input type="password" name="pw" placeholder="Admin Password" required autofocus/>
+<button type="submit">Sign In</button></form></div></body></html>""",
+            status_code=200
+        )
+
+    # Fetch stats
+    stats = db.get_stats()
+    stats["total_email_subscribers"] = db.get_email_count()
+    pv = stats.get("total_page_views", 0)
+    fs = stats.get("total_form_started", 0)
+    dg = stats.get("total_duas_generated", 0)
+    rv = stats.get("total_referred_visits", 0)
+    rg = stats.get("total_referred_generations", 0)
+    bounce = round((1 - fs / pv) * 100, 1) if pv > 0 else 0
+    form_conv = round((dg / fs) * 100, 1) if fs > 0 else 0
+    share_conv = round((rg / rv) * 100, 1) if rv > 0 else 0
+
+    def stat_card(label, value, color="#c9a96e"):
+        return f'<div class="stat"><div class="stat-val" style="color:{color}">{value}</div><div class="stat-lbl">{label}</div></div>'
+
+    cards = "".join([
+        stat_card("Page Views", f"{pv:,}"),
+        stat_card("Form Starts", f"{fs:,}"),
+        stat_card("Du'as Generated", f"{dg:,}"),
+        stat_card("Email Subscribers", f'{stats.get("total_email_subscribers", 0):,}'),
+        stat_card("Bounce Rate", f"{bounce}%", "#e8825a" if bounce > 60 else "#6ec96e"),
+        stat_card("Form → Du'a", f"{form_conv}%", "#6ec96e" if form_conv > 30 else "#e8825a"),
+        stat_card("Share → Generate", f"{share_conv}%"),
+        stat_card("PDFs Downloaded", f'{stats.get("total_pdfs_downloaded", 0):,}'),
+        stat_card("SMS Shared", f'{stats.get("total_sms_shared", 0):,}'),
+        stat_card("Referred Visits", f"{rv:,}"),
+        stat_card("Referred Gens", f"{rg:,}"),
+        stat_card("Donations", f'{stats.get("donations_completed", 0):,}'),
+    ])
+
+    return HTMLResponse(content=f"""<!DOCTYPE html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Admin Dashboard — MyDua.AI</title>
+<meta name="robots" content="noindex,nofollow"/>
+<style>
+*{{margin:0;padding:0;box-sizing:border-box;}}
+body{{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0b08;color:#e8dcc8;padding:24px;min-height:100vh;}}
+.header{{text-align:center;margin-bottom:32px;}}
+.header h1{{font-size:28px;color:#c9a96e;margin-bottom:4px;}}
+.header p{{font-size:14px;color:#8a7d6b;}}
+.grid{{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:16px;max-width:900px;margin:0 auto;}}
+.stat{{background:#1a1510;border:1px solid rgba(201,169,110,.15);border-radius:12px;padding:24px 16px;text-align:center;}}
+.stat-val{{font-size:32px;font-weight:700;margin-bottom:4px;}}
+.stat-lbl{{font-size:13px;color:#8a7d6b;text-transform:uppercase;letter-spacing:.05em;}}
+.footer{{text-align:center;margin-top:32px;font-size:12px;color:#5a5040;}}
+</style></head><body>
+<div class="header"><h1>MyDua.AI Dashboard</h1><p>v1.5.3 — Real-time analytics</p></div>
+<div class="grid">{cards}</div>
+<div class="footer">Refresh page for latest data. Data resets on server restart (SQLite in-memory counters).</div>
+</body></html>""")
 
 
 @app.get("/privacy", response_class=HTMLResponse)
