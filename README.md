@@ -1,6 +1,6 @@
 # MyDua.AI
 
-**Version 1.5.5** | March 2026
+**Version 1.5.6** | March 2026
 
 A du'a lives deep in your heart. We help it find its words — personalized Islamic supplications for every occasion, powered by Quran and authentic Hadith.
 
@@ -141,7 +141,8 @@ Optional integrations: SMTP (email), Stripe (payments), Twilio (SMS), Lob (postc
 
 See `CHANGELOG.md` for the complete version history. Recent releases:
 
-- **v1.5.5** — Capacitor hybrid app wrapper (this release)
+- **v1.5.6** — Third-party audit patch: admin auth, email-subscribe, OpenAI streaming (this release)
+- **v1.5.5** — Capacitor hybrid app wrapper
 - **v1.5.4** — Age granularity, expanded concerns, COPPA fix
 - **v1.5.3** — Full i18n, RTL fixes, admin dashboard, email opt-in
 - **v1.5.2** — Tier calibration, dynamic concern strategy

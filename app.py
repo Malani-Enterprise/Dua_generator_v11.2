@@ -1,6 +1,22 @@
 """
-MyDua.AI — Backend API (v1.5.5 Production)
+MyDua.AI — Backend API (v1.5.6 Production)
 ==========================================
+v1.5.6 Changes (Third-Party Audit Patch — Medium Findings):
+  - F-03: Admin dashboard login switched from GET ?pw= to POST form with signed session cookie
+    - Password no longer transmitted in URL (query string, server logs, browser history)
+    - HMAC-signed httponly/secure/samesite=strict cookie with 1-hour expiry
+    - Cache-Control: no-store on all admin pages
+    - Added /admin/logout endpoint to clear session
+  - F-04: Implemented /api/email-subscribe endpoint
+    - Frontend submitPostGenEmail() was calling this route but it didn't exist (returned 405)
+    - New endpoint upserts into existing email_list table via db.track_email()
+    - Rate-limited (10/hour per IP), respects unsubscribe status, RFC-5322 email validation
+  - F-05: SSE streaming now respects AI_PROVIDER setting
+    - Added call_openai_stream() — full OpenAI SSE streaming with retry logic
+    - /api/generate-dua-stream dispatches to Anthropic or OpenAI based on AI_PROVIDER env var
+    - Startup log now shows which streaming provider is active
+    - Startup warning if configured provider's API key is missing
+
 v1.5.5 Changes (Capacitor Hybrid App Wrapper):
   - Capacitor hybrid app infrastructure for iOS + Android (Capacitor v6)
   - PWA manifest (manifest.json) + service worker with offline caching strategies
@@ -1041,6 +1057,8 @@ def normalize_age_for_prompt(age_range: str) -> str:
 # ── Du'a Length Tiers ──
 # Named after Islamic prayer contexts — not arbitrary labels.
 # Each tier specifies: word target, Names of Allah count, Quranic/Hadith reference count.
+# ── Ramadan-specific LENGTH_TIERS (original from v1.5.5) ──
+# These word counts are tuned for Ramadan: Post Salah 3-5 min, Sujood 8-10 min, LQ ~30 min
 LENGTH_TIERS = {
     "quick": {
         # "A breath of du'a." — after wudu, between tasks, a brief moment of supplication.
@@ -1134,23 +1152,122 @@ LENGTH_TIERS = {
 }
 
 # ── Word budget midpoints per tier/bucket (used by concern-density calculator) ──
-TIER_WORD_BUDGET = {
+# Ramadan budgets (original from v1.5.5)
+TIER_WORD_BUDGET_RAMADAN = {
     "quick":         {"solo": 58, 2: 88, 4: 115, 6: 145, 99: 180},
     "post_salah":    {"solo": 525, 2: 625, 4: 725, 6: 825, 99: 925},
     "sujood":        {"solo": 1350, 2: 1450, 4: 1650, 6: 1850, 99: 2050},
     "laylatul_qadr": {"solo": 4750, 2: 5000, 4: 5500, 6: 6250, 99: 7000},
 }
 
+# ── General-specific LENGTH_TIERS ──
+# Recalibrated for everyday use: Post Salah 2-3 min (~275-425 words), Sujood 5-7 min (~700-1000 words)
+# Spiritual text reading pace: ~130-150 WPM
+GENERAL_LENGTH_TIERS = {
+    "quick": {
+        # Same as Ramadan quick — a brief moment of supplication. 15-30 seconds.
+        # 1 Name of Allah | 1 Quranic reference
+        "solo": (
+            "Write a very brief, focused du'a of approximately 40-75 words ONLY. "
+            "This is meant to be read in 15-30 seconds — keep it extremely concise. "
+            "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
+            "Structure: 1-2 sentences opening with Bismillah invoking 1 Name of Allah (Asma ul-Husna), "
+            "1 brief Quranic reference, 1-2 sentences of personal supplication, "
+            "and close with آمِين يَا رَبَّ الْعَالَمِين. "
+            "Do NOT use section headers or ornamental breaks. Keep it as a single flowing paragraph. "
+            "Brevity is essential — the word count is a hard constraint."
+        ),
+        "family": {
+            2: "Write a very brief du'a of approximately 75-100 words total. Reading time: 30 seconds. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. No section headers. Single flowing paragraph with Ameen. The word count is a hard constraint.",
+            4: "Write a brief du'a of approximately 100-130 words total. Reading time: ~45 seconds. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. Minimal structure, short closing with Ameen. The word count is a hard constraint.",
+            6: "Write a brief du'a of approximately 130-160 words total. Reading time: ~1 minute. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. Minimal structure, short closing with Ameen. The word count is a hard constraint.",
+            99: "Write a brief du'a of approximately 160-200 words total. Reading time: ~1 minute. Invoke 1 Name of Allah. 1 Quranic reference. 1 sentence per person. Minimal structure, short closing with Ameen. The word count is a hard constraint.",
+        },
+    },
+    "post_salah": {
+        # General Post Salah — 2-3 minutes (~275-425 words)
+        # 3 Names of Allah | ~2 Quranic/Hadith references
+        # Shorter than Ramadan post_salah — everyday reflection after prayer
+        "solo": (
+            "Write a heartfelt du'a of approximately 275-400 words total. "
+            "This is meant to be read in 2-3 minutes — meaningful but concise. "
+            "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
+            "Instead, weave all prayers into a single flowing supplication with: "
+            "an opening with Bismillah, brief praise invoking 3 of His Names (Asma ul-Husna), "
+            "include approximately 2 Quranic verses or authentic Hadith references woven naturally throughout, "
+            "a personal section addressing the supplicant's concerns, "
+            "and a closing with Ameen. "
+            "This is a post-salah du'a — the natural window after completing prayer. "
+            "End with آمِين يَا رَبَّ الْعَالَمِين."
+        ),
+        "family": {
+            2: "Write a heartfelt du'a of approximately 300-425 words total. Reading time: 2-3 minutes. Invoke 3 Names of Allah. Include approximately 2 Quranic/Hadith references. Opening with Bismillah and praise. Concise individual mentions. Complete closing with Ameen.",
+            4: "Write a heartfelt du'a of approximately 350-450 words total. Reading time: ~3 minutes. Invoke 3 Names of Allah. ~2 Quranic/Hadith references. Full opening, individual mentions, closing with Ameen.",
+            6: "Write a heartfelt du'a of approximately 375-475 words total. Reading time: ~3 minutes. Invoke 3 Names of Allah. ~2 Quranic/Hadith references. Full opening, individual mentions, closing with Ameen.",
+            99: "Write a heartfelt du'a of approximately 400-500 words total. Reading time: ~3 minutes. Invoke 3 Names of Allah. ~2 Quranic/Hadith references. Full opening, individual mentions, closing with Ameen.",
+        },
+    },
+    "sujood": {
+        # General Sujood — 5-7 minutes (~700-1000 words)
+        # 6 Names of Allah | ~5 Quranic/Hadith references
+        # Shorter than Ramadan sujood — deep but not marathon
+        "solo": (
+            "Write a rich, deeply personal du'a of approximately 700-950 words total. "
+            "This is meant to be read in 5-7 minutes — give it spiritual depth and emotional weight. "
+            "This is a du'a for ONE person only — do NOT create any 'Individual Family Member' sections. "
+            "Instead, weave all prayers into a single flowing supplication with: "
+            "an opening praising Allah invoking 6 of His Names (Asma ul-Husna), explaining the relevance of each, "
+            "approximately 5 Quranic verses and authentic Hadith references woven naturally throughout, "
+            "a deeply personal section that addresses concerns with spiritual depth, "
+            "and a closing with forgiveness, mercy, and Ameen. "
+            "This is a sujood du'a — for extended moments in prostration where you pour your heart out. "
+            "Let every prayer breathe. "
+            "End with آمِين يَا رَبَّ الْعَالَمِين."
+        ),
+        "family": {
+            2: "Write a deeply personal du'a of approximately 750-1000 words total. Reading time: 5-7 minutes. Invoke 6 Names of Allah throughout. Include approximately 5 Quranic/Hadith references. Rich opening. Each person's section should be heartfelt and personal. Closing with Ameen.",
+            4: "Write a deeply personal du'a of approximately 800-1050 words total. Reading time: ~6 minutes. Invoke 6 Names of Allah. ~5 Quranic/Hadith references. Rich opening, personal sections. Closing with Ameen.",
+            6: "Write a deeply personal du'a of approximately 850-1100 words total. Reading time: ~7 minutes. Invoke 6 Names of Allah. ~5 Quranic/Hadith references. Rich opening, personal sections. Closing with Ameen.",
+            99: "Write a deeply personal du'a of approximately 900-1150 words total. Reading time: ~7 minutes. Invoke 6 Names of Allah. ~5 Quranic/Hadith references. Rich opening, personal sections. Closing with Ameen.",
+        },
+    },
+}
+
+# General word budget midpoints (recalibrated for shorter everyday du'as)
+TIER_WORD_BUDGET_GENERAL = {
+    "quick":      {"solo": 58, 2: 88, 4: 115, 6: 145, 99: 180},
+    "post_salah": {"solo": 338, 2: 363, 4: 400, 6: 425, 99: 450},
+    "sujood":     {"solo": 825, 2: 875, 4: 925, 6: 975, 99: 1025},
+}
+
+# ── Occasion-aware tier routing ──
+# Maps occasion → (length_tiers_dict, word_budget_dict)
+# Ramadan uses the original LENGTH_TIERS; General uses GENERAL_LENGTH_TIERS; others fall back to Ramadan
+OCCASION_TIER_DATA = {
+    "general": (GENERAL_LENGTH_TIERS, TIER_WORD_BUDGET_GENERAL),
+    "ramadan": (LENGTH_TIERS, TIER_WORD_BUDGET_RAMADAN),
+}
+# Legacy alias kept for backward compat with concern-density calculator
+TIER_WORD_BUDGET = TIER_WORD_BUDGET_RAMADAN
+
 # Default tier per occasion
 OCCASION_DEFAULT_TIER = {
     "ramadan": "laylatul_qadr",
+    "general": "quick",
 }
 # All other occasions default to "post_salah"
 
 
-def get_length_instruction(member_count: int, is_solo: bool = False, tier: str = "post_salah") -> str:
-    tier = tier if tier in LENGTH_TIERS else "post_salah"
-    tier_data = LENGTH_TIERS[tier]
+def _get_tier_data(occasion: str = "general"):
+    """Return (length_tiers, word_budget) for the given occasion."""
+    return OCCASION_TIER_DATA.get(occasion, (LENGTH_TIERS, TIER_WORD_BUDGET_RAMADAN))
+
+
+def get_length_instruction(member_count: int, is_solo: bool = False, tier: str = "post_salah",
+                           occasion: str = "general") -> str:
+    length_tiers, _ = _get_tier_data(occasion)
+    tier = tier if tier in length_tiers else "post_salah"
+    tier_data = length_tiers[tier]
     if is_solo:
         return tier_data["solo"]
     family = tier_data["family"]
@@ -1164,36 +1281,61 @@ def get_length_instruction(member_count: int, is_solo: bool = False, tier: str =
         return family[99]
 
 
-def get_max_tokens(member_count: int, is_solo: bool = False, tier: str = "post_salah") -> int:
+def get_max_tokens(member_count: int, is_solo: bool = False, tier: str = "post_salah",
+                   occasion: str = "general") -> int:
     """Token budget per tier — generous headroom (~1.5× max word target) to prevent truncation.
-    Quick: 15-30s (40-200 words) | Post Salah: 3-5 min (450-1000 words)
-    Sujood: 8-10 min (1200-2200 words) | Laylatul Qadr: ~30 min (4500-8000 words)
+    General:  Quick 15-30s | Post Salah 2-3 min (275-500 words) | Sujood 5-7 min (700-1150 words)
+    Ramadan:  Quick 15-30s | Post Salah 3-5 min (450-1000 words) | Sujood 8-10 min (1200-2200 words) | LQ ~30 min (4500-8000 words)
     """
-    tier = tier if tier in LENGTH_TIERS else "post_salah"
-    if tier == "quick":
-        if is_solo: return 300          # 75 words × 1.5 + formatting headroom
-        elif member_count <= 2: return 350  # 100 words × 1.5 + headroom
-        elif member_count <= 4: return 400  # 130 words × 1.5 + headroom
-        elif member_count <= 6: return 500  # 160 words × 1.5 + headroom
-        else: return 600                # 200 words × 1.5 + headroom
-    elif tier == "laylatul_qadr":
-        if is_solo: return 10000        # 5000 words × 1.5 + headroom
-        elif member_count <= 2: return 11000  # 5500 words × 1.5 + headroom
-        elif member_count <= 4: return 12000  # 6000 words × 1.5 + headroom
-        elif member_count <= 6: return 14000  # 7000 words × 1.5 + headroom
-        else: return 16000              # 8000 words × 1.5 + headroom
-    elif tier == "sujood":
-        if is_solo: return 3000         # 1500 words × 1.5 + headroom
-        elif member_count <= 2: return 3200  # 1600 words × 1.5 + headroom
-        elif member_count <= 4: return 3600  # 1800 words × 1.5 + headroom
-        elif member_count <= 6: return 4000  # 2000 words × 1.5 + headroom
-        else: return 4500               # 2200 words × 1.5 + headroom
-    else:  # post_salah (default)
-        if is_solo: return 1200         # 600 words × 1.5 + headroom
-        elif member_count <= 2: return 1400  # 700 words × 1.5 + headroom
-        elif member_count <= 4: return 1600  # 800 words × 1.5 + headroom
-        elif member_count <= 6: return 1800  # 900 words × 1.5 + headroom
-        else: return 2000               # 1000 words × 1.5 + headroom
+    length_tiers, _ = _get_tier_data(occasion)
+    tier = tier if tier in length_tiers else "post_salah"
+
+    if occasion == "general":
+        # ── General occasion token budgets ──
+        if tier == "quick":
+            if is_solo: return 300
+            elif member_count <= 2: return 350
+            elif member_count <= 4: return 400
+            elif member_count <= 6: return 500
+            else: return 600
+        elif tier == "sujood":
+            if is_solo: return 1900          # 950 words × 1.5 + headroom
+            elif member_count <= 2: return 2000  # 1000 words × 1.5 + headroom
+            elif member_count <= 4: return 2100  # 1050 words × 1.5 + headroom
+            elif member_count <= 6: return 2200  # 1100 words × 1.5 + headroom
+            else: return 2300               # 1150 words × 1.5 + headroom
+        else:  # post_salah (default for General)
+            if is_solo: return 800           # 400 words × 1.5 + headroom
+            elif member_count <= 2: return 900   # 425 words × 1.5 + headroom
+            elif member_count <= 4: return 1000  # 450 words × 1.5 + headroom
+            elif member_count <= 6: return 1050  # 475 words × 1.5 + headroom
+            else: return 1100               # 500 words × 1.5 + headroom
+    else:
+        # ── Ramadan / other occasions token budgets (original v1.5.5) ──
+        if tier == "quick":
+            if is_solo: return 300
+            elif member_count <= 2: return 350
+            elif member_count <= 4: return 400
+            elif member_count <= 6: return 500
+            else: return 600
+        elif tier == "laylatul_qadr":
+            if is_solo: return 10000
+            elif member_count <= 2: return 11000
+            elif member_count <= 4: return 12000
+            elif member_count <= 6: return 14000
+            else: return 16000
+        elif tier == "sujood":
+            if is_solo: return 3000
+            elif member_count <= 2: return 3200
+            elif member_count <= 4: return 3600
+            elif member_count <= 6: return 4000
+            else: return 4500
+        else:  # post_salah (default)
+            if is_solo: return 1200
+            elif member_count <= 2: return 1400
+            elif member_count <= 4: return 1600
+            elif member_count <= 6: return 1800
+            else: return 2000
 
 
 # ══════════════════════════════════════════════════
@@ -1343,7 +1485,7 @@ class GiftDuaRequest(BaseModel):
     recipientGender: str = ""
     concerns: str = ""
     personalMessage: str = ""
-    occasion: str = "ramadan"  # ramadan, illness, newborn, hajj, wedding, hardship, general
+    occasion: str = "general"  # general, ramadan, illness, newborn, hajj, wedding, hardship
 
     @field_validator("senderName", "recipientName")
     @classmethod
@@ -1414,7 +1556,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("MyDua.AI v1.5.5 — Production")
+    logger.info("MyDua.AI v1.5.6 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -1426,7 +1568,14 @@ async def lifespan(app):
     logger.info(f"ElevenLabs:   {'configured' if ELEVENLABS_API_KEY else 'not set (browser TTS fallback)'}")
     logger.info(f"Analytics:    {'key configured' if ANALYTICS_KEY else 'NO KEY — endpoint locked (all requests return 401)'}")
     logger.info(f"Base URL:     {APP_BASE_URL}")
+    logger.info(f"Streaming:    {AI_PROVIDER} (SSE)")
     logger.info(f"Database:     {DB_PATH}")
+
+    # v1.5.6: Warn if streaming provider API key is missing
+    if AI_PROVIDER == "anthropic" and not ANTHROPIC_API_KEY:
+        logger.warning("AI_PROVIDER is 'anthropic' but ANTHROPIC_API_KEY is not set — streaming du'a generation will fail.")
+    elif AI_PROVIDER == "openai" and not OPENAI_API_KEY:
+        logger.warning("AI_PROVIDER is 'openai' but OPENAI_API_KEY is not set — streaming du'a generation will fail.")
 
     # Fix #8: Cleanup expired data
     j, c, r = db.cleanup()
@@ -1451,7 +1600,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.5.5",
+    version="1.5.6",
     lifespan=lifespan,
 )
 
@@ -1549,6 +1698,81 @@ OCCASION_LABELS = {
     "general": "everyday life — asking Allah for guidance, protection, and mercy",
 }
 
+# ── Occasion-Specific System Prompt Supplements ──
+# These are appended to SYSTEM_PROMPT when the occasion is active.
+# They override the default sectioned structure with occasion-appropriate guidance.
+OCCASION_SYSTEM_SUPPLEMENTS = {
+    "general": """
+
+--------------------------------------------------
+
+GENERAL DU'A — SPECIAL FORMAT INSTRUCTIONS
+*** THESE INSTRUCTIONS SUPERSEDE the "STRUCTURE" section (sections 1–4) in the system prompt. ***
+*** For this General/Everyday du'a, IGNORE the 4-section template (Opening, Personal, Individual, Closing). ***
+
+STRUCTURE — FLOWING, NOT SECTIONED:
+Do NOT use rigid labeled sections like "### 1. Opening Section", "### 2. Personal Section",
+"### 3. Individual Sections", or "### 4. Family Closing Section".
+Do NOT number your sections. Do NOT use "---" dividers between phases.
+Instead, write ONE continuous, flowing supplication that intertwines praise, petition,
+self-reflection, and surrender seamlessly — as if the supplicant is pouring their heart out
+in a single unbroken conversation with Allah.
+
+The du'a should read like a river — themes flow into each other naturally:
+- Praise of Allah transitions into a personal request which transitions into gratitude
+  which transitions into asking for guidance which transitions into prayers for family.
+- Names of Allah are invoked where they naturally fit, not grouped in an "opening block."
+- Quranic meanings surface throughout, not clustered at the start or end.
+- Begin with Bismillah, but do NOT follow it with a rigid "praise block" — let praise emerge naturally.
+
+You may still use ## headers for individual family members when the du'a includes family,
+but the supplicant's own portion should be ONE flowing piece — no sub-headers, no labeled phases.
+
+BECOMING A BETTER MUSLIM — REQUIRED THEME:
+Every General du'a MUST include prayers for becoming a better Muslim, woven naturally
+into the flow. Include PRACTICAL, SPECIFIC examples of what a better Muslim looks like
+in everyday life. Do not be vague — be concrete:
+
+Examples to weave in (select 3-5 that fit the person's life context):
+• Waking for Fajr without resentment — finding sweetness in rising while the world sleeps
+• Making salah on time, not rushing through it, being present in every rakat
+• Speaking with kindness even when angry or tired — controlling the tongue
+• Lowering the gaze and guarding the heart from what does not benefit it
+• Being honest in business and dealings, even when dishonesty would profit more
+• Giving sadaqah quietly, without counting or expecting return
+• Checking on neighbors, especially the elderly and the lonely
+• Reading even one ayah of Quran daily and sitting with its meaning
+• Making dhikr in the mundane moments — driving, cooking, waiting
+• Forgiving quickly, even when the other person does not apologize
+• Being patient with parents, even when their demands feel heavy
+• Raising children with gentleness and not just discipline
+• Keeping promises, being on time, honoring commitments as acts of worship
+• Putting the phone down during salah, during family time, during moments with Allah
+
+The du'a should ask Allah to help the supplicant embody these qualities — not as a lecture,
+but as a heartfelt plea: "Ya Allah, help me be the kind of Muslim who..."
+
+APPLY THE 10 PRINCIPLES OF POWERFUL DU'A:
+1. Arc, Not List — the du'a is an emotional journey, not a catalog of requests
+2. Wave, Not Plateau — intensity rises and falls; peaks separated by rest
+3. Name → Acknowledge → Ask — praise the Name's meaning, then petition from it
+4. Sentence Heartbeat — medium, medium, SHORT PUNCH, long exhale
+5. Paradox Is Wisdom — "dignity in humility, freedom in surrender"
+6. Temporal Completeness — cover past, present, and future
+7. Physical First, Spiritual Second — ground in body imagery before soul
+8. I/You Intimacy — first-person singular addressing Allah; "we" only for communal
+9. Seamless Transitions — each thought seeds the next; no jarring jumps
+10. Tradition Absorbed — prophetic du'as woven in naturally, never block-quoted
+
+AMEEN CHECKPOINT:
+After every 3-4 distinct petitions, include a brief "Ameen" or "Ya Rabb, Ameen"
+as a natural breathing pause. This mirrors how du'a is actually recited aloud —
+the listener and reader need moments to affirm and absorb. Do not save all the Ameen
+for the end. The final closing should still end with آمِين يَا رَبَّ الْعَالَمِين.
+
+""",
+}
+
 OCCASION_DISPLAY = {
     "ramadan": "Ramadan — Last 10 Nights",
     "jumuah": "Jumu'ah (Friday)",
@@ -1626,11 +1850,15 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
     is_solo = (member_count == 1 and members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
 
     # Resolve tier: user choice > occasion default > "post_salah"
-    if not tier or tier not in LENGTH_TIERS:
+    occasion_tiers, _ = _get_tier_data(occasion)
+    if not tier or tier not in occasion_tiers:
         tier = OCCASION_DEFAULT_TIER.get(occasion, "post_salah")
 
-    length_instruction = get_length_instruction(member_count, is_solo=is_solo, tier=tier)
+    length_instruction = get_length_instruction(member_count, is_solo=is_solo, tier=tier, occasion=occasion)
     occasion_label = OCCASION_LABELS.get(occasion, OCCASION_LABELS["general"])
+
+    # ── Occasion-specific system prompt supplement (injected at top of user prompt) ──
+    occasion_supplement = OCCASION_SYSTEM_SUPPLEMENTS.get(occasion, "")
 
     # ── Language instruction ──
     LANG_INSTRUCTIONS = {
@@ -1661,6 +1889,8 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
             prompt = f"Please write a deeply personal du'a for <user_data>{display_name}</user_data>.\n\n"
         else:
             prompt = "Please write a deeply personal du'a. The person has not provided their name, so write in second person — address them as 'you' and 'your' throughout, as if guiding them in conversation with Allah.\n\n"
+        if occasion_supplement:
+            prompt += occasion_supplement
         prompt += f"OCCASION: This du'a is for {occasion_label}.\n\n"
         if lang_instruction:
             prompt += lang_instruction
@@ -1668,10 +1898,16 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
 
         prompt += "IMPORTANT STRUCTURE RULE: This du'a is for ONE person only. "
         prompt += "Do NOT create separate 'Individual Family Member' sections or '## A Du'a for [Name]' headers. "
-        prompt += "Instead, write a single flowing supplication with:\n"
-        prompt += "  1. Opening — Praise and glorify Allah\n"
-        prompt += "  2. Personal supplication — Address the person's life, concerns, and blessings in a natural, flowing way\n"
-        prompt += "  3. Closing — Forgiveness, mercy, occasion-appropriate references, and Ameen\n\n"
+        if occasion_supplement:
+            # General (and future occasions with supplements) already provide their own
+            # structure instructions — flowing format, no rigid sections.
+            prompt += "Follow the structure instructions provided above.\n\n"
+        else:
+            # Ramadan and other occasions without a supplement use the classic 3-part layout
+            prompt += "Instead, write a single flowing supplication with:\n"
+            prompt += "  1. Opening — Praise and glorify Allah\n"
+            prompt += "  2. Personal supplication — Address the person's life, concerns, and blessings in a natural, flowing way\n"
+            prompt += "  3. Closing — Forgiveness, mercy, occasion-appropriate references, and Ameen\n\n"
 
         age_desc = normalize_age_for_prompt(m.ageRange)
         # SECURITY FIX: Sanitize user inputs and wrap in user_data tags
@@ -1694,6 +1930,8 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
             prompt = f"Please write a personalized du'a for <user_data>{display_name}</user_data> and their family.\n\n"
         else:
             prompt = "Please write a personalized du'a for this person and their family. The person has not provided their name, so address them in second person ('you', 'your').\n\n"
+        if occasion_supplement:
+            prompt += occasion_supplement
         prompt += f"OCCASION: This du'a is for {occasion_label}.\n\n"
         if lang_instruction:
             prompt += lang_instruction
@@ -1725,7 +1963,8 @@ def build_prompt(user_name: str, members: list[FamilyMember], occasion: str = "g
     if total_concerns > 0:
         # Look up the word budget for this tier + member bucket
         bucket = "solo" if is_solo else (2 if member_count <= 2 else 4 if member_count <= 4 else 6 if member_count <= 6 else 99)
-        word_budget = TIER_WORD_BUDGET.get(tier, {}).get(bucket, 500)
+        _, occasion_budget = _get_tier_data(occasion)
+        word_budget = occasion_budget.get(tier, {}).get(bucket, 500)
 
         # Calculate available content words (after opening/closing overhead)
         if is_solo:
@@ -1920,6 +2159,64 @@ async def call_anthropic_stream(prompt: str, max_tokens: int = 8000):
                 raise
 
 
+async def call_openai_stream(prompt: str, max_tokens: int = 8000):
+    """Stream tokens from OpenAI via SSE. Yields text deltas as they arrive."""
+    last_error = None
+    for attempt in range(MAX_RETRIES + 1):
+        try:
+            async with http_client.stream(
+                "POST",
+                "https://api.openai.com/v1/chat/completions",
+                headers={
+                    "Content-Type": "application/json",
+                    "Authorization": f"Bearer {OPENAI_API_KEY}",
+                },
+                json={
+                    "model": "gpt-4o",
+                    "max_tokens": max_tokens,
+                    "stream": True,
+                    "temperature": 0.8,
+                    "messages": [
+                        {"role": "system", "content": SYSTEM_PROMPT},
+                        {"role": "user", "content": prompt},
+                    ],
+                },
+            ) as response:
+                response.raise_for_status()
+                async for line in response.aiter_lines():
+                    if not line.startswith("data: "):
+                        continue
+                    payload = line[6:].strip()
+                    if payload == "[DONE]":
+                        return
+                    try:
+                        data = json.loads(payload)
+                        choice = data.get("choices", [{}])[0]
+                        delta = choice.get("delta", {})
+                        content = delta.get("content")
+                        if content:
+                            yield content
+                        # Check for truncation (finish_reason == "length")
+                        finish = choice.get("finish_reason")
+                        if finish == "length":
+                            logger.warning(f"OpenAI stream truncated: hit max_tokens ({max_tokens})")
+                            yield "\n\nآمِين يَا رَبَّ الْعَالَمِين"
+                            return
+                    except (json.JSONDecodeError, KeyError, IndexError):
+                        pass
+                return  # Stream ended normally
+        except (httpx.HTTPStatusError, httpx.ConnectError, httpx.TimeoutException) as e:
+            last_error = e
+            status = getattr(getattr(e, "response", None), "status_code", 0)
+            if isinstance(e, httpx.HTTPStatusError) and status not in RETRYABLE_STATUS_CODES:
+                raise
+            if attempt < MAX_RETRIES:
+                logger.warning(f"OpenAI stream attempt {attempt + 1} failed ({type(e).__name__}), retrying in {RETRY_BACKOFF}s...")
+                await asyncio.sleep(RETRY_BACKOFF * (attempt + 1))
+            else:
+                raise
+
+
 async def call_anthropic_batch(prompt: str, max_tokens: int, user_name: str, user_email: str) -> str:
     """Non-blocking batch submission. Returns job_id immediately."""
     request_id = uuid.uuid4().hex[:8]
@@ -2031,8 +2328,8 @@ async def poll_batch_job(job_id: str):
 async def generate_dua_text(prompt: str, member_count: int = 1, is_solo: bool = False,
                             delivery_mode: str = "instant",
                             user_name: str = "", user_email: str = "",
-                            tier: str = "post_salah") -> str:
-    max_tokens = get_max_tokens(member_count, is_solo=is_solo, tier=tier)
+                            tier: str = "post_salah", occasion: str = "general") -> str:
+    max_tokens = get_max_tokens(member_count, is_solo=is_solo, tier=tier, occasion=occasion)
     if AI_PROVIDER == "anthropic":
         if not ANTHROPIC_API_KEY:
             raise HTTPException(500, "Anthropic API key not configured.")
@@ -2340,7 +2637,7 @@ async def generate_dua(req: GenerateDuaRequest, request: Request, background_tas
             delivery_mode=req.deliveryMode,
             user_name=req.userName,
             user_email=req.userEmail or "",
-            tier=tier,
+            tier=tier, occasion=req.occasion,
         )
     except httpx.HTTPStatusError as e:
         status = e.response.status_code
@@ -2451,12 +2748,15 @@ async def generate_dua_stream(req: GenerateDuaRequest, request: Request):
 
     prompt = build_prompt(req.userName, valid_members, req.occasion, tier=tier, language=req.language)
     is_solo = (len(valid_members) == 1 and valid_members[0].relationship.strip().lower() in ("self", "myself", "me", ""))
-    max_tokens = get_max_tokens(len(valid_members), is_solo=is_solo, tier=tier)
+    max_tokens = get_max_tokens(len(valid_members), is_solo=is_solo, tier=tier, occasion=req.occasion)
+
+    # Select streaming function based on configured AI provider
+    stream_fn = call_openai_stream if AI_PROVIDER == "openai" else call_anthropic_stream
 
     async def event_stream():
         full_text = []
         try:
-            async for chunk in call_anthropic_stream(prompt, max_tokens):
+            async for chunk in stream_fn(prompt, max_tokens):
                 full_text.append(chunk)
                 yield f"data: {json.dumps({'type': 'delta', 'text': chunk})}\n\n"
 
@@ -2660,6 +2960,36 @@ async def track_pageview(request: Request):
     return {"status": "tracked"}
 
 
+class EmailSubscribeRequest(BaseModel):
+    email: str
+
+
+@app.post("/api/email-subscribe")
+async def email_subscribe(req: EmailSubscribeRequest, request: Request):
+    """Subscribe an email to the mailing list (post-generation opt-in).
+    Uses the existing email_list table via db.track_email(). Rate-limited to
+    prevent abuse."""
+    email = req.email.strip().lower()
+    if not email or "@" not in email or len(email) > 254:
+        raise HTTPException(400, "Please provide a valid email address.")
+    # RFC-5322 basic check
+    email_regex = re.compile(r"^[^\s@]+@[^\s@]+\.[^\s@]{2,}$")
+    if not email_regex.match(email):
+        raise HTTPException(400, "Please provide a valid email address.")
+    client_ip = get_client_ip(request)
+    allowed, _ = db.rate_limit_check(f"email_sub:{client_ip}", max_requests=10, window_seconds=3600)
+    if not allowed:
+        raise HTTPException(429, "Rate limit exceeded.", headers={"Retry-After": "3600"})
+    # Check if already unsubscribed — respect their preference
+    if db.is_unsubscribed(email):
+        return {"status": "ok", "message": "Already on our list."}
+    db.track_email(email)
+    db.log_event("email_subscribed", detail=f"source:post_gen", ip=client_ip,
+                 user_agent=request.headers.get("user-agent", ""),
+                 referrer=request.headers.get("referer", ""))
+    return {"status": "ok", "message": "Subscribed successfully."}
+
+
 @app.get("/api/analytics")
 async def get_analytics(request: Request):
     # Auth: require ANALYTICS_KEY via query param or Authorization header
@@ -2691,25 +3021,80 @@ async def get_analytics(request: Request):
     return stats
 
 
-@app.get("/admin/stats", response_class=HTMLResponse)
-async def admin_dashboard(request: Request):
-    """Password-protected admin analytics dashboard."""
-    # Auth via query param ?pw= or ANALYTICS_KEY as fallback
-    pw = request.query_params.get("pw", "")
-    if not ADMIN_PASSWORD or not hmac.compare_digest(pw, ADMIN_PASSWORD):
-        return HTMLResponse(
-            content="""<!DOCTYPE html><html><head><title>Admin Login — MyDua.AI</title>
+def _admin_login_page(error: str = ""):
+    """Return the admin login HTML form (POST-based, no password in URL)."""
+    err_html = f'<div style="color:#e8825a;font-size:14px;margin-bottom:16px;">{error}</div>' if error else ""
+    return HTMLResponse(
+        content=f"""<!DOCTYPE html><html><head><title>Admin Login — MyDua.AI</title>
 <meta name="viewport" content="width=device-width,initial-scale=1"/>
-<style>*{margin:0;padding:0;box-sizing:border-box;}body{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0b08;color:#e8dcc8;display:flex;justify-content:center;align-items:center;min-height:100vh;}
-.card{background:#1a1510;border:1px solid rgba(201,169,110,.2);border-radius:16px;padding:40px;max-width:400px;width:90%;text-align:center;}
-h1{font-size:22px;color:#c9a96e;margin-bottom:8px;}p{font-size:14px;color:#8a7d6b;margin-bottom:24px;}
-input{width:100%;padding:14px;background:#0d0b08;border:1px solid rgba(201,169,110,.3);border-radius:8px;color:#e8dcc8;font-size:16px;margin-bottom:16px;}
-button{width:100%;padding:14px;background:linear-gradient(135deg,#c9a96e,#8b6914);border:none;border-radius:8px;color:#fff;font-size:16px;cursor:pointer;font-weight:600;}
-button:hover{opacity:.9;}</style></head><body><div class="card"><h1>MyDua.AI Admin</h1><p>Enter your admin password to view analytics.</p>
-<form method="GET" action="/admin/stats"><input type="password" name="pw" placeholder="Admin Password" required autofocus/>
+<style>*{{margin:0;padding:0;box-sizing:border-box;}}body{{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0b08;color:#e8dcc8;display:flex;justify-content:center;align-items:center;min-height:100vh;}}
+.card{{background:#1a1510;border:1px solid rgba(201,169,110,.2);border-radius:16px;padding:40px;max-width:400px;width:90%;text-align:center;}}
+h1{{font-size:22px;color:#c9a96e;margin-bottom:8px;}}p{{font-size:14px;color:#8a7d6b;margin-bottom:24px;}}
+input{{width:100%;padding:14px;background:#0d0b08;border:1px solid rgba(201,169,110,.3);border-radius:8px;color:#e8dcc8;font-size:16px;margin-bottom:16px;}}
+button{{width:100%;padding:14px;background:linear-gradient(135deg,#c9a96e,#8b6914);border:none;border-radius:8px;color:#fff;font-size:16px;cursor:pointer;font-weight:600;}}
+button:hover{{opacity:.9;}}</style></head><body><div class="card"><h1>MyDua.AI Admin</h1><p>Enter your admin password to view analytics.</p>
+{err_html}<form method="POST" action="/admin/stats"><input type="password" name="pw" placeholder="Admin Password" required autofocus/>
 <button type="submit">Sign In</button></form></div></body></html>""",
-            status_code=200
-        )
+        status_code=200,
+        headers={"Cache-Control": "no-store"}
+    )
+
+
+def _verify_admin_session(request: Request) -> bool:
+    """Check if the request has a valid admin session cookie."""
+    token = request.cookies.get("admin_session", "")
+    if not token or not ADMIN_PASSWORD:
+        return False
+    expected = hmac.new(SECRET_KEY.encode(), ADMIN_PASSWORD.encode(), hashlib.sha256).hexdigest()[:64]
+    return hmac.compare_digest(token, expected)
+
+
+def _make_admin_token() -> str:
+    """Create a signed admin session token."""
+    return hmac.new(SECRET_KEY.encode(), ADMIN_PASSWORD.encode(), hashlib.sha256).hexdigest()[:64]
+
+
+@app.get("/admin/stats", response_class=HTMLResponse)
+async def admin_dashboard_get(request: Request):
+    """Admin dashboard — GET shows login form or dashboard if already authenticated."""
+    if not _verify_admin_session(request):
+        return _admin_login_page()
+
+    return await _render_admin_dashboard()
+
+
+@app.post("/admin/stats", response_class=HTMLResponse)
+async def admin_dashboard_post(request: Request):
+    """Admin dashboard — POST handles login form submission."""
+    form = await request.form()
+    pw = form.get("pw", "")
+    if not ADMIN_PASSWORD or not hmac.compare_digest(str(pw), ADMIN_PASSWORD):
+        return _admin_login_page(error="Invalid password. Please try again.")
+
+    # Set signed session cookie and render dashboard
+    response = await _render_admin_dashboard()
+    response.set_cookie(
+        key="admin_session",
+        value=_make_admin_token(),
+        httponly=True,
+        secure=APP_ENV == "production",
+        samesite="strict",
+        max_age=3600,  # 1 hour session
+        path="/admin"
+    )
+    return response
+
+
+@app.get("/admin/logout")
+async def admin_logout():
+    """Clear admin session cookie and redirect to login."""
+    response = RedirectResponse(url="/admin/stats", status_code=303)
+    response.delete_cookie("admin_session", path="/admin")
+    return response
+
+
+async def _render_admin_dashboard():
+    """Render the admin analytics dashboard HTML."""
 
     # Fetch stats
     stats = db.get_stats()
@@ -2757,10 +3142,10 @@ body{{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0b08;color:#e8dc
 .stat-lbl{{font-size:13px;color:#8a7d6b;text-transform:uppercase;letter-spacing:.05em;}}
 .footer{{text-align:center;margin-top:32px;font-size:12px;color:#5a5040;}}
 </style></head><body>
-<div class="header"><h1>MyDua.AI Dashboard</h1><p>v1.5.5 — Real-time analytics</p></div>
+<div class="header"><h1>MyDua.AI Dashboard</h1><p>v1.5.6 — Real-time analytics</p></div>
 <div class="grid">{cards}</div>
-<div class="footer">Refresh page for latest data. Data resets on server restart (SQLite in-memory counters).</div>
-</body></html>""")
+<div class="footer"><a href="/admin/logout" style="color:#c9a96e;text-decoration:none;">Log out</a> &middot; Refresh page for latest data. Data resets on server restart (SQLite in-memory counters).</div>
+</body></html>""", headers={"Cache-Control": "no-store"})
 
 
 @app.get("/privacy", response_class=HTMLResponse)
@@ -3429,7 +3814,7 @@ async def generate_gift_dua(req: GiftDuaRequest, request: Request):
         f"Age range: {req.recipientAgeRange or 'Not specified'}\n"
         f"Gender: {req.recipientGender or 'Not specified'}\n"
         f"Concerns/prayer requests: {req.concerns or 'General well-being and blessings'}\n\n"
-        f"LENGTH INSTRUCTION: {get_length_instruction(2)}\n\n"
+        f"LENGTH INSTRUCTION: {get_length_instruction(2, occasion=occasion)}\n\n"
         f"IMPORTANT: Write this du'a as if {req.senderName} is making du'a FOR {req.recipientName}. "
         f"Use second-person address to Allah ('O Allah, bless {req.recipientName}...'). "
         f"The tone should convey deep love and care from the sender to the recipient.\n\n"

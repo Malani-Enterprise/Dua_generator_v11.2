@@ -1,0 +1,70 @@
+<!--
+  MyDua.AI — Android Manifest Additions
+  =======================================
+  These entries need to be merged into android/app/src/main/AndroidManifest.xml
+  after running `npx cap add android`.
+-->
+
+<!-- ─── Permissions (add inside <manifest> tag, before <application>) ─── -->
+
+<!-- Network (required for API calls) -->
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+<!-- Location (Hajj/Umrah phase detection at sacred sites) -->
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<!-- Background location for moving between Hajj sites -->
+<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+<!-- Push Notifications -->
+<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+<uses-permission android:name="android.permission.VIBRATE" />
+
+<!-- Audio (devotional du'a playback with screen locked) -->
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+<uses-permission android:name="android.permission.FOREGROUND_SERVICE_MEDIA_PLAYBACK" />
+<uses-permission android:name="android.permission.WAKE_LOCK" />
+
+<!-- File storage (PDF journal export, cached audio) -->
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    android:maxSdkVersion="32" />
+<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    android:maxSdkVersion="29" />
+
+
+<!--
+  ─── Application-level additions (add inside <application> tag) ───
+-->
+
+<!-- Deep links for prayer request inbox: mydua.ai/journey/{code} -->
+<!--
+<activity ...existing MainActivity...>
+  <intent-filter android:autoVerify="true">
+    <action android:name="android.intent.action.VIEW" />
+    <category android:name="android.intent.category.DEFAULT" />
+    <category android:name="android.intent.category.BROWSABLE" />
+    <data android:scheme="https" android:host="mydua.ai" />
+  </intent-filter>
+</activity>
+-->
+
+<!-- Foreground service for background audio playback during Tawaf -->
+<!--
+<service
+    android:name=".AudioPlaybackService"
+    android:foregroundServiceType="mediaPlayback"
+    android:exported="false" />
+-->
+
+<!-- Firebase Cloud Messaging for push notifications -->
+<!--
+<service
+    android:name="com.google.firebase.messaging.FirebaseMessagingService"
+    android:exported="false">
+  <intent-filter>
+    <action android:name="com.google.firebase.MESSAGING_EVENT" />
+  </intent-filter>
+</service>
+-->

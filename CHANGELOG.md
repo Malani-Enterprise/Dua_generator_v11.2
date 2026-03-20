@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.5.6 — Third-Party Audit Patch (March 2026)
+
+Security and reliability fixes for three Medium-severity findings from an independent code review of v1.5.5.
+
+### F-03: Admin Dashboard — GET → POST Auth with Session Cookie
+- **Before:** Admin password was sent as `?pw=` query parameter via `GET` form. This exposed the password in URL bars, browser history, server access logs, and proxy logs.
+- **After:** Login form now uses `method="POST"`. On successful auth, a signed `admin_session` cookie is set (`httponly`, `secure` in production, `samesite=strict`, 1-hour expiry). Subsequent GET requests to `/admin/stats` validate the cookie — no password in the URL at any point.
+- Added `Cache-Control: no-store` on all admin pages to prevent caching of sensitive dashboard data.
+- Added `/admin/logout` endpoint that clears the session cookie and redirects to login.
+- Cookie token is HMAC-SHA256 signed using `SECRET_KEY` — not guessable without the server secret.
+
+### F-04: `/api/email-subscribe` Endpoint Implemented
+- **Before:** The frontend `submitPostGenEmail()` function called `POST /api/email-subscribe` after emailing a du'a to also subscribe the user to the mailing list. But no such route existed in `app.py` — the call silently returned a `405 Method Not Allowed` error.
+- **After:** New `POST /api/email-subscribe` endpoint implemented. Accepts `{email}`, validates (RFC-5322 regex, length ≤ 254 chars), respects existing unsubscribe status, and upserts into the existing `email_list` table via `db.track_email()`.
+- Rate-limited: 10 requests per hour per IP.
+- Logs a `email_subscribed` analytics event.
+
+### F-05: SSE Streaming Respects `AI_PROVIDER` Setting
+- **Before:** `/api/generate-dua-stream` always called `call_anthropic_stream()` regardless of the `AI_PROVIDER` environment variable. Users who set `AI_PROVIDER=openai` got Anthropic streaming (or errors if only an OpenAI key was configured).
+- **After:** New `call_openai_stream()` async generator added with full OpenAI SSE protocol support (parses `data:` lines, handles `[DONE]` sentinel, detects `finish_reason: "length"` truncation with auto-ameen fallback). The streaming endpoint now dispatches to the correct provider based on `AI_PROVIDER`.
+- Startup log now prints which streaming provider is active.
+- Startup warning emitted if the configured provider's API key is missing.
+
+### Files Changed
+- **`app.py`** — all three fixes, version bump to 1.5.6
+- **`README.md`** — version bump, version history updated
+- **`CHANGELOG.md`** — this entry
+
+### Backward Compatibility
+- **No frontend changes** — `index.html` is untouched; the existing `submitPostGenEmail()` call now succeeds instead of silently failing.
+- **No new environment variables** — all fixes use existing configuration (`SECRET_KEY`, `ADMIN_PASSWORD`, `AI_PROVIDER`).
+- **Admin sessions** — existing users will need to re-login (one-time) since the auth mechanism changed from query param to cookie.
+- **Web-only users unaffected** — all changes are backend-only.
+
+---
+
 ## v1.5.5 — Capacitor Hybrid App Wrapper (March 2026)
 
 Adds the infrastructure to wrap MyDua.AI as a native iOS + Android app via Capacitor, while maintaining full backward compatibility with the existing website.

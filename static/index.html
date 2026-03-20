@@ -98,9 +98,9 @@
         <div>
           <label for="occasionSelect" id="occasionLabel">Occasion <span style="font-weight:500;text-transform:none;letter-spacing:0;color:var(--text-muted);font-style:italic;font-size:14px;">Weaves the right verses & Hadith</span></label>
           <select id="occasionSelect" onchange="selectedOccasion=this.value;updateLengthDefault();trackFormStart();">
+            <option value="general">🤲  General</option>
             <option value="ramadan">🌙  Ramadan</option>
             <option value="jumuah" disabled>🕌  Jumu'ah — Coming Soon</option>
-            <option value="general" disabled>🤲  General — Coming Soon</option>
             <option value="illness" disabled>💚  Healing — Coming Soon</option>
             <option value="exams" disabled>📖  Exams — Coming Soon</option>
             <option value="travel" disabled>✈️  Travel — Coming Soon</option>
@@ -146,10 +146,9 @@
       <div class="field-group" style="margin-bottom:0">
         <label id="lengthLabel">Du'a Length</label>
         <div id="lengthToggle" style="display:flex;gap:0;background:rgba(255,255,255,0.04);border:1px solid rgba(201,169,110,0.2);border-radius:10px;overflow:hidden;">
-          <button type="button" class="length-pill" data-tier="quick" onclick="selectLength('quick')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Quick<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">~30 sec</span></button>
+          <button type="button" class="length-pill active" data-tier="quick" onclick="selectLength('quick')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:rgba(201,169,110,0.12);font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Quick<span style="display:block;font-size:10px;font-weight:400;color:var(--gold);opacity:.7;margin-top:2px;">~30 sec</span></button>
           <button type="button" class="length-pill" data-tier="post_salah" onclick="selectLength('post_salah')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Post Salah<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">~3-5 min</span></button>
-          <button type="button" class="length-pill" data-tier="sujood" onclick="selectLength('sujood')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;border-right:1px solid rgba(201,169,110,0.1);transition:all .2s;">Sujood<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">~8-10 min</span></button>
-          <button type="button" class="length-pill active" data-tier="laylatul_qadr" onclick="selectLength('laylatul_qadr')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:600;color:var(--gold);cursor:pointer;border:none;background:rgba(201,169,110,0.12);font-family:'Cormorant Garamond',serif;transition:all .2s;">Laylatul Qadr<span style="display:block;font-size:10px;font-weight:400;color:var(--gold);opacity:.7;margin-top:2px;">~30 min</span></button>
+          <button type="button" class="length-pill" data-tier="sujood" onclick="selectLength('sujood')" style="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;transition:all .2s;">Sujood<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">~8-10 min</span></button>
         </div>
       </div>
 
@@ -260,7 +259,7 @@
         generateBtn: "Generate My Du\u2018a",
         loading: "Weaving Quranic verses, Hadith, and the Names of Allah into your personal supplication...",
         selectPlaceholder: "Select...",
-        occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"Ramadan"},{id:"jumuah",icon:"\ud83d\udd4c",label:"Jumu\u2018ah"},{id:"general",icon:"\ud83e\udd32",label:"General"},{id:"illness",icon:"\ud83d\udc9a",label:"Healing"},{id:"exams",icon:"\ud83d\udcd6",label:"Exams"},{id:"travel",icon:"\u2708\ufe0f",label:"Travel"},{id:"newborn",icon:"\ud83d\udc76",label:"New Baby"},{id:"marriage",icon:"\ud83d\udc8d",label:"Marriage"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"Grief"},{id:"hajj",icon:"\ud83d\udd4b",label:"Hajj"},{id:"gratitude",icon:"\ud83c\udf3f",label:"Gratitude"}],
+        occasions: [{id:"general",icon:"\ud83e\udd32",label:"General"},{id:"ramadan",icon:"\ud83c\udf19",label:"Ramadan"},{id:"jumuah",icon:"\ud83d\udd4c",label:"Jumu\u2018ah"},{id:"illness",icon:"\ud83d\udc9a",label:"Healing"},{id:"exams",icon:"\ud83d\udcd6",label:"Exams"},{id:"travel",icon:"\u2708\ufe0f",label:"Travel"},{id:"newborn",icon:"\ud83d\udc76",label:"New Baby"},{id:"marriage",icon:"\ud83d\udc8d",label:"Marriage"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"Grief"},{id:"hajj",icon:"\ud83d\udd4b",label:"Hajj"},{id:"gratitude",icon:"\ud83c\udf3f",label:"Gratitude"}],
         concerns: ["Guidance","Health","Patience","Forgiveness","Strong iman","Success","Anxiety","Depression","Finances","Marriage","Finding spouse","School","Trauma","Protection","Children","Parents","Family unity","Righteous offspring","Career","Rizq","Taqwa","Gratitude","Sincerity","Repentance","Afterlife","Peace of mind","Loneliness","Grief"],
         relationships: ["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Mother In Law","Father In Law","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague","Pet"],
         // Member card labels
@@ -342,7 +341,7 @@
         generateBtn: "Generar Mi Du\u2018a",
         loading: "Tejiendo vers\u00edculos cor\u00e1nicos, hadith y los Nombres de Allah en tu s\u00faplica personal...",
         selectPlaceholder: "Selecciona...",
-        occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"Ramad\u00e1n"},{id:"jumuah",icon:"\ud83d\udd4c",label:"Jumu\u2018ah"},{id:"general",icon:"\ud83e\udd32",label:"General"},{id:"illness",icon:"\ud83d\udc9a",label:"Sanaci\u00f3n"},{id:"exams",icon:"\ud83d\udcd6",label:"Ex\u00e1menes"},{id:"travel",icon:"\u2708\ufe0f",label:"Viaje"},{id:"newborn",icon:"\ud83d\udc76",label:"Beb\u00e9 Reci\u00e9n Nacido"},{id:"marriage",icon:"\ud83d\udc8d",label:"Matrimonio"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"Duelo"},{id:"hajj",icon:"\ud83d\udd4b",label:"Hajj"},{id:"gratitude",icon:"\ud83c\udf3f",label:"Gratitud"}],
+        occasions: [{id:"general",icon:"\ud83e\udd32",label:"General"},{id:"ramadan",icon:"\ud83c\udf19",label:"Ramad\u00e1n"},{id:"jumuah",icon:"\ud83d\udd4c",label:"Jumu\u2018ah"},{id:"illness",icon:"\ud83d\udc9a",label:"Sanaci\u00f3n"},{id:"exams",icon:"\ud83d\udcd6",label:"Ex\u00e1menes"},{id:"travel",icon:"\u2708\ufe0f",label:"Viaje"},{id:"newborn",icon:"\ud83d\udc76",label:"Beb\u00e9 Reci\u00e9n Nacido"},{id:"marriage",icon:"\ud83d\udc8d",label:"Matrimonio"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"Duelo"},{id:"hajj",icon:"\ud83d\udd4b",label:"Hajj"},{id:"gratitude",icon:"\ud83c\udf3f",label:"Gratitud"}],
         concerns: ["Gu\u00eda","Salud","Paciencia","Perd\u00f3n","Iman fuerte","\u00c9xito","Ansiedad","Depresi\u00f3n","Finanzas","Matrimonio","Encontrar pareja","Escuela","Trauma","Protecci\u00f3n","Hijos","Padres","Unidad familiar","Descendencia piadosa","Carrera","Rizq","Taqwa","Gratitud","Sinceridad","Arrepentimiento","M\u00e1s all\u00e1","Paz interior","Soledad","Duelo"],
         relationships: ["Esposa","Esposo","Hijo","Hija","Madre","Padre","Hermano","Hermana","Abuelo","Abuela","Suegra","Suegro","T\u00edo","T\u00eda","Sobrino","Sobrina","Primo/a","Amigo/a","Maestro/a","Mentor/a","Vecino/a","Colega","Mascota"],
         nameLabel: "Nombre", nameHint: "Puede ser un apodo o \u{1F60A}", namePlaceholder: "ej. Sumaira",
@@ -405,7 +404,7 @@
         generateBtn: "\u0645\u06cc\u0631\u06cc \u062f\u0639\u0627 \u0628\u0646\u0627\u0626\u06cc\u06ba",
         loading: "\u0642\u0631\u0622\u0646 \u06a9\u06cc \u0622\u06cc\u062a\u06cc\u06ba\u060c \u0627\u062d\u0627\u062f\u06cc\u062b\u060c \u0627\u0648\u0631 \u0627\u0644\u0644\u06c1 \u06a9\u06d2 \u0646\u0627\u0645 \u0622\u067e \u06a9\u06cc \u062f\u0639\u0627 \u0645\u06cc\u06ba...",
         selectPlaceholder: "\u0645\u0646\u062a\u062e\u0628 \u06a9\u0631\u06cc\u06ba...",
-        occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"\u0631\u0645\u0636\u0627\u0646"},{id:"jumuah",icon:"\ud83d\udd4c",label:"\u062c\u0645\u0639\u06c1"},{id:"general",icon:"\ud83e\udd32",label:"\u0639\u0627\u0645"},{id:"illness",icon:"\ud83d\udc9a",label:"\u0634\u0641\u0627"},{id:"exams",icon:"\ud83d\udcd6",label:"\u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a"},{id:"travel",icon:"\u2708\ufe0f",label:"\u0633\u0641\u0631"},{id:"newborn",icon:"\ud83d\udc76",label:"\u0646\u06cc\u0627 \u0628\u0686\u06c1"},{id:"marriage",icon:"\ud83d\udc8d",label:"\u0634\u0627\u062f\u06cc"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"\u063a\u0645"},{id:"hajj",icon:"\ud83d\udd4b",label:"\u062d\u062c"},{id:"gratitude",icon:"\ud83c\udf3f",label:"\u0634\u06a9\u0631"}],
+        occasions: [{id:"general",icon:"\ud83e\udd32",label:"\u0639\u0627\u0645"},{id:"ramadan",icon:"\ud83c\udf19",label:"\u0631\u0645\u0636\u0627\u0646"},{id:"jumuah",icon:"\ud83d\udd4c",label:"\u062c\u0645\u0639\u06c1"},{id:"illness",icon:"\ud83d\udc9a",label:"\u0634\u0641\u0627"},{id:"exams",icon:"\ud83d\udcd6",label:"\u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a"},{id:"travel",icon:"\u2708\ufe0f",label:"\u0633\u0641\u0631"},{id:"newborn",icon:"\ud83d\udc76",label:"\u0646\u06cc\u0627 \u0628\u0686\u06c1"},{id:"marriage",icon:"\ud83d\udc8d",label:"\u0634\u0627\u062f\u06cc"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"\u063a\u0645"},{id:"hajj",icon:"\ud83d\udd4b",label:"\u062d\u062c"},{id:"gratitude",icon:"\ud83c\udf3f",label:"\u0634\u06a9\u0631"}],
         concerns: ["\u06c1\u062f\u0627\u06cc\u062a","\u0635\u062d\u062a","\u0635\u0628\u0631","\u0645\u063a\u0641\u0631\u062a","\u0645\u0636\u0628\u0648\u0637 \u0627\u06cc\u0645\u0627\u0646","\u06a9\u0627\u0645\u06cc\u0627\u0628\u06cc","\u067e\u0631\u06cc\u0634\u0627\u0646\u06cc","\u0630\u06c1\u0646\u06cc \u062f\u0628\u0627\u0624","\u0645\u0627\u0644\u06cc","\u0634\u0627\u062f\u06cc","\u0631\u0634\u062a\u06c1","\u062a\u0639\u0644\u06cc\u0645","\u0635\u062f\u0645\u06c1","\u062d\u0641\u0627\u0638\u062a","اولاد","والدین","خاندانی اتحاد","نیک اولاد","کیریئر","رزق","تقویٰ","شکر","اخلاص","توبہ","آخرت","ذہنی سکون","تنہائی","غم"],
         relationships: ["\u0628\u06cc\u0648\u06cc","\u0634\u0648\u06c1\u0631","\u0628\u06cc\u0679\u0627","\u0628\u06cc\u0679\u06cc","\u0627\u0645\u06cc","\u0627\u0628\u0648","\u0628\u06be\u0627\u0626\u06cc","\u0628\u06c1\u0646","\u062f\u0627\u062f\u0627","\u062f\u0627\u062f\u06cc","\u0633\u0627\u0633","\u0633\u0633\u0631","\u0686\u0627\u0686\u0627/\u0645\u0627\u0645\u0648\u06ba","\u062e\u0627\u0644\u06c1/\u067e\u06be\u0648\u067e\u06be\u06cc","\u0628\u06be\u062a\u06cc\u062c\u0627","\u0628\u06be\u062a\u06cc\u062c\u06cc","\u06a9\u0632\u0646","\u062f\u0648\u0633\u062a","\u0627\u0633\u062a\u0627\u062f","\u0631\u06c1\u0646\u0645\u0627","\u067e\u0691\u0648\u0633\u06cc","\u0633\u0627\u062a\u06be\u06cc","\u067e\u0627\u0644\u062a\u0648 \u062c\u0627\u0646\u0648\u0631"],
         nameLabel: "\u0646\u0627\u0645", nameHint: "\u0639\u0631\u0641\u06cc\u062a \u06cc\u0627 \u{1F60A}", namePlaceholder: "\u0645\u062b\u0644\u0627\u064b \u0633\u0645\u06cc\u0631\u06c1",
@@ -468,7 +467,7 @@
         generateBtn: "\u0623\u0646\u0634\u0626 \u062f\u0639\u0627\u0626\u064a",
         loading: "\u062c\u0627\u0631\u064a \u0646\u0633\u062c \u0622\u064a\u0627\u062a \u0642\u0631\u0622\u0646\u064a\u0629 \u0648\u0623\u062d\u0627\u062f\u064a\u062b \u0641\u064a \u062f\u0639\u0627\u0626\u0643...",
         selectPlaceholder: "\u0627\u062e\u062a\u0631...",
-        occasions: [{id:"ramadan",icon:"\ud83c\udf19",label:"\u0631\u0645\u0636\u0627\u0646"},{id:"jumuah",icon:"\ud83d\udd4c",label:"\u0627\u0644\u062c\u0645\u0639\u0629"},{id:"general",icon:"\ud83e\udd32",label:"\u0639\u0627\u0645"},{id:"illness",icon:"\ud83d\udc9a",label:"\u0627\u0644\u0634\u0641\u0627\u0621"},{id:"exams",icon:"\ud83d\udcd6",label:"\u0627\u0644\u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a"},{id:"travel",icon:"\u2708\ufe0f",label:"\u0627\u0644\u0633\u0641\u0631"},{id:"newborn",icon:"\ud83d\udc76",label:"\u0645\u0648\u0644\u0648\u062f \u062c\u062f\u064a\u062f"},{id:"marriage",icon:"\ud83d\udc8d",label:"\u0627\u0644\u0632\u0648\u0627\u062c"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"\u0627\u0644\u062d\u0632\u0646"},{id:"hajj",icon:"\ud83d\udd4b",label:"\u0627\u0644\u062d\u062c"},{id:"gratitude",icon:"\ud83c\udf3f",label:"\u0627\u0644\u0634\u0643\u0631"}],
+        occasions: [{id:"general",icon:"\ud83e\udd32",label:"\u0639\u0627\u0645"},{id:"ramadan",icon:"\ud83c\udf19",label:"\u0631\u0645\u0636\u0627\u0646"},{id:"jumuah",icon:"\ud83d\udd4c",label:"\u0627\u0644\u062c\u0645\u0639\u0629"},{id:"illness",icon:"\ud83d\udc9a",label:"\u0627\u0644\u0634\u0641\u0627\u0621"},{id:"exams",icon:"\ud83d\udcd6",label:"\u0627\u0644\u0627\u0645\u062a\u062d\u0627\u0646\u0627\u062a"},{id:"travel",icon:"\u2708\ufe0f",label:"\u0627\u0644\u0633\u0641\u0631"},{id:"newborn",icon:"\ud83d\udc76",label:"\u0645\u0648\u0644\u0648\u062f \u062c\u062f\u064a\u062f"},{id:"marriage",icon:"\ud83d\udc8d",label:"\u0627\u0644\u0632\u0648\u0627\u062c"},{id:"grief",icon:"\ud83d\udd4a\ufe0f",label:"\u0627\u0644\u062d\u0632\u0646"},{id:"hajj",icon:"\ud83d\udd4b",label:"\u0627\u0644\u062d\u062c"},{id:"gratitude",icon:"\ud83c\udf3f",label:"\u0627\u0644\u0634\u0643\u0631"}],
         concerns: ["\u0627\u0644\u0647\u062f\u0627\u064a\u0629","\u0627\u0644\u0635\u062d\u0629","\u0627\u0644\u0635\u0628\u0631","\u0627\u0644\u0645\u063a\u0641\u0631\u0629","\u0642\u0648\u0629 \u0627\u0644\u0625\u064a\u0645\u0627\u0646","\u0627\u0644\u0646\u062c\u0627\u062d","\u0627\u0644\u0642\u0644\u0642","\u0627\u0644\u0627\u0643\u062a\u0626\u0627\u0628","\u0627\u0644\u0645\u0627\u0644\u064a\u0629","\u0627\u0644\u0632\u0648\u0627\u062c","\u0625\u064a\u062c\u0627\u062f \u0634\u0631\u064a\u0643","\u0627\u0644\u062f\u0631\u0627\u0633\u0629","\u0627\u0644\u0635\u062f\u0645\u0629","\u0627\u0644\u062d\u0645\u0627\u064a\u0629","الأطفال","الوالدين","وحدة العائلة","الذرية الصالحة","المهنة","الرزق","التقوى","الشكر","الإخلاص","التوبة","الآخرة","راحة البال","الوحدة","الحزن"],
         relationships: ["\u0632\u0648\u062c\u0629","\u0632\u0648\u062c","\u0627\u0628\u0646","\u0627\u0628\u0646\u0629","\u0623\u0645","\u0623\u0628","\u0623\u062e","\u0623\u062e\u062a","\u062c\u062f","\u062c\u062f\u0629","\u062d\u0645\u0627\u0629","\u062d\u0645\u0648","\u0639\u0645/\u062e\u0627\u0644","\u0639\u0645\u0629/\u062e\u0627\u0644\u0629","\u0627\u0628\u0646 \u0627\u0644\u0623\u062e/\u0627\u0644\u0623\u062e\u062a","\u0627\u0628\u0646\u0629 \u0627\u0644\u0623\u062e/\u0627\u0644\u0623\u062e\u062a","\u0627\u0628\u0646 \u0627\u0644\u0639\u0645","\u0635\u062f\u064a\u0642/\u0629","\u0645\u0639\u0644\u0645/\u0629","\u0645\u0631\u0634\u062f/\u0629","\u062c\u0627\u0631/\u0629","\u0632\u0645\u064a\u0644/\u0629","\u062d\u064a\u0648\u0627\u0646 \u0623\u0644\u064a\u0641"],
         nameLabel: "الاسم", nameHint: "يمكن أن يكون لقبًا أو 😊", namePlaceholder: "مثلاً سميرة",
@@ -550,22 +549,14 @@
         d.occasions.forEach(function(o) {
           var opt = document.createElement('option');
           opt.value = o.id;
-          if(o.id === 'ramadan') { opt.textContent = o.icon + '  ' + o.label; }
+          if(o.id === 'general' || o.id === 'ramadan') { opt.textContent = o.icon + '  ' + o.label; }
           else { opt.textContent = o.icon + '  ' + o.label + ' — ' + (d.comingSoon||'Coming Soon'); opt.disabled = true; }
           occ.appendChild(opt);
         });
       }
       // Length pills
-      var pills = document.querySelectorAll('.length-pill');
-      var tierLabels = {quick:[d.quick,d.quickTime],post_salah:[d.postsalah,d.postsalahTime],sujood:[d.sujood,d.sujoodTime],laylatul_qadr:[d.laylatulqadr,d.laylatulqadrTime]};
-      pills.forEach(function(p) {
-        var tier = p.dataset.tier;
-        if(tierLabels[tier]) {
-          var sp = p.querySelector('span');
-          p.childNodes[0].textContent = tierLabels[tier][0];
-          if(sp) sp.textContent = tierLabels[tier][1];
-        }
-      });
+      // Rebuild length pills with locale-aware labels for current occasion
+      rebuildLengthPills();
       // Concern tags
       CONCERN_TAGS.length = 0;
       d.concerns.forEach(function(c){ CONCERN_TAGS.push(c); });
@@ -758,11 +749,14 @@
     const RELATIONSHIPS=["Wife","Husband","Son","Daughter","Mother","Father","Brother","Sister","Grandfather","Grandmother","Mother In Law","Father In Law","Uncle","Aunt","Nephew","Niece","Cousin","Friend","Teacher","Mentor","Neighbor","Colleague","Pet"];
     const AGE_RANGES=function(){var a=["Under 1"];for(var i=1;i<=80;i++)a.push(String(i));a.push("80+");return a;}();
     let members=[],generatedDuaText="",currentDuaId=null,currentEmailToken="";
-    let selectedOccasion="ramadan";
-    let selectedLengthTier="laylatul_qadr"; // Ramadan defaults to laylatul_qadr
+    let selectedOccasion="general";
+    let selectedLengthTier="quick"; // General defaults to quick
     const CONCERN_TAGS=["Guidance","Health","Patience","Forgiveness","Strong iman","Success","Anxiety","Depression","Finances","Marriage","Finding spouse","School","Trauma","Protection","Children","Parents","Family unity","Righteous offspring","Career","Rizq","Taqwa","Gratitude","Sincerity","Repentance","Afterlife","Peace of mind","Loneliness","Grief"];
-    const OCCASIONS=[{id:"ramadan",label:"Ramadan",icon:"🌙"},{id:"jumuah",label:"Jumu'ah",icon:"🕌"},{id:"general",label:"General",icon:"🤲"},{id:"illness",label:"Healing",icon:"💚"},{id:"travel",label:"Travel",icon:"✈️"},{id:"newborn",label:"New Baby",icon:"👶"},{id:"marriage",label:"Marriage",icon:"💍"},{id:"grief",label:"Grief",icon:"🕊️"},{id:"hajj",label:"Hajj",icon:"🕋"},{id:"gratitude",label:"Gratitude",icon:"🌿"}];
-    const OCCASION_DEFAULT_TIERS={ramadan:"laylatul_qadr"};
+    const OCCASIONS=[{id:"general",label:"General",icon:"🤲"},{id:"ramadan",label:"Ramadan",icon:"🌙"},{id:"jumuah",label:"Jumu'ah",icon:"🕌"},{id:"illness",label:"Healing",icon:"💚"},{id:"travel",label:"Travel",icon:"✈️"},{id:"newborn",label:"New Baby",icon:"👶"},{id:"marriage",label:"Marriage",icon:"💍"},{id:"grief",label:"Grief",icon:"🕊️"},{id:"hajj",label:"Hajj",icon:"🕋"},{id:"gratitude",label:"Gratitude",icon:"🌿"}];
+    const OCCASION_DEFAULT_TIERS={ramadan:"laylatul_qadr",general:"quick"};
+    // Which tier pills to show per occasion (default: 3 tiers without Laylatul Qadr)
+    const OCCASION_TIERS={ramadan:["quick","post_salah","sujood","laylatul_qadr"]};
+    const DEFAULT_TIERS=["quick","post_salah","sujood"];
 
     // Length toggle
     function selectLength(tier){
@@ -776,9 +770,32 @@
       });
       trackFormStart();
     }
-    function updateLengthDefault(){
-      const defaultTier=OCCASION_DEFAULT_TIERS[selectedOccasion]||"post_salah";
+    function rebuildLengthPills(){
+      var d=LOCALE_DATA[currentLang]||LOCALE_DATA.en;
+      var allTierMeta={
+        quick:{label:d.quick,time:d.quickTime,id:"quick"},
+        post_salah:{label:d.postsalah,time:d.postsalahTime,id:"post_salah"},
+        sujood:{label:d.sujood,time:d.sujoodTime,id:"sujood"},
+        laylatul_qadr:{label:d.laylatulqadr,time:d.laylatulqadrTime,id:"laylatul_qadr"}
+      };
+      var tiers=OCCASION_TIERS[selectedOccasion]||DEFAULT_TIERS;
+      var defaultTier=OCCASION_DEFAULT_TIERS[selectedOccasion]||"post_salah";
+      var container=document.getElementById("lengthToggle");
+      container.innerHTML="";
+      tiers.forEach(function(tid,idx){
+        var meta=allTierMeta[tid];if(!meta)return;
+        var btn=document.createElement("button");
+        btn.type="button";btn.className="length-pill";btn.dataset.tier=tid;
+        btn.onclick=function(){selectLength(tid);};
+        btn.style.cssText="flex:1;padding:10px 4px;text-align:center;font-size:13px;font-weight:500;color:var(--text-muted);cursor:pointer;border:none;background:transparent;font-family:'Cormorant Garamond',serif;transition:all .2s;";
+        if(idx<tiers.length-1) btn.style.borderRight="1px solid rgba(201,169,110,0.1)";
+        btn.innerHTML=meta.label+'<span style="display:block;font-size:10px;font-weight:400;color:var(--text-dim);margin-top:2px;">'+meta.time+'</span>';
+        container.appendChild(btn);
+      });
       selectLength(defaultTier);
+    }
+    function updateLengthDefault(){
+      rebuildLengthPills();
     }
 
     function updateSeasonalBanner(){
@@ -1016,7 +1033,7 @@
 
     // Form auto-save to sessionStorage
     function saveFormState(){try{const state={age:document.getElementById("userAge").value,gender:document.getElementById("userGender").value,concerns:document.getElementById("userConcerns").value,occasion:selectedOccasion,tier:selectedLengthTier,members:members};if(window.MyDuaNative){MyDuaNative.storageSet("mydua_form",state);}else{sessionStorage.setItem("mydua_form",JSON.stringify(state));}}catch(e){}}
-    function restoreFormState(){try{if(window.MyDuaNative){MyDuaNative.storageGet("mydua_form").then(state=>{if(!state)return;if(state.age)document.getElementById("userAge").value=state.age;if(state.gender)document.getElementById("userGender").value=state.gender;if(state.concerns){document.getElementById("userConcerns").value=state.concerns;updateUserConcernsCount();}if(state.occasion){selectedOccasion=state.occasion;document.getElementById("occasionSelect").value=state.occasion;}if(state.tier)selectLength(state.tier);if(state.members&&state.members.length){members=state.members;renderMembers();}}).catch(()=>{});}else{const raw=sessionStorage.getItem("mydua_form");if(!raw)return;const state=JSON.parse(raw);if(state.age)document.getElementById("userAge").value=state.age;if(state.gender)document.getElementById("userGender").value=state.gender;if(state.concerns){document.getElementById("userConcerns").value=state.concerns;updateUserConcernsCount();}if(state.occasion){selectedOccasion=state.occasion;document.getElementById("occasionSelect").value=state.occasion;}if(state.tier)selectLength(state.tier);if(state.members&&state.members.length){members=state.members;renderMembers();}}}catch(e){}}
+    function restoreFormState(){try{if(window.MyDuaNative){MyDuaNative.storageGet("mydua_form").then(state=>{if(!state)return;if(state.age)document.getElementById("userAge").value=state.age;if(state.gender)document.getElementById("userGender").value=state.gender;if(state.concerns){document.getElementById("userConcerns").value=state.concerns;updateUserConcernsCount();}if(state.occasion){selectedOccasion=state.occasion;document.getElementById("occasionSelect").value=state.occasion;}rebuildLengthPills();if(state.tier){var availTiers=OCCASION_TIERS[selectedOccasion]||DEFAULT_TIERS;if(availTiers.indexOf(state.tier)!==-1)selectLength(state.tier);}if(state.members&&state.members.length){members=state.members;renderMembers();}}).catch(()=>{});}else{const raw=sessionStorage.getItem("mydua_form");if(!raw)return;const state=JSON.parse(raw);if(state.age)document.getElementById("userAge").value=state.age;if(state.gender)document.getElementById("userGender").value=state.gender;if(state.concerns){document.getElementById("userConcerns").value=state.concerns;updateUserConcernsCount();}if(state.occasion){selectedOccasion=state.occasion;document.getElementById("occasionSelect").value=state.occasion;}rebuildLengthPills();if(state.tier){var availTiers=OCCASION_TIERS[selectedOccasion]||DEFAULT_TIERS;if(availTiers.indexOf(state.tier)!==-1)selectLength(state.tier);}if(state.members&&state.members.length){members=state.members;renderMembers();}}}catch(e){}}
     setInterval(saveFormState,5000);
 
     // Referral tracking

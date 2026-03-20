@@ -1,0 +1,29 @@
+<!--
+  MyDua.AI — iOS Entitlements
+  ============================
+  Add to ios/App/App/App.entitlements
+-->
+
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+  <!-- Push Notifications -->
+  <key>aps-environment</key>
+  <string>development</string>
+  <!-- Change to "production" for App Store release -->
+
+  <!-- Associated Domains (deep links for prayer request inbox) -->
+  <key>com.apple.developer.associated-domains</key>
+  <array>
+    <string>applinks:mydua.ai</string>
+    <string>applinks:www.mydua.ai</string>
+  </array>
+
+  <!-- Background Audio -->
+  <key>com.apple.developer.background-modes</key>
+  <array>
+    <string>audio</string>
+  </array>
+</dict>
+</plist>

@@ -1,0 +1,54 @@
+<!--
+  MyDua.AI — iOS Info.plist Additions
+  ====================================
+  These keys need to be added to ios/App/App/Info.plist after running `npx cap add ios`.
+  They configure permissions for native features used by the Hajj/Umrah/Year-Round modes.
+-->
+
+<!-- ─── Background Audio (Devotional du'a playback during Tawaf / walking) ─── -->
+<key>UIBackgroundModes</key>
+<array>
+  <string>audio</string>
+  <string>fetch</string>
+  <string>remote-notification</string>
+</array>
+
+<!-- ─── Location (Hajj phase detection at sacred sites) ─── -->
+<key>NSLocationWhenInUseUsageDescription</key>
+<string>MyDua.AI uses your location to detect which sacred site you are at during Hajj or Umrah, so your du'a matches the spiritual significance of where you are standing.</string>
+
+<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+<string>MyDua.AI uses background location to guide your du'as as you move between sacred sites during Hajj, even when the app is in the background.</string>
+
+<!-- ─── Push Notifications (daily check-in reminders, prayer request alerts) ─── -->
+<!-- No plist key needed — handled by Capacitor PushNotifications plugin at runtime -->
+
+<!-- ─── App Transport Security (allow your API server) ─── -->
+<key>NSAppTransportSecurity</key>
+<dict>
+  <key>NSAllowsArbitraryLoads</key>
+  <false/>
+  <key>NSExceptionDomains</key>
+  <dict>
+    <!-- Development only — remove for production -->
+    <key>localhost</key>
+    <dict>
+      <key>NSExceptionAllowsInsecureHTTPLoads</key>
+      <true/>
+    </dict>
+  </dict>
+</dict>
+
+<!-- ─── Privacy: Microphone (future: voice du'a recording) ─── -->
+<!-- Uncomment when voice features are added -->
+<!--
+<key>NSMicrophoneUsageDescription</key>
+<string>MyDua.AI can record your voice as you make du'a, creating a personal audio journal of your prayers.</string>
+-->
+
+<!-- ─── App Display ─── -->
+<key>UIStatusBarStyle</key>
+<string>UIStatusBarStyleLightContent</string>
+
+<key>UIViewControllerBasedStatusBarAppearance</key>
+<true/>
