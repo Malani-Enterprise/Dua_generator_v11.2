@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.5.5 — Capacitor Hybrid App Wrapper (March 2026)
+
+Adds the infrastructure to wrap MyDua.AI as a native iOS + Android app via Capacitor, while maintaining full backward compatibility with the existing website.
+
+### New Files
+- **`native-bridge.js`** — drop-in Capacitor plugin wrapper (`MyDuaNative.*` API) with graceful web fallback for all functions: API routing, persistent storage, haptics, native share sheet, push notifications, GPS with sacred site geofencing, background audio, file saving, and deep links
+- **`service-worker.js`** — offline caching with route-aware strategies (cache-first for app shell, network-first for API data, cache-on-play for audio); push notification display; offline fallback page
+- **`manifest.json`** — PWA manifest with app icons, shortcuts ("How is your heart?" and "My Journey"), and theme colors
+- **`package.json`** — 13 Capacitor plugins pre-configured for v2.0 roadmap (core, app, filesystem, haptics, network, preferences, push-notifications, share, splash-screen, status-bar, geolocation, browser, background-audio)
+- **`capacitor.config.ts`** — Capacitor configuration matched to MyDua.AI dark theme, plugin settings, and allowed navigation domains
+- **`native-ios/`** — Info.plist additions (background audio, location permissions with Hajj-specific descriptions, push), entitlements (associated domains, push, background audio)
+- **`native-android/`** — AndroidManifest additions (location, audio foreground service, push, deep links)
+- **`MIGRATION-GUIDE.md`** — 8-step walkthrough for initializing Capacitor, syncing platforms, and submitting to App Store / Play Store
+
+### Frontend Changes (index.html)
+- **`nFetch()` wrapper** — all `fetch()` calls to API endpoints now routed through native-aware helper that prepends base URL when running in Capacitor, passes through unchanged on web
+- **PWA meta tags** — `manifest.json` link, `apple-mobile-web-app-capable`, `theme-color`, `apple-touch-icon`, `viewport-fit=cover`
+- **Safe-area CSS** — `env(safe-area-inset-*)` padding on body for iPhone notch / Android cutout
+- **Offline detection** delegated to Capacitor Network plugin (falls back to browser events on web)
+- **Form auto-save** upgraded to Capacitor Preferences when available (persistent across app restarts), falls back to sessionStorage on web
+- **Native bridge initialization** — `MyDuaNative.init()` called on DOMContentLoaded with platform-aware API base URL
+
+### Backend Changes (app.py)
+- **CORS origins expanded** — added `capacitor://localhost`, `http://localhost`, `https://localhost` for Capacitor WebView
+- **CSP updated** — `connect-src` expanded for Capacitor origins, Google Analytics, and Google Tag Manager; `script-src` expanded for Google Tag Manager
+- **Permissions-Policy** — `geolocation` changed from `()` (blocked) to `(self)` (allowed for Hajj/Umrah phase detection)
+- **Version** bumped to 1.5.5 across docstring, FastAPI app, health endpoint, logger, and admin dashboard
+
+### Backward Compatibility
+- **Zero breaking changes on web** — every native bridge function checks `window.Capacitor.isNativePlatform()` and falls back to browser APIs when false
+- `nFetch()` with empty base URL is identical to `fetch()` with relative paths
+- Safe-area CSS evaluates to 0px on non-mobile browsers
+- Service worker, manifest, and PWA meta tags are ignored by desktop browsers unless user explicitly installs
+
+---
+
 ## v1.5.4 — Age Granularity, Expanded Concerns & COPPA Fix (March 2026)
 
 - **Concern tags expanded from 14 to 28** — new tags across all 4 locales: Children, Parents, Family unity, Righteous offspring, Career, Rizq, Taqwa, Gratitude, Sincerity, Repentance, Afterlife, Peace of mind, Loneliness, Grief. Covers spiritual, family, career, and emotional du'a themes so users can tap instead of type.

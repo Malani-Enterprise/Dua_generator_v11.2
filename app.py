@@ -1,6 +1,23 @@
 """
-MyDua.AI — Backend API (v1.5.4 Production)
+MyDua.AI — Backend API (v1.5.5 Production)
 ==========================================
+v1.5.5 Changes (Capacitor Hybrid App Wrapper):
+  - Capacitor hybrid app infrastructure for iOS + Android (Capacitor v6)
+  - PWA manifest (manifest.json) + service worker with offline caching strategies
+  - Native bridge (native-bridge.js) — wraps Capacitor plugins with graceful web fallback
+  - All frontend fetch() calls routed through nFetch() for native API base URL support
+  - sessionStorage form auto-save upgraded to Capacitor Preferences (persistent across app restarts)
+  - Offline detection delegated to Capacitor Network plugin (falls back to browser events on web)
+  - CORS: Capacitor origins added (capacitor://localhost, http://localhost, https://localhost)
+  - CSP: connect-src expanded for Capacitor, Google Analytics, and Google Tag Manager
+  - Permissions-Policy: geolocation enabled for self (Hajj/Umrah phase detection)
+  - Safe-area CSS insets for iPhone notch / Android display cutout
+  - PWA meta tags (apple-mobile-web-app-capable, theme-color, apple-touch-icon)
+  - iOS Info.plist additions for background audio, location, and push notifications
+  - Android manifest additions for location, audio foreground service, and push
+  - package.json with 13 Capacitor plugins pre-configured for v2.0 roadmap
+  - Migration guide (MIGRATION-GUIDE.md) with step-by-step Capacitor setup instructions
+
 v1.5.4 Changes (Anti-Truncation, Admin Dashboard & Email Opt-in):
   - Token budgets bumped ~50% across all tiers to eliminate truncation (1.5× max word target + formatting headroom)
   - Admin dashboard at /admin/stats — password-protected visual analytics page
@@ -1397,7 +1414,7 @@ async def lifespan(app):
 
     # Fix #7: No secrets in logs
     logger.info("=" * 50)
-    logger.info("MyDua.AI v1.5.4 — Production")
+    logger.info("MyDua.AI v1.5.5 — Production")
     logger.info("=" * 50)
     logger.info(f"AI Provider:  {AI_PROVIDER} ({ANTHROPIC_MODEL})")
     logger.info(f"Anthropic:    {'configured' if ANTHROPIC_API_KEY else 'NOT SET'}")
@@ -1434,7 +1451,7 @@ async def lifespan(app):
 app = FastAPI(
     title="Du'a Generator API",
     description="Generate personalized Islamic supplications for any occasion.",
-    version="1.5.4",
+    version="1.5.5",
     lifespan=lifespan,
 )
 
@@ -1446,6 +1463,10 @@ app.add_middleware(
         "http://localhost:3000",
         "http://127.0.0.1:3000",
         APP_BASE_URL,
+        # Capacitor hybrid app origins
+        "capacitor://localhost",     # iOS Capacitor
+        "http://localhost",          # Android Capacitor
+        "https://localhost",         # Android Capacitor (https scheme)
     ],
     allow_credentials=True,
     allow_methods=["GET", "POST", "OPTIONS"],
@@ -1467,18 +1488,23 @@ class SecurityHeadersMiddleware(BaseHTTPMiddleware):
         response.headers["X-Frame-Options"] = "DENY"
         response.headers["X-XSS-Protection"] = "1; mode=block"
         response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+        # Build connect-src with APP_BASE_URL so Capacitor shells can reach the production API
+        _csp_connect = "connect-src 'self' https://api.stripe.com capacitor://localhost http://localhost https://localhost https://www.google-analytics.com https://www.googletagmanager.com"
+        if APP_BASE_URL and APP_BASE_URL not in ("http://localhost:8000", "http://127.0.0.1:8000"):
+            _csp_connect += f" {APP_BASE_URL}"
+        _csp_connect += "; "
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://js.stripe.com; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://js.stripe.com https://www.googletagmanager.com https://www.google-analytics.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; "
             "font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: blob:; "
-            "connect-src 'self' https://api.stripe.com; "
+            "img-src 'self' data: blob: https://www.google-analytics.com; "
+            + _csp_connect +
             "frame-src https://js.stripe.com; "
             "object-src 'none'; "
             "base-uri 'self'"
         )
-        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=()"
+        response.headers["Permissions-Policy"] = "camera=(), microphone=(), geolocation=(self)"
         if APP_ENV == "production":
             response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains"
         return response
@@ -2731,7 +2757,7 @@ body{{font-family:'Segoe UI',system-ui,sans-serif;background:#0d0b08;color:#e8dc
 .stat-lbl{{font-size:13px;color:#8a7d6b;text-transform:uppercase;letter-spacing:.05em;}}
 .footer{{text-align:center;margin-top:32px;font-size:12px;color:#5a5040;}}
 </style></head><body>
-<div class="header"><h1>MyDua.AI Dashboard</h1><p>v1.5.4 — Real-time analytics</p></div>
+<div class="header"><h1>MyDua.AI Dashboard</h1><p>v1.5.5 — Real-time analytics</p></div>
 <div class="grid">{cards}</div>
 <div class="footer">Refresh page for latest data. Data resets on server restart (SQLite in-memory counters).</div>
 </body></html>""")

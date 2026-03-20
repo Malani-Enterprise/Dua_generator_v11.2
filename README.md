@@ -1,134 +1,154 @@
-# Du'a Generator — Last 10 Nights of Ramadan
+# MyDua.AI
 
-A web application that generates personalized Islamic supplications (du'as) for families to recite during the blessed last 10 nights of Ramadan.
+**Version 1.5.5** | March 2026
+
+A du'a lives deep in your heart. We help it find its words — personalized Islamic supplications for every occasion, powered by Quran and authentic Hadith.
+
+## Overview
+
+MyDua.AI is an AI-powered web and mobile application that generates deeply personalized du'as (Islamic supplications) for individuals and families. The platform uses Claude (Anthropic) or GPT-4o (OpenAI) combined with Quranic verses and authentic Hadith to create intimate, spiritually resonant prayers tailored to each person's age, relationships, life concerns, and chosen occasion.
 
 ## Features
 
-- **AI-Powered Du'a Generation** — Uses OpenAI GPT-4o or Anthropic Claude to create deeply personal, Quran-and-Hadith-rich supplications
-- **Multi-Language** — Arabic transliteration alongside English so users can recite in Arabic
-- **PDF Export** — Download beautifully formatted PDF via html2pdf.js
-- **Email Delivery** — Send the du'a directly to any email address
-- **Shareable Links** — Generate a unique URL to share with family and friends
-- **Anonymous Analytics** — Track total du'as generated (no personal data collected)
-- **Smart Caching** — Cache identical requests to reduce API costs
-- **Rate Limiting** — Prevent abuse (5 du'a generations/hour, 10 saves/hour, 5 emails/hour per IP)
+**Du'a Generation**: AI-powered personalized supplications with real-time SSE streaming, supporting 11 occasions (Ramadan, Hajj/Umrah, Jumu'ah, illness, exams, travel, new baby, marriage, grief, gratitude, and general), 4 length tiers (Quick, Post Salah, Sujood, Laylatul Qadr), and 28 concern tags across spiritual, family, career, and emotional themes.
+
+**Family Personalization**: Add up to 15 family members with individual names, relationships, ages, genders, and specific prayer concerns. The AI weaves each person's details naturally throughout the du'a.
+
+**Multi-Language**: Full support for English, Spanish (Espanol), Urdu, and Arabic with RTL layout and locale-aware UI.
+
+**Sharing & Delivery**: Shareable links, email delivery (Resend/SMTP), SMS (Twilio), WhatsApp/Facebook/Instagram/TikTok sharing, PDF export (html2pdf.js), and physical postcard delivery (Lob).
+
+**Gift System**: Send personalized du'as as gifts via email, SMS, or postcard with dedicated gift viewing pages.
+
+**Audio (TTS)**: AI-generated voice recitation via ElevenLabs with browser Web Speech API fallback.
+
+**Mobile App Ready (v1.5.5)**: Capacitor hybrid app infrastructure for iOS and Android with native bridge, service worker for offline caching, PWA manifest, GPS sacred site detection, background audio, push notifications, and haptic feedback — all with graceful web fallback.
 
 ## Tech Stack
 
-- **Backend:** Python 3.11+ / FastAPI
-- **AI:** OpenAI GPT-4o or Anthropic Claude
-- **Frontend:** Vanilla HTML/CSS/JS (single file, no build step)
-- **PDF:** html2pdf.js (client-side)
-- **Email:** aiosmtplib (async SMTP)
-- **Storage:** File-based JSON (no database required)
+**Backend**: FastAPI 0.115.0 (Python), SQLite with WAL mode, Uvicorn
+
+**AI**: Anthropic Claude (default) or OpenAI GPT-4o
+
+**Frontend**: Single-file HTML/JS/CSS (vanilla), Cormorant Garamond + Amiri fonts
+
+**Mobile**: Capacitor v6 hybrid wrapper (13 plugins)
+
+**Integrations**: Stripe (payments), Resend/SMTP (email), Twilio (SMS), Lob (postcards), ElevenLabs (TTS), Google Analytics
 
 ## Quick Start
 
 ```bash
-# 1. Clone the repo
-git clone https://github.com/your-username/dua-generator.git
-cd dua-generator
+# 1. Clone and enter the project
+cd MyDua-AI-v1.5.5-production
 
-# 2. Install dependencies
+# 2. Create environment file
+cp .env.example .env
+# Edit .env with your API keys (at minimum: ANTHROPIC_API_KEY or OPENAI_API_KEY)
+
+# 3. Install Python dependencies
 pip install -r requirements.txt
 
-# 3. Configure environment
-cp .env.example .env
-# Edit .env with your API keys and SMTP settings
-
 # 4. Run the server
-uvicorn app:app --reload --port 8000
+uvicorn app:app --host 0.0.0.0 --port 8000
 
-# 5. Open http://localhost:8000
+# 5. Open in browser
+open http://localhost:8000
 ```
+
+## Mobile App Setup (Capacitor)
+
+The Capacitor infrastructure is included but the native projects are not yet generated. See `MIGRATION-GUIDE.md` for the complete 8-step setup process. Summary:
+
+```bash
+# 1. Install Node dependencies
+npm install
+
+# 2. Generate native projects
+npx cap add ios
+npx cap add android
+
+# 3. Sync web assets
+npx cap sync
+
+# 4. Open in IDE
+npx cap open ios      # Opens Xcode
+npx cap open android  # Opens Android Studio
+```
+
+**Prerequisites for mobile**: macOS (for iOS), Xcode 15+, Android Studio, Node.js 18+, Apple Developer Account ($99/year), Google Play Account ($25 one-time).
 
 ## Project Structure
 
 ```
-dua-app/
-├── app.py              ← FastAPI backend (all API routes)
-├── requirements.txt    ← Python dependencies
-├── .env.example        ← Environment variable template
-├── README.md           ← This file
+MyDua-AI-v1.5.5-production/
+├── app.py                  # Backend API (FastAPI)
+├── requirements.txt        # Python dependencies
+├── .env.example            # Environment variable template
+├── .gitignore              # Git ignore rules
+├── CHANGELOG.md            # Version history
+├── MIGRATION-GUIDE.md      # Capacitor setup walkthrough
+├── RELEASE-NOTES-v1.5.5.docx  # Formal release notes
+├── README.md               # This file
+├── package.json            # Node/Capacitor dependencies
+├── capacitor.config.ts     # Capacitor configuration
+├── locales/
+│   └── en.json             # English locale strings
 ├── static/
-│   └── index.html      ← Complete frontend (single file)
-└── data/               ← Auto-created at runtime
-    ├── analytics.json   ← Anonymous usage counters
-    ├── cache/           ← Cached AI responses
-    └── saved/           ← Saved/shared du'as
+│   ├── index.html          # Frontend (single-file SPA)
+│   ├── native-bridge.js    # Capacitor plugin wrappers
+│   ├── service-worker.js   # Offline caching + push
+│   ├── manifest.json       # PWA manifest
+│   ├── favicon.svg         # Browser favicon
+│   ├── og-image.png        # Social sharing image
+│   ├── og-image.svg        # Social sharing image (vector)
+│   └── icons/              # App icons (generate from logo)
+├── native-ios/
+│   ├── Info.plist.additions.xml     # iOS permissions
+│   └── Entitlements.additions.plist # iOS entitlements
+└── native-android/
+    └── AndroidManifest.additions.xml # Android permissions
 ```
+
+## Environment Variables
+
+See `.env.example` for the complete list. Required:
+
+| Variable | Required | Description |
+|---|---|---|
+| `ANTHROPIC_API_KEY` | Yes* | Anthropic Claude API key |
+| `OPENAI_API_KEY` | Yes* | OpenAI API key (*one of the two is required) |
+| `AI_PROVIDER` | Yes | "anthropic" or "openai" |
+| `APP_BASE_URL` | Yes | Your deployed URL (e.g., https://mydua.ai) |
+| `SECRET_KEY` | Yes | Random string, 32+ characters |
+
+Optional integrations: SMTP (email), Stripe (payments), Twilio (SMS), Lob (postcards), ElevenLabs (TTS), Firebase (push notifications).
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| `GET`  | `/api/health` | Health check |
-| `POST` | `/api/generate-dua` | Generate a personalized du'a |
-| `POST` | `/api/save-dua` | Save du'a and get shareable URL |
-| `GET`  | `/api/saved/{id}` | Retrieve a saved du'a |
-| `POST` | `/api/email-dua` | Email a saved du'a |
-| `POST` | `/api/track-pdf` | Track PDF export (analytics) |
-| `GET`  | `/api/analytics` | Get anonymous usage stats |
-| `GET`  | `/shared/{id}` | View shared du'a (HTML page) |
+| Method | Path | Description |
+|---|---|---|
+| POST | `/api/generate-dua-stream` | Generate du'a via SSE streaming |
+| POST | `/api/save-dua` | Save du'a and get shareable URL |
+| POST | `/api/email-dua` | Email a saved du'a |
+| POST | `/api/create-support-session` | Create Stripe payment session |
+| GET | `/shared/{dua_id}` | Public share page |
+| GET | `/admin/stats` | Admin analytics dashboard |
+| GET | `/privacy` | Privacy policy |
+| GET | `/terms` | Terms of service |
 
-## Configuration
+## Version History
 
-### AI Provider
+See `CHANGELOG.md` for the complete version history. Recent releases:
 
-Set `AI_PROVIDER` in `.env` to either `openai` or `anthropic`, then provide the corresponding API key.
+- **v1.5.5** — Capacitor hybrid app wrapper (this release)
+- **v1.5.4** — Age granularity, expanded concerns, COPPA fix
+- **v1.5.3** — Full i18n, RTL fixes, admin dashboard, email opt-in
+- **v1.5.2** — Tier calibration, dynamic concern strategy
+- **v1.5.1** — Progress bar UX fix, multi-language support
+- **v1.5.0** — Audit remediation (security, legal, performance, UX)
+- **v1.4.4** — Du'a length toggle, solo mode, concern tags
 
-### Email (Gmail)
+## License
 
-1. Enable 2-Factor Authentication on your Google account
-2. Generate an App Password: https://support.google.com/accounts/answer/185833
-3. Use that App Password as `SMTP_PASSWORD`
-
-### Deployment
-
-**Vercel:** Not ideal for FastAPI (use for frontend-only deployments)
-
-**Railway / Render / Fly.io (Recommended):**
-1. Push to GitHub
-2. Connect repo in Railway/Render dashboard
-3. Set environment variables
-4. Connect your domain
-5. Deploy
-
-**VPS (DigitalOcean, AWS, etc.):**
-```bash
-pip install -r requirements.txt
-uvicorn app:app --host 0.0.0.0 --port 8000
-```
-Use nginx as reverse proxy + Let's Encrypt for SSL.
-
-## Cost Estimates
-
-| Component | Monthly Cost |
-|-----------|-------------|
-| Hosting (Railway free tier) | $0-5 |
-| Domain | ~$1/mo |
-| Anthropic API (Opus 4.6, ~100 du'as/day for 10 days) | ~$30-45 total |
-| Email (Gmail) | Free |
-
-## Production Deployment Notes
-
-**This app is designed for single-instance deployment** (e.g., Railway with a persistent volume, a single DigitalOcean droplet, or Render). The following design decisions are intentional tradeoffs for simplicity at this scale:
-
-- **SQLite database**: All data (cache, jobs, saved du'as, analytics, rate limits) is stored in a single `data/mydua.db` file. SQLite with WAL mode handles concurrent reads safely and is the correct choice for a single-instance app. If you need to scale to multiple instances, migrate to PostgreSQL.
-
-- **Background tasks**: Batch du'a generation uses FastAPI's `BackgroundTasks` which is process-local. If the server restarts during the 2-5 minute window a batch is processing, that job is marked as failed on the next startup. Users see a clear error and can retry. For higher durability, migrate to Celery + Redis.
-
-- **Rate limiting**: Stored in SQLite, survives restarts, but is per-instance. If running multiple instances behind a load balancer, migrate to Redis-backed rate limiting.
-
-**Production checklist:**
-- [ ] Set `APP_ENV=production` (the app refuses to start with the default SECRET_KEY in production)
-- [ ] Set a real `SECRET_KEY` (at least 32 random characters)
-- [ ] Use live Stripe keys (`sk_live_...`, `pk_live_...`)
-- [ ] Set `APP_BASE_URL` to your domain (`https://mydua.ai`)
-- [ ] Configure SMTP credentials for email delivery
-- [ ] Mount a persistent volume at the `data/` directory (Railway: Settings → Volumes)
-- [ ] Run with a single instance (do NOT scale to multiple replicas without migrating to PostgreSQL + Redis)
-
----
-
-*May Allah accept the du'as of all who use this tool. Ameen.*
+Proprietary. All rights reserved.
