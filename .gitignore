@@ -16,3 +16,17 @@ venv/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local artefacts (plans, audits, prior release trees) - kept on disk, not in the product repo
+ClaudeCode/
+Prior Versions/
+graphify-out/
+
+# Claude Code session bookkeeping
+.claude/
+
+# Capacitor / Node (generated)
+node_modules/
+ios/
+android/
+.capacitor/
